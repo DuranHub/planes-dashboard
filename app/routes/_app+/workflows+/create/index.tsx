@@ -1,8 +1,9 @@
 import { Fragment } from "react";
 import { ActionFunctionArgs, LinksFunction, json } from "@remix-run/node";
+import { ClientOnly } from "remix-utils/client-only";
 
-import reacflowStyles from "reactflow/dist/style.css";
-import WorkflowBuilder from "./WorkflowBuilder";
+import reacflowStyles from "reactflow/dist/style.css?url";
+import WorkflowBuilder from "~/components/WorkflowBuilder";
 import { useLoaderData } from "@remix-run/react";
 import { fetchWorkflows } from "./query.server";
 import { createEdge, createNode, updateNode } from "./mutations.server";

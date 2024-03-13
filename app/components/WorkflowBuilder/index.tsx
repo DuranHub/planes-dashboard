@@ -1,12 +1,12 @@
-import ReactFlow, {
+import {
   addEdge,
   Background,
+  ReactFlow,
   BackgroundVariant,
   Controls,
   Edge,
   MiniMap,
   Node,
-  NodeDragHandler,
   OnConnect,
   ReactFlowInstance,
   useEdgesState,
@@ -15,9 +15,83 @@ import ReactFlow, {
 import { nodeTypes } from "./components/Nodes";
 import { DragEventHandler, useCallback, useState } from "react";
 import Toolbar from "./components/Sidebar";
-import { useFetcher } from "@remix-run/react";
 import useRequestActions from "./useRequestActions";
-import CustomEdge, { edgeTypes } from "./components/Edge";
+import { edgeTypes } from "./components/Edge";
+
+const initial = {
+  nodes: [
+    {
+      width: 160,
+      height: 50,
+      id: "0.5070981859355164",
+      type: "custom",
+      position: {
+        x: 0,
+        y: -120,
+      },
+      data: {
+        label: "custom node",
+      },
+      selected: false,
+      positionAbsolute: {
+        x: 0,
+        y: -120,
+      },
+      dragging: false,
+    },
+    {
+      width: 160,
+      height: 50,
+      id: "0.2933712536487305",
+      type: "custom",
+      position: {
+        x: 435,
+        y: -90,
+      },
+      data: {
+        label: "custom node",
+      },
+      selected: true,
+      positionAbsolute: {
+        x: 435,
+        y: -90,
+      },
+      dragging: false,
+    },
+    {
+      width: 160,
+      height: 50,
+      id: "0.4515740083546298",
+      type: "custom",
+      position: {
+        x: 15,
+        y: 30,
+      },
+      data: {
+        label: "custom node",
+      },
+      positionAbsolute: {
+        x: 15,
+        y: 30,
+      },
+    },
+  ],
+  edges: [
+    {
+      source: "0.5070981859355164",
+      sourceHandle: null,
+      target: "0.2933712536487305",
+      targetHandle: null,
+      type: "custom",
+      id: "reactflow__edge-0.5070981859355164-0.2933712536487305",
+    },
+  ],
+  viewport: {
+    x: 204.56638897701248,
+    y: 175.8682518737749,
+    zoom: 1.1680862808012318,
+  },
+};
 
 export default function WorkflowBuilder({
   initialNodes,
@@ -26,14 +100,14 @@ export default function WorkflowBuilder({
   initialNodes: Node[];
   initialEdges: Edge[];
 }) {
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-  const [selectedNode, setSelectedNode] = useState<string | null>(null);
+  const [nodes, setNodes, onNodesChange] = useNodesState(initial.nodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(initial.edges);
+  const [selectedNode] = useState<string | null>(null);
 
-  const { createEdge, createNode, updateNode } = useRequestActions();
+  const { createEdge, createNode } = useRequestActions();
 
   const [reactFlowInstance, setReactFlowInstance] =
-    useState<ReactFlowInstance | null>(null);
+    useState<ReactFlowInstance | null>();
 
   const onConnect = useCallback<OnConnect>((params) => {
     const edge = { ...params, type: "custom" };
@@ -87,7 +161,18 @@ export default function WorkflowBuilder({
         <ReactFlow
           nodes={nodes}
           edges={edges}
-          onNodesChange={onNodesChange}
+          onNodesChange={(changes) => {
+            onNodesChange(changes);
+            for (const change of changes) {
+              if (change.type === "dimensions" || change.type === "remove") {
+                console.log(reactFlowInstance?.toObject());
+              }
+            }
+          }}
+          onNodeDragStop={() => {
+            console.log("drag stop");
+            console.log(reactFlowInstance?.toObject());
+          }}
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
           onInit={setReactFlowInstance}

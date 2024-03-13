@@ -12,17 +12,13 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/ui/select";
+
 import { cn } from "~/lib/utils";
 
-export const inputNode = memo(({ data, isConnectable }: NodeProps) => {
+export const inputNode = memo(function InputNode({
+  data,
+  isConnectable,
+}: NodeProps) {
   const [isEditing, setIsEditing] = useState(false);
   const fetcher = useFetcher();
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -75,7 +71,7 @@ export const inputNode = memo(({ data, isConnectable }: NodeProps) => {
             </fetcher.Form>
           ) : (
             <button
-              className="px-3 py-2 h-10"
+              className="px-3 py-2 text-2xl"
               ref={buttonRef}
               onClick={() => {
                 flushSync(() => {
@@ -99,7 +95,7 @@ export const inputNode = memo(({ data, isConnectable }: NodeProps) => {
   );
 });
 
-export const commentNode = memo(({ data, isConnectable }: NodeProps) => {
+export const commentNode = memo(function CommentNode() {
   return (
     <Fragment>
       <Card className="">
@@ -109,9 +105,7 @@ export const commentNode = memo(({ data, isConnectable }: NodeProps) => {
             Deploy your new project in one-click.
           </CardDescription>
         </CardHeader>
-        <CardContent>
-
-        </CardContent>
+        <CardContent></CardContent>
         <CardFooter className="flex justify-between">
           <Button variant="outline">Cancel</Button>
           <Button>Deploy</Button>

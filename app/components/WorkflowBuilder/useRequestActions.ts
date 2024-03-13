@@ -1,5 +1,5 @@
 import { useFetcher } from "@remix-run/react";
-import { Connection, Edge, Node } from "reactflow";
+import { Connection, Node } from "reactflow";
 
 const INTENTS = {
     create: "create",

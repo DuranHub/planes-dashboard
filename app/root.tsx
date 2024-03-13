@@ -1,22 +1,17 @@
-import { cssBundleHref } from "@remix-run/css-bundle";
 import type { LinksFunction, MetaFunction } from "@remix-run/node";
 import {
   Links,
-  LiveReload,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
 
-import styles from "./tailwind.css";
+import styles from "./tailwind.css?url";
 import { Toaster } from "./components/ui/sonner";
 import { GeneralErrorBoundary } from "./components/ErrorBoundary";
 
-export const links: LinksFunction = () => [
-  { rel: "stylesheet", href: styles },
-  ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
-];
+export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
 
 export const meta: MetaFunction = () => [
   {
@@ -37,13 +32,21 @@ function Document({ children }: { children: React.ReactNode }) {
         {children}
         <ScrollRestoration />
         <Scripts />
-        <LiveReload />
       </body>
     </html>
   );
 }
 
-export default function App() {
+export function ErrorBoundary() {
+  return (
+    <Document>
+      <GeneralErrorBoundary />
+      <p>Ooops! Something went wrong.</p>
+    </Document>
+  );
+}
+
+function App() {
   return (
     <Document>
       <Outlet />
@@ -52,11 +55,5 @@ export default function App() {
   );
 }
 
-export function ErrorBoundary({ error }: { error: Error }) {
-  return (
-    <Document>
-      <GeneralErrorBoundary />
-      <p>Ooops! Something went wrong.</p>
-    </Document>
-  );
-}
+export default App;
+

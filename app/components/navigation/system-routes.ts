@@ -15,5 +15,10 @@ export const systemRoutes = [
         to: "/workflows",
         text: "Workflows",
         icon: ActivityIcon,
+    },
+    {
+        to: "/projects",
+        text: "Projects",
+        icon: GalleryVerticalIcon,
     }
 ]
