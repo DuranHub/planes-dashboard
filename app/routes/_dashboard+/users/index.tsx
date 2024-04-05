@@ -5,11 +5,9 @@ import { Fragment, Suspense } from "react";
 import { DataTable } from "~/components/data-table";
 import { columns } from "./datatable/columns";
 import { Skeleton } from "~/components/ui/skeleton";
-import { Heading } from "~/components/ui/heading";
-import { Separator } from "~/components/ui/separator";
 import PageHeader from "~/components/PageHeader";
 
-export function loader() {
+export async function loader() {
   return defer({
     data: fetchUser(),
   });
@@ -33,7 +31,7 @@ export default function UserIndex() {
         <Await resolve={data}>
           {(users) => (
             <div className="px-4 mt-4">
-              <DataTable columns={columns} data={users} />
+              <DataTable columns={columns} data={users.users} />
             </div>
           )}
         </Await>

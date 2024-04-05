@@ -1,0 +1,154 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+directive @resolveRoot on FIELD_DEFINITION
+
+directive @globalOptions(sourceName: String, endpoint: String, operationHeaders: ObjMap, queryStringOptions: ObjMap, queryParams: ObjMap) on OBJECT
+
+directive @httpOperation(path: String, operationSpecificHeaders: ObjMap, httpMethod: HTTPMethod, isBinary: Boolean, requestBaseBody: ObjMap, queryParamArgMap: ObjMap, queryStringOptionsByParam: ObjMap) on FIELD_DEFINITION
+
+type Query @globalOptions(sourceName: "Planes", endpoint: "http://localhost:3004") {
+  users_by_id(id: String!): User @httpOperation(path: "/users/{args.id}", operationSpecificHeaders: "{\"accept\":\"application/json\"}", httpMethod: GET)
+  users(name: String, email: EmailAddress): [User] @httpOperation(path: "/users", operationSpecificHeaders: "{\"accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"name\":\"name\",\"email\":\"email\"}")
+  projects_by_id(
+    """The unique identifier for the project"""
+    id: String!
+  ): Project @httpOperation(path: "/projects/{args.id}", operationSpecificHeaders: "{\"accept\":\"application/json\"}", httpMethod: GET)
+  projects(
+    """The unique identifier for the project"""
+    id: String
+    """The name of the project"""
+    name: String
+  ): [Project] @httpOperation(path: "/projects", operationSpecificHeaders: "{\"accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"id\":\"id\",\"name\":\"name\"}")
+}
+
+type User {
+  id: String!
+  email: EmailAddress!
+  password: String!
+  name: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""
+A field whose value conforms to the standard internet email address format as specified in HTML Spec: https://html.spec.whatwg.org/multipage/input.html#valid-e-mail-address.
+"""
+scalar EmailAddress @specifiedBy(url: "https://html.spec.whatwg.org/multipage/input.html#valid-e-mail-address")
+
+"""
+A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+"""
+scalar DateTime
+
+type Project {
+  """The unique identifier for the project"""
+  id: String!
+  """The name of the project"""
+  name: String!
+  """The description of the project"""
+  description: String!
+  """The date and time the project was created"""
+  createdAt: DateTime!
+  """The date and time the project was last updated"""
+  updatedAt: DateTime!
+  leader: query_projects_by_id_leader!
+  """The users that are collaborators on the project"""
+  collaborators: [User]!
+  """The unique identifiers for the tasks that are part of the project"""
+  tasks: [String]!
+}
+
+type query_projects_by_id_leader {
+  id: String!
+  email: EmailAddress!
+  password: String!
+  name: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  JSON: JSON @resolveRoot
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON @specifiedBy(url: "http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf")
+
+type Mutation {
+  patch_users_by_id(id: String!, input: patch_users_by_id_request_Input): User @httpOperation(path: "/users/{args.id}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"accept\":\"application/json\"}", httpMethod: PATCH)
+  delete_users_by_id(id: String!): User @httpOperation(path: "/users/{args.id}", operationSpecificHeaders: "{\"accept\":\"application/json\"}", httpMethod: DELETE)
+  post_users(input: post_users_request_Input): User @httpOperation(path: "/users", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"accept\":\"application/json\"}", httpMethod: POST)
+  delete_projects_by_id(
+    """The unique identifier for the project"""
+    id: String!
+  ): Project @httpOperation(path: "/projects/{args.id}", operationSpecificHeaders: "{\"accept\":\"application/json\"}", httpMethod: DELETE)
+  put_projects_by_id(
+    """The unique identifier for the project"""
+    id: String!
+    input: put_projects_by_id_request_Input
+  ): Project @httpOperation(path: "/projects/{args.id}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"accept\":\"application/json\"}", httpMethod: PUT)
+  post_projects(input: post_projects_request_Input): Project @httpOperation(path: "/projects", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"accept\":\"application/json\"}", httpMethod: POST)
+}
+
+input patch_users_by_id_request_Input {
+  name: String!
+  password: String!
+}
+
+input post_users_request_Input {
+  email: EmailAddress!
+  password: String!
+  name: String!
+}
+
+input put_projects_by_id_request_Input {
+  """The name of the project"""
+  name: String!
+  """The description of the project"""
+  description: String!
+  """The date and time the project was created"""
+  createdAt: DateTime!
+  """The date and time the project was last updated"""
+  updatedAt: DateTime!
+  leader: JSON!
+  """The users that are collaborators on the project"""
+  collaborators: [User_Input]!
+  """The unique identifiers for the tasks that are part of the project"""
+  tasks: [String]!
+}
+
+input User_Input {
+  id: String!
+  email: EmailAddress!
+  password: String!
+  name: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input post_projects_request_Input {
+  """The name of the project"""
+  name: String!
+  """The description of the project"""
+  description: String!
+  """The leader of the project"""
+  leaderId: String
+  """The collaborators of the project"""
+  collaboratorsIds: [String]
+}
+
+scalar ObjMap
+
+enum HTTPMethod {
+  GET
+  HEAD
+  POST
+  PUT
+  DELETE
+  CONNECT
+  OPTIONS
+  TRACE
+  PATCH
+}
