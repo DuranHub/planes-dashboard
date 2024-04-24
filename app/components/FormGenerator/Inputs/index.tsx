@@ -58,11 +58,9 @@ const LabelBlock = ({ input }: { input: InputUnion }) => {
 
 export const getInputsFromSchema = (schema: Schema) => {
   return schema.map((input) => {
-    console.log(input);
     const InputComponent = inputMap[input.kind] ?? TextInput;
     const inputProps =
       inputPropsByKind[input.kind] ?? inputPropsByKind.alphanumeric;
-      console.log(inputProps);
 
     const Component = function Field({ errors }: FieldProps) {
       return (

@@ -5,15 +5,15 @@ import { ClientOnly } from "remix-utils/client-only";
 import { fetchUsers } from "./users.server";
 import { Fragment, Suspense } from "react";
 import { DataTable } from "~/components/data-table";
-import { columns } from "./datatable/columns";
+import { columns } from "./components/datatable/columns";
 import { Skeleton } from "~/components/ui/skeleton";
 import PageHeader from "~/components/PageHeader";
 import { Button } from "~/components/ui/button";
-import CreateUserModal from "./components/CreateUserModal";
 import { useFormGenerator } from "~/components/FormGenerator";
 
 import { validateFormJsonSchema } from "~/lib/validateFormAjv.server";
 import { Schema } from "~/components/FormGenerator/types";
+import Modal from "~/components/ui/modal";
 
 const createUserSchema = [
   {
@@ -87,14 +87,14 @@ export default function UserIndex() {
                   data={users}
                   externalActions={
                     <ClientOnly
-                      fallback={
-                        <CreateUserModal.Trigger>
-                          Edit Profile
-                        </CreateUserModal.Trigger>
-                      }
+                      fallback={<Modal.Trigger>Edit Profile</Modal.Trigger>}
                     >
                       {() => (
-                        <CreateUserModal>
+                        <Modal
+                          triggerLabel="Add User"
+                          title="Register a new user"
+                          description="Fill in the form below to add a new user."
+                        >
                           {({ closeModal }) => (
                             <Form
                               actions={
@@ -108,7 +108,7 @@ export default function UserIndex() {
                               }
                             />
                           )}
-                        </CreateUserModal>
+                        </Modal>
                       )}
                     </ClientOnly>
                   }

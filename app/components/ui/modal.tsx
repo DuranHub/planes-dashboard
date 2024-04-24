@@ -23,6 +23,9 @@ import {
 
 interface Props {
   children: (props: { closeModal: () => void }) => ReactNode;
+  triggerLabel: string;
+  title?: string;
+  description?: string;
 }
 
 const Trigger = forwardRef<HTMLButtonElement, ComponentProps<typeof Button>>(
@@ -33,7 +36,7 @@ const Trigger = forwardRef<HTMLButtonElement, ComponentProps<typeof Button>>(
 
 Trigger.displayName = "ModalTrigger";
 
-const CreateUserModal = ({ children }: Props) => {
+const Modal = ({ children, triggerLabel, title, description }: Props) => {
   const [open, setOpen] = useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
@@ -41,14 +44,14 @@ const CreateUserModal = ({ children }: Props) => {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Trigger>Edit Profile</Trigger>
+          <Trigger>{triggerLabel}</Trigger>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Edit profile</DialogTitle>
-            <DialogDescription>
-              Make changes to your profile here.
-            </DialogDescription>
+            <DialogTitle>{title || triggerLabel}</DialogTitle>
+            {description && (
+              <DialogDescription>{description}</DialogDescription>
+            )}
           </DialogHeader>
           {children({ closeModal: () => setOpen(false) })}
         </DialogContent>
@@ -59,14 +62,16 @@ const CreateUserModal = ({ children }: Props) => {
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Trigger>Edit Profile</Trigger>
+        <Trigger>{triggerLabel}</Trigger>
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader className="text-left">
-          <DrawerTitle>Edit profile</DrawerTitle>
-          <DrawerDescription>
-            Make changes to your profile here.
-          </DrawerDescription>
+          <DrawerTitle>{title || triggerLabel}</DrawerTitle>
+          {description && (
+            <DrawerDescription>
+              Make changes to your profile here.
+            </DrawerDescription>
+          )}
         </DrawerHeader>
         {children({ closeModal: () => setOpen(false) })}
         <DrawerFooter className="pt-2">
@@ -79,6 +84,6 @@ const CreateUserModal = ({ children }: Props) => {
   );
 };
 
-CreateUserModal.Trigger = Trigger;
+Modal.Trigger = Trigger;
 
-export default CreateUserModal;
+export default Modal;
