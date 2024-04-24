@@ -1,4 +1,10 @@
-import { GalleryVerticalIcon, HomeIcon, ActivityIcon } from "lucide-react";
+import {
+    HomeIcon,
+    UserRoundCogIcon,
+    MonitorPlayIcon,
+    ListChecksIcon,
+    LandmarkIcon,
+} from "lucide-react";
 
 export const systemRoutes = [
     {
@@ -7,18 +13,23 @@ export const systemRoutes = [
         icon: HomeIcon,
     },
     {
-        to: "/users",
-        text: "Users",
-        icon: GalleryVerticalIcon,
+        to: "/levels",
+        text: "Levels",
+        icon: ListChecksIcon,
     },
     {
-        to: "/workflows",
-        text: "Workflows",
-        icon: ActivityIcon,
+        to: "/assignment-areas",
+        text: "Assignment Areas",
+        icon: LandmarkIcon,
+    },
+    {
+        to: "/users",
+        text: "Users",
+        icon: UserRoundCogIcon,
     },
     {
         to: "/projects",
         text: "Projects",
-        icon: GalleryVerticalIcon,
+        icon: MonitorPlayIcon,
     }
 ]

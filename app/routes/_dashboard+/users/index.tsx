@@ -52,7 +52,8 @@ export async function action({ request }: ActionFunctionArgs) {
     });
   }
 
-  // const data = result.data;
+  const data = result.data;
+  console.log(data);
   // await createUser(data);
 
   return "Dashboard";
