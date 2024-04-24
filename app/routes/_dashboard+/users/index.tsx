@@ -2,14 +2,14 @@ import { useLoaderData, Await } from "@remix-run/react";
 import { ActionFunctionArgs, defer, json } from "@remix-run/node";
 import { ClientOnly } from "remix-utils/client-only";
 
-import { createUser, fetchUsers } from "./users.server";
+import { fetchUsers } from "./users.server";
 import { Fragment, Suspense } from "react";
 import { DataTable } from "~/components/data-table";
 import { columns } from "./datatable/columns";
 import { Skeleton } from "~/components/ui/skeleton";
 import PageHeader from "~/components/PageHeader";
 import { Button } from "~/components/ui/button";
-import CreateUserModal from "./createUser/Modal";
+import CreateUserModal from "./components/CreateUserModal";
 import { useFormGenerator } from "~/components/FormGenerator";
 
 import { validateFormJsonSchema } from "~/lib/validateFormAjv.server";
@@ -39,7 +39,7 @@ const createUserSchema = [
 
 export async function loader() {
   return defer({
-    data: fetchUser(),
+    users: fetchUsers(),
   });
 }
 
@@ -52,8 +52,8 @@ export async function action({ request }: ActionFunctionArgs) {
     });
   }
 
-  const data = result.data;
-  await createUser(data);
+  // const data = result.data;
+  // await createUser(data);
 
   return "Dashboard";
 }
@@ -73,6 +73,7 @@ export default function UserIndex() {
       <Suspense
         fallback={
           <div className="flex flex-col space-y-3 px-4 mt-4">
+            <Skeleton className="h-[50px] w-full rounded-xl" />
             <Skeleton className="h-[225px] w-full rounded-xl" />
           </div>
         }
@@ -85,7 +86,13 @@ export default function UserIndex() {
                   columns={columns}
                   data={users}
                   externalActions={
-                    <ClientOnly fallback={<CreateUserModal.Trigger />}>
+                    <ClientOnly
+                      fallback={
+                        <CreateUserModal.Trigger>
+                          Edit Profile
+                        </CreateUserModal.Trigger>
+                      }
+                    >
                       {() => (
                         <CreateUserModal>
                           {({ closeModal }) => (

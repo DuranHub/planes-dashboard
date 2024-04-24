@@ -1,7 +1,6 @@
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef, Column } from "@tanstack/react-table";
 import {
   ArrowDownIcon,
-  ArrowUpDown,
   ArrowUpIcon,
   EyeOffIcon,
   MoreHorizontal,
@@ -18,7 +17,6 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { Checkbox } from "~/components/ui/checkbox";
 
-import { Column } from "@tanstack/react-table";
 import { cn } from "~/lib/utils";
 
 interface DataTableColumnHeaderProps<TData, TValue>
@@ -76,9 +74,8 @@ export function DataTableColumnHeader<TData, TValue>({
 }
 
 export type User = {
-  id: number;
+  id: string;
   name: string;
-  username: string;
   email: string;
 };
 
@@ -107,21 +104,9 @@ export const columns: ColumnDef<User>[] = [
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="ID" />
-    ),
-    accessorKey: "id",
-  },
-  {
-    header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Name" />
     ),
     accessorKey: "name",
-  },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Username" />
-    ),
-    accessorKey: "username",
   },
   {
     header: ({ column }) => (
@@ -138,7 +123,7 @@ export const columns: ColumnDef<User>[] = [
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
+            <Button variant="ghost" className="">
               <span className="sr-only">Open menu</span>
               <MoreHorizontal className="h-4 w-4" />
             </Button>

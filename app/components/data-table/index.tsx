@@ -11,14 +11,7 @@ import {
   getPaginationRowModel,
 } from "@tanstack/react-table";
 import { Fragment, useState } from "react";
-import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu";
 
 import {
   Table,
@@ -28,30 +21,19 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/ui/select";
-import {
-  ArrowLeft,
-  ArrowLeftCircle,
-  ArrowRight,
-  ArrowRightCircle,
-} from "lucide-react";
 import Pagination from "./pagination";
 import { DataTableViewOptions } from "./column-toggle";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  externalActions?: React.ReactNode;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  externalActions,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -88,7 +70,10 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
-        <DataTableViewOptions table={table} />
+        <div className="flex gap-3 ml-auto">
+          {externalActions}
+          <DataTableViewOptions table={table} />
+        </div>
       </div>
       <div className="rounded-md border">
         <Table>
