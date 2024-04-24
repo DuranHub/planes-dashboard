@@ -23,3 +23,28 @@ export async function fetchUsers() {
     email: user.email as string,
   }));
 }
+
+export async function createUser() {
+  const createUserMutation = graphql(`
+  mutation CreateUser($input: post_users_request_Input!) {
+    post_users(input: $input) {
+      id
+      name
+      email
+    }
+  }
+`);
+
+  const user = {
+    name: "Test User",
+    email: "aa@aaa.aa",
+  };
+
+  return graphqlClient.mutation(createUserMutation, {
+    input: {
+      email: user.email,
+      name: user.name,
+      password: "password",
+    },
+  });
+}
