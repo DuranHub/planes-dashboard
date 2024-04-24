@@ -1,11 +1,41 @@
 import { useLoaderData, Await } from "@remix-run/react";
-import { defer } from "@remix-run/node";
-import { fetchUser } from "./fetchUsers.server";
+import { ActionFunctionArgs, defer, json } from "@remix-run/node";
+import { ClientOnly } from "remix-utils/client-only";
+
+import { createUser, fetchUsers } from "./users.server";
 import { Fragment, Suspense } from "react";
 import { DataTable } from "~/components/data-table";
 import { columns } from "./datatable/columns";
 import { Skeleton } from "~/components/ui/skeleton";
 import PageHeader from "~/components/PageHeader";
+import { Button } from "~/components/ui/button";
+import CreateUserModal from "./createUser/Modal";
+import { useFormGenerator } from "~/components/FormGenerator";
+
+import { validateFormJsonSchema } from "~/lib/validateFormAjv.server";
+import { Schema } from "~/components/FormGenerator/types";
+
+const createUserSchema = [
+  {
+    kind: "alphabetic",
+    name: "name",
+    label: "Name",
+    required: true,
+  },
+  {
+    kind: "email",
+    label: "Email",
+    name: "email",
+    required: true,
+  },
+  {
+    kind: "password",
+    name: "password",
+    label: "Password",
+    required: true,
+    minLength: 3,
+  },
+] as const satisfies Schema;
 
 export async function loader() {
   return defer({
@@ -13,8 +43,27 @@ export async function loader() {
   });
 }
 
+export async function action({ request }: ActionFunctionArgs) {
+  const formData = await request.formData();
+  const result = validateFormJsonSchema(formData, createUserSchema);
+  if (!result.success) {
+    return json(result.errors, {
+      status: 400,
+    });
+  }
+
+  const data = result.data;
+  await createUser(data);
+
+  return "Dashboard";
+}
+
 export default function UserIndex() {
-  const { data } = useLoaderData<typeof fetchUser>();
+  const { users } = useLoaderData<typeof loader>();
+  const { Form } = useFormGenerator({
+    schema: createUserSchema,
+  });
+
   return (
     <Fragment>
       <PageHeader
@@ -28,12 +77,38 @@ export default function UserIndex() {
           </div>
         }
       >
-        <Await resolve={data}>
-          {(users) => (
-            <div className="px-4 mt-4">
-              <DataTable columns={columns} data={users.users} />
-            </div>
-          )}
+        <Await resolve={users}>
+          {(users) => {
+            return (
+              <div className="px-4 mt-4">
+                <DataTable
+                  columns={columns}
+                  data={users}
+                  externalActions={
+                    <ClientOnly fallback={<CreateUserModal.Trigger />}>
+                      {() => (
+                        <CreateUserModal>
+                          {({ closeModal }) => (
+                            <Form
+                              actions={
+                                <Button
+                                  type="button"
+                                  variant="secondary"
+                                  onClick={closeModal}
+                                >
+                                  Cancel
+                                </Button>
+                              }
+                            />
+                          )}
+                        </CreateUserModal>
+                      )}
+                    </ClientOnly>
+                  }
+                />
+              </div>
+            );
+          }}
         </Await>
       </Suspense>
     </Fragment>
