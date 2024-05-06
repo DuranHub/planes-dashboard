@@ -8,7 +8,7 @@ interface Props {
     to: string;
     text: string;
     icon: LucideIcon | string;
-  }[];
+  }[]
 }
 
 export default function LinkList({ className = "", links }: Props) {

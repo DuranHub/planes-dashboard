@@ -23,9 +23,15 @@ import {
 
 interface Props {
   children: (props: { closeModal: () => void }) => ReactNode;
-  triggerLabel: string;
+  showTrigger?: boolean;
+  triggerLabel?: string;
   title?: string;
   description?: string;
+  openByDefault?: boolean;
+  controls?: {
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
+  };
 }
 
 const Trigger = forwardRef<HTMLButtonElement, ComponentProps<typeof Button>>(
@@ -36,24 +42,41 @@ const Trigger = forwardRef<HTMLButtonElement, ComponentProps<typeof Button>>(
 
 Trigger.displayName = "ModalTrigger";
 
-const Modal = ({ children, triggerLabel, title, description }: Props) => {
-  const [open, setOpen] = useState(false);
+const Modal = ({
+  children,
+  triggerLabel,
+  title,
+  description,
+  showTrigger = true,
+  openByDefault = false,
+  controls,
+}: Props) => {
+  const [open, setOpen] = useState(openByDefault);
+  const { open: externalOpen, onOpenChange } = controls || {};
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
   if (isDesktop) {
     return (
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
-          <Trigger>{triggerLabel}</Trigger>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
+      <Dialog
+        open={externalOpen ?? open}
+        onOpenChange={onOpenChange ?? setOpen}
+      >
+        {showTrigger && (
+          <DialogTrigger asChild>
+            <Trigger>{triggerLabel}</Trigger>
+          </DialogTrigger>
+        )}
+        <DialogContent
+          className="sm:max-w-[425px]"
+          onOpenAutoFocus={(e) => e.preventDefault()}
+        >
           <DialogHeader>
             <DialogTitle>{title || triggerLabel}</DialogTitle>
             {description && (
               <DialogDescription>{description}</DialogDescription>
             )}
           </DialogHeader>
-          {children({ closeModal: () => setOpen(false) })}
+          {children({ closeModal: () => onOpenChange ? onOpenChange(false) : setOpen(false) })}
         </DialogContent>
       </Dialog>
     );

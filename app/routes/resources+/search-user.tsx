@@ -19,15 +19,20 @@ import { invariant } from "@epic-web/invariant";
 import { useFetcher } from "@remix-run/react";
 import { useState } from "react";
 import { graphql, graphqlClient } from "~/graphql/client.server";
+import { authenticator } from "~/services/auth/auth.server";
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  await authenticator.isAuthenticated(request, {
+    failureRedirect: "/login",
+  });
+
   const url = new URL(request.url);
   const query = url.searchParams.get("query");
   invariant(typeof query === "string", "query is required");
 
   const usersQuery = graphql(`
     query Users($name: String!) {
-      users(name: $name) {
+      findManyUser(where: { name: { contains: $name, mode: insensitive } }) {
         id
         name
       }
@@ -37,7 +42,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const users = await graphqlClient.query(usersQuery, { name: query });
 
   return json({
-    users: users.data?.users ?? [],
+    users: users.data?.findManyUser ?? [],
   });
 }
 
@@ -133,7 +138,7 @@ export function SearchUserCombobox() {
             {users.filter(Boolean).map((user) => (
               <CommandItem
                 key={user.id}
-                value={user.id}
+                value={user.id as string}
                 onSelect={(currentValue) => {
                   setValue(currentValue === value ? "" : currentValue);
                   setOpen(false);

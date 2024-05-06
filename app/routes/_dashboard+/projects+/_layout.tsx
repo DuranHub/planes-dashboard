@@ -9,7 +9,7 @@ import { graphqlClient } from "~/graphql/client.server";
 export const loader = async () => {
   const projectsQuery = graphql(`
     query ProjectList {
-      projects {
+      findManyProject {
         id
         name
       }
@@ -19,7 +19,7 @@ export const loader = async () => {
   const projects = await graphqlClient.query(projectsQuery, {});
 
   return json({
-    projects: projects.data?.projects ?? [],
+    projects: projects.data?.findManyProject ?? [],
   });
 };
 

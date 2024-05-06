@@ -3,6 +3,14 @@ import { json, redirect } from "@remix-run/node";
 import { Form, useLoaderData } from "@remix-run/react";
 import { authenticator } from "~/services/auth/auth.server";
 import { getSession, commitSession } from "~/services/auth/auth-session.server";
+import { Button } from "~/components/ui/button";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from "~/components/ui/input-otp";
+import { Label } from "@radix-ui/react-label";
+import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp"
 
 export async function loader({ request }: LoaderFunctionArgs) {
   await authenticator.isAuthenticated(request, {
@@ -14,7 +22,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const authError = session.get(authenticator.sessionErrorKey);
   if (!authEmail) return redirect("/login");
 
-  // Commit session to clear any `flash` error message.
   return json(
     { authError },
     {
@@ -39,21 +46,28 @@ export default function Verify() {
   const { authError } = useLoaderData<typeof loader>();
 
   return (
-    <div style={{ display: "flex", flexDirection: "column" }}>
-      {/* Code Verification Form */}
-      <Form method="POST">
-        <label htmlFor="code">Code</label>
-        <input type="text" name="code" placeholder="Insert code .." required />
-        <button type="submit">Continue</button>
+    <div className="min-h-screen w-full flex items-center justify-center flex-col gap-4">
+      <Form method="POST" className="flex flex-col gap-4">
+        <Label htmlFor="code">Code</Label>
+        <InputOTP maxLength={6} pattern={REGEXP_ONLY_DIGITS_AND_CHARS} id="code" name="code">
+          <InputOTPGroup id="code">
+            <InputOTPSlot index={0} />
+            <InputOTPSlot index={1} />
+            <InputOTPSlot index={2} />
+            <InputOTPSlot index={3} />
+            <InputOTPSlot index={4} />
+            <InputOTPSlot index={5} />
+          </InputOTPGroup>
+        </InputOTP>
+        <Button type="submit">Continue</Button>
       </Form>
 
-      {/* Renders the form that requests a new code. */}
-      {/* Email input is not required, it's already stored in Session. */}
       <Form method="POST">
-        <button type="submit">Request new Code</button>
+        <Button variant="secondary" type="submit">
+          Request new Code
+        </Button>
       </Form>
 
-      {/* Errors Handling. */}
       <span>{authError?.message}</span>
     </div>
   );

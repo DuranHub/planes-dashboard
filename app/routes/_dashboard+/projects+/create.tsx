@@ -5,8 +5,8 @@ import { graphqlClient } from "~/graphql/client.server";
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const createProjectQuery = graphql(`
-    mutation CreateProject($input: post_projects_request_Input!) {
-      post_projects(input: $input) {
+    mutation CreateProject($input: ProjectCreateInput!) {
+      createOneProject(data: $input) {
         id
       }
     }
@@ -16,7 +16,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     input: {
       name: "New Project 2",
       description: "This is a new project",
-      leaderId: "clu4wnu0w0000tj4px6ummufe"
+      places: {},
+      requirements: {},
+      transitions: {},
+      leader: {
+        connect: {
+          id: "1",
+        },
+      },
     },
   });
   console.log(JSON.stringify(result, null, 2));

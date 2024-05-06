@@ -15,7 +15,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { Checkbox } from "~/components/ui/checkbox";
 
 import { cn } from "~/lib/utils";
 
@@ -73,35 +72,13 @@ export function DataTableColumnHeader<TData, TValue>({
   );
 }
 
-export type User = {
-  id: string;
+export type AssignmentArea = {
+  id: string | number;
   name: string;
-  email: string;
+  description: string;
 };
 
-export const columns: ColumnDef<User>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
+export const columns: ColumnDef<AssignmentArea>[] = [
   {
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Name" />
@@ -110,13 +87,14 @@ export const columns: ColumnDef<User>[] = [
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Email" />
+      <DataTableColumnHeader column={column} title="Description" />
     ),
-    accessorKey: "email",
+    accessorKey: "description",
   },
   {
     id: "actions",
     enableHiding: false,
+    header: "Actions",
     cell: ({ row }) => {
       const payment = row.original;
 

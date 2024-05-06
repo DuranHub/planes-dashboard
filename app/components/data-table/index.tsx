@@ -28,17 +28,20 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   externalActions?: React.ReactNode;
+  emptyStateAction?: React.ReactNode;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   externalActions,
+  emptyStateAction,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
+  const [globalFilter, setGlobalFilter] = useState<string>("");
 
   const table = useReactTable({
     data,
@@ -56,17 +59,19 @@ export function DataTable<TData, TValue>({
       columnFilters,
       columnVisibility,
       rowSelection,
+      globalFilter,
     },
   });
 
   return (
     <Fragment>
-      <div className="flex items-center pb-4">
+      <div className="flex gap-4 items-center pb-4">
         <Input
-          placeholder="Filter emails..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+          tabIndex={0}
+          placeholder="Search..."
+          value={globalFilter ?? ""}
           onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
+            setGlobalFilter(event.target.value.toLowerCase())
           }
           className="max-w-sm"
         />
@@ -119,6 +124,7 @@ export function DataTable<TData, TValue>({
                   className="h-24 text-center"
                 >
                   No results.
+                  {emptyStateAction}
                 </TableCell>
               </TableRow>
             )}

@@ -1,7 +1,7 @@
 import type { FetcherFormProps } from "react-router-dom";
-import type { FieldErrors, FieldValues } from "react-hook-form";
+import type { ControllerRenderProps, FieldValues } from "react-hook-form";
 
-type InputsKind = "alphanumeric" | "email" | "alphabetic" | "password";
+type InputsKind = "alphanumeric" | "email" | "alphabetic" | "password" | "select";
 
 type InputDefinition = {
     kind: InputsKind;
@@ -21,7 +21,12 @@ type EmailInputDefinition = InputDefinition & {
     kind: "email";
 };
 
-type InputUnion = TextInputDefinition | EmailInputDefinition;
+type SelectInputDefinition = InputDefinition & {
+    kind: "select";
+    options: { value: string; label: string }[];
+};
+
+type InputUnion = TextInputDefinition | EmailInputDefinition | SelectInputDefinition;
 type Schema = InputUnion[];
 
 interface FormGeneratorArgs {
@@ -33,9 +38,11 @@ interface FormGeneratorArgs {
 }
 
 interface FieldProps {
-    errors: FieldErrors<FieldValues>
+    field: ControllerRenderProps<FieldValues, string>
 }
 
 interface FormGeneratedProps {
     actions?: JSX.Element;
+    onSubmitCallback?: () => void;
+    fetcher: FetcherWithComponents;
 }

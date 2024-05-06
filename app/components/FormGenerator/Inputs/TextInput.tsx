@@ -1,11 +1,16 @@
 import { ComponentProps } from "react";
-import { useFormContext } from "react-hook-form";
+import { FormControl } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 
-type Props = ComponentProps<typeof Input>;
+type BaseProps = ComponentProps<typeof Input>;
+interface Props extends BaseProps {
+  field: { name: string; value: string };
+}
 
-export default function BaseInput(props: Props) {
-  const { register } = useFormContext();
-
-  return <Input {...props} {...register(props.name!)} />;
+export default function BaseInput({ field, defaultValue }: Props) {
+  return (
+    <FormControl>
+      <Input defaultValue={defaultValue || ""} {...field} />
+    </FormControl>
+  );
 }
