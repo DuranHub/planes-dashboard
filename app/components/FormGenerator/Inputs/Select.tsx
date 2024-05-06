@@ -107,7 +107,6 @@ export function SelectInput({ field, ...props }: Props) {
         name={field.name}
         value={field.value}
         onChange={() => {}}
-        defaultValue=""
       />
     </Fragment>
   );

@@ -5,9 +5,10 @@ import { systemRoutes } from "~/components/navigation/system-routes";
 import { Button } from "~/components/ui/button";
 import { Drawer, DrawerContent, DrawerTrigger } from "~/components/ui/drawer";
 import { Separator } from "~/components/ui/separator";
+import { LucideIcon, MenuIcon } from "lucide-react";
 
 interface Props {
-  procedures: any[];
+  procedures: { to: string; text: string; icon: string | LucideIcon }[];
 }
 
 export default function Navigation({ procedures }: Props) {
@@ -32,10 +33,10 @@ export default function Navigation({ procedures }: Props) {
 
       {/* Mobile navigation */}
       <Drawer direction="right" shouldScaleBackground={false}>
-        <aside className="lg:hidden p-4">
+        <aside className="lg:hidden p-4 flex justify-end">
           <DrawerTrigger asChild>
-            <Button variant="default" size="sm">
-              Menu
+            <Button variant="ghost" size="icon">
+              <MenuIcon />
             </Button>
           </DrawerTrigger>
         </aside>

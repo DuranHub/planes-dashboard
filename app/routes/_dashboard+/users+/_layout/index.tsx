@@ -17,7 +17,6 @@ export async function loader() {
 
 export default function UserIndex() {
   const { users } = useLoaderData<typeof loader>();
-
   return (
     <Fragment>
       <PageHeader

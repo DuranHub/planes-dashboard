@@ -16,5 +16,8 @@ export default defineConfig({
     routes: async defineRoutes => {
       return flatRoutes('routes', defineRoutes)
     }
-  }), tsconfigPaths(), remixDevTools(),],
+  }),
+  tsconfigPaths(),
+  remixDevTools()
+  ],
 });

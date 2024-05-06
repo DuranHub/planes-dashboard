@@ -146,7 +146,10 @@ export const columns: ColumnDef<UserQuery>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem asChild>
-              <Link to={`${user.id}`}>Edit User</Link>
+              <Link to={`${user.id}/edit`}>Edit User</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link to={`${user.id}/delete`}>Delete User</Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

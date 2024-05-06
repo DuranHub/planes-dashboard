@@ -1,4 +1,10 @@
-import { Await, defer, useLoaderData, useNavigate } from "@remix-run/react";
+import {
+  Await,
+  defer,
+  useFetcher,
+  useLoaderData,
+  useNavigate,
+} from "@remix-run/react";
 import { ClientOnly } from "remix-utils/client-only";
 import { Schema } from "~/components/FormGenerator/types";
 import Modal from "~/components/ui/modal";
@@ -13,7 +19,7 @@ import { validateFormJsonSchema } from "~/lib/validateFormAjv.server";
 import { createUserMutation } from "~/graphql/models/user/mutations";
 import { useFormGenerator } from "~/components/FormGenerator";
 import { Button } from "~/components/ui/button";
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import { Skeleton } from "~/components/ui/skeleton";
 
 const createUserSchema = [
@@ -101,7 +107,6 @@ export async function action({ request }: ActionFunctionArgs) {
 
   // Extract variables
   const { assignmentArea, email, identification, name, position } = result.data;
-
   // Buisness logic
   const { data: user, error } = await graphqlClient.mutation(
     createUserMutation,
@@ -114,7 +119,7 @@ export async function action({ request }: ActionFunctionArgs) {
         position,
         assignmentArea: {
           connect: {
-            id: assignmentArea,
+            machineName: assignmentArea,
           },
         },
       },
@@ -175,9 +180,17 @@ function AddForm({
   const { FormGenerated } = useFormGenerator({
     schema,
   });
+  const fetcher = useFetcher<{ success: boolean }>();
+
+  useEffect(() => {
+    if (fetcher.state === "idle" && fetcher.data?.success) {
+      closeModal();
+    }
+  }, [fetcher.state, fetcher.data, closeModal]);
 
   return (
     <FormGenerated
+      fetcher={fetcher}
       actions={
         <Button type="button" variant="secondary" onClick={closeModal}>
           Cancel

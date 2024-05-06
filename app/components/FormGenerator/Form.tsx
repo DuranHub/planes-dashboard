@@ -8,6 +8,7 @@ import { JSONSchemaType } from "ajv";
 import { fullFormats } from "ajv-formats/dist/formats";
 import { FormField } from "../ui/form";
 import { useRef } from "react";
+import { LoaderIcon } from "lucide-react";
 
 interface Inputs {
   Component: (props: FieldProps) => JSX.Element;
@@ -37,11 +38,12 @@ export const FormGenerator = ({
   defaultValues,
 }: Props) => {
   const form = useForm({
-    defaultValues,
+    defaultValues: defaultValues,
     mode: "onBlur",
     reValidateMode: "onChange",
     resolver: ajvResolver(schema, { allErrors: true, formats: fullFormats }),
   });
+
   const formRef = useRef<HTMLFormElement>(null);
   const navSubmit = useSubmit();
   const submit = fetcher?.submit ?? navSubmit;
@@ -85,7 +87,11 @@ export const FormGenerator = ({
         <div className="flex justify-end gap-4">
           {actions}
           <Button disabled={fetcher?.state !== "idle"} type="submit">
-            {saveButtonText}
+            {fetcher?.state !== "idle" ? (
+              <LoaderIcon className="animate-spin" />
+            ) : (
+              saveButtonText
+            )}
           </Button>
         </div>
       </Form>
