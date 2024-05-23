@@ -15627,6 +15627,30 @@ export type introspection = {
         "name": "Project",
         "fields": [
           {
+            "name": "account",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "archiveBox",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "args": []
+          },
+          {
             "name": "collaborators",
             "type": {
               "kind": "NON_NULL",
@@ -15739,6 +15763,18 @@ export type introspection = {
             "args": []
           },
           {
+            "name": "goal",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "args": []
+          },
+          {
             "name": "id",
             "type": {
               "kind": "NON_NULL",
@@ -15825,12 +15861,9 @@ export type introspection = {
           {
             "name": "places",
             "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Json",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "Json",
+              "ofType": null
             },
             "args": []
           },
@@ -15914,26 +15947,32 @@ export type introspection = {
             ]
           },
           {
-            "name": "requirements",
+            "name": "progressUnit",
             "type": {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "SCALAR",
-                "name": "Json",
+                "name": "String",
                 "ofType": null
               }
             },
             "args": []
           },
           {
+            "name": "requirements",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Json",
+              "ofType": null
+            },
+            "args": []
+          },
+          {
             "name": "transitions",
             "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Json",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "Json",
+              "ofType": null
             },
             "args": []
           },
@@ -15954,8 +15993,38 @@ export type introspection = {
       },
       {
         "kind": "INPUT_OBJECT",
+        "name": "ProjectAvgOrderByAggregateInput",
+        "inputFields": [
+          {
+            "name": "goal",
+            "type": {
+              "kind": "ENUM",
+              "name": "SortOrder",
+              "ofType": null
+            }
+          }
+        ]
+      },
+      {
+        "kind": "INPUT_OBJECT",
         "name": "ProjectCountOrderByAggregateInput",
         "inputFields": [
+          {
+            "name": "account",
+            "type": {
+              "kind": "ENUM",
+              "name": "SortOrder",
+              "ofType": null
+            }
+          },
+          {
+            "name": "archiveBox",
+            "type": {
+              "kind": "ENUM",
+              "name": "SortOrder",
+              "ofType": null
+            }
+          },
           {
             "name": "createdAt",
             "type": {
@@ -15974,6 +16043,14 @@ export type introspection = {
           },
           {
             "name": "description",
+            "type": {
+              "kind": "ENUM",
+              "name": "SortOrder",
+              "ofType": null
+            }
+          },
+          {
+            "name": "goal",
             "type": {
               "kind": "ENUM",
               "name": "SortOrder",
@@ -16029,6 +16106,14 @@ export type introspection = {
             }
           },
           {
+            "name": "progressUnit",
+            "type": {
+              "kind": "ENUM",
+              "name": "SortOrder",
+              "ofType": null
+            }
+          },
+          {
             "name": "requirements",
             "type": {
               "kind": "ENUM",
@@ -16058,6 +16143,28 @@ export type introspection = {
         "kind": "INPUT_OBJECT",
         "name": "ProjectCreateInput",
         "inputFields": [
+          {
+            "name": "account",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            }
+          },
+          {
+            "name": "archiveBox",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            }
+          },
           {
             "name": "collaborators",
             "type": {
@@ -16089,6 +16196,17 @@ export type introspection = {
               "ofType": {
                 "kind": "SCALAR",
                 "name": "String",
+                "ofType": null
+              }
+            }
+          },
+          {
+            "name": "goal",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
                 "ofType": null
               }
             }
@@ -16148,12 +16266,9 @@ export type introspection = {
           {
             "name": "places",
             "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Json",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "Json",
+              "ofType": null
             }
           },
           {
@@ -16165,25 +16280,30 @@ export type introspection = {
             }
           },
           {
-            "name": "requirements",
+            "name": "progressUnit",
             "type": {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "SCALAR",
-                "name": "Json",
+                "name": "String",
                 "ofType": null
               }
             }
           },
           {
+            "name": "requirements",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Json",
+              "ofType": null
+            }
+          },
+          {
             "name": "transitions",
             "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Json",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "Json",
+              "ofType": null
             }
           },
           {
@@ -16200,6 +16320,28 @@ export type introspection = {
         "kind": "INPUT_OBJECT",
         "name": "ProjectCreateManyInput",
         "inputFields": [
+          {
+            "name": "account",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            }
+          },
+          {
+            "name": "archiveBox",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            }
+          },
           {
             "name": "createdAt",
             "type": {
@@ -16223,6 +16365,17 @@ export type introspection = {
               "ofType": {
                 "kind": "SCALAR",
                 "name": "String",
+                "ofType": null
+              }
+            }
+          },
+          {
+            "name": "goal",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
                 "ofType": null
               }
             }
@@ -16282,10 +16435,18 @@ export type introspection = {
           {
             "name": "places",
             "type": {
+              "kind": "SCALAR",
+              "name": "Json",
+              "ofType": null
+            }
+          },
+          {
+            "name": "progressUnit",
+            "type": {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "SCALAR",
-                "name": "Json",
+                "name": "String",
                 "ofType": null
               }
             }
@@ -16293,23 +16454,17 @@ export type introspection = {
           {
             "name": "requirements",
             "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Json",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "Json",
+              "ofType": null
             }
           },
           {
             "name": "transitions",
             "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Json",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "Json",
+              "ofType": null
             }
           },
           {
@@ -16326,6 +16481,28 @@ export type introspection = {
         "kind": "INPUT_OBJECT",
         "name": "ProjectCreateManyLeaderInput",
         "inputFields": [
+          {
+            "name": "account",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            }
+          },
+          {
+            "name": "archiveBox",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            }
+          },
           {
             "name": "createdAt",
             "type": {
@@ -16349,6 +16526,17 @@ export type introspection = {
               "ofType": {
                 "kind": "SCALAR",
                 "name": "String",
+                "ofType": null
+              }
+            }
+          },
+          {
+            "name": "goal",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
                 "ofType": null
               }
             }
@@ -16397,10 +16585,18 @@ export type introspection = {
           {
             "name": "places",
             "type": {
+              "kind": "SCALAR",
+              "name": "Json",
+              "ofType": null
+            }
+          },
+          {
+            "name": "progressUnit",
+            "type": {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "SCALAR",
-                "name": "Json",
+                "name": "String",
                 "ofType": null
               }
             }
@@ -16408,23 +16604,17 @@ export type introspection = {
           {
             "name": "requirements",
             "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Json",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "Json",
+              "ofType": null
             }
           },
           {
             "name": "transitions",
             "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Json",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "Json",
+              "ofType": null
             }
           },
           {
@@ -16473,6 +16663,28 @@ export type introspection = {
         "name": "ProjectCreateManyLevelInput",
         "inputFields": [
           {
+            "name": "account",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            }
+          },
+          {
+            "name": "archiveBox",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            }
+          },
+          {
             "name": "createdAt",
             "type": {
               "kind": "SCALAR",
@@ -16495,6 +16707,17 @@ export type introspection = {
               "ofType": {
                 "kind": "SCALAR",
                 "name": "String",
+                "ofType": null
+              }
+            }
+          },
+          {
+            "name": "goal",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
                 "ofType": null
               }
             }
@@ -16543,10 +16766,18 @@ export type introspection = {
           {
             "name": "places",
             "type": {
+              "kind": "SCALAR",
+              "name": "Json",
+              "ofType": null
+            }
+          },
+          {
+            "name": "progressUnit",
+            "type": {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "SCALAR",
-                "name": "Json",
+                "name": "String",
                 "ofType": null
               }
             }
@@ -16554,23 +16785,17 @@ export type introspection = {
           {
             "name": "requirements",
             "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Json",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "Json",
+              "ofType": null
             }
           },
           {
             "name": "transitions",
             "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Json",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "Json",
+              "ofType": null
             }
           },
           {
@@ -16921,6 +17146,28 @@ export type introspection = {
         "name": "ProjectCreateWithoutCollaboratorsInput",
         "inputFields": [
           {
+            "name": "account",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            }
+          },
+          {
+            "name": "archiveBox",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            }
+          },
+          {
             "name": "createdAt",
             "type": {
               "kind": "SCALAR",
@@ -16943,6 +17190,17 @@ export type introspection = {
               "ofType": {
                 "kind": "SCALAR",
                 "name": "String",
+                "ofType": null
+              }
+            }
+          },
+          {
+            "name": "goal",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
                 "ofType": null
               }
             }
@@ -17002,12 +17260,9 @@ export type introspection = {
           {
             "name": "places",
             "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Json",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "Json",
+              "ofType": null
             }
           },
           {
@@ -17019,25 +17274,30 @@ export type introspection = {
             }
           },
           {
-            "name": "requirements",
+            "name": "progressUnit",
             "type": {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "SCALAR",
-                "name": "Json",
+                "name": "String",
                 "ofType": null
               }
             }
           },
           {
+            "name": "requirements",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Json",
+              "ofType": null
+            }
+          },
+          {
             "name": "transitions",
             "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Json",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "Json",
+              "ofType": null
             }
           },
           {
@@ -17055,6 +17315,28 @@ export type introspection = {
         "name": "ProjectCreateWithoutLeaderInput",
         "inputFields": [
           {
+            "name": "account",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            }
+          },
+          {
+            "name": "archiveBox",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            }
+          },
+          {
             "name": "collaborators",
             "type": {
               "kind": "INPUT_OBJECT",
@@ -17085,6 +17367,17 @@ export type introspection = {
               "ofType": {
                 "kind": "SCALAR",
                 "name": "String",
+                "ofType": null
+              }
+            }
+          },
+          {
+            "name": "goal",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
                 "ofType": null
               }
             }
@@ -17133,12 +17426,9 @@ export type introspection = {
           {
             "name": "places",
             "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Json",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "Json",
+              "ofType": null
             }
           },
           {
@@ -17150,25 +17440,30 @@ export type introspection = {
             }
           },
           {
-            "name": "requirements",
+            "name": "progressUnit",
             "type": {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "SCALAR",
-                "name": "Json",
+                "name": "String",
                 "ofType": null
               }
             }
           },
           {
+            "name": "requirements",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Json",
+              "ofType": null
+            }
+          },
+          {
             "name": "transitions",
             "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Json",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "Json",
+              "ofType": null
             }
           },
           {
@@ -17186,6 +17481,28 @@ export type introspection = {
         "name": "ProjectCreateWithoutLevelInput",
         "inputFields": [
           {
+            "name": "account",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            }
+          },
+          {
+            "name": "archiveBox",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            }
+          },
+          {
             "name": "collaborators",
             "type": {
               "kind": "INPUT_OBJECT",
@@ -17216,6 +17533,17 @@ export type introspection = {
               "ofType": {
                 "kind": "SCALAR",
                 "name": "String",
+                "ofType": null
+              }
+            }
+          },
+          {
+            "name": "goal",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
                 "ofType": null
               }
             }
@@ -17264,12 +17592,9 @@ export type introspection = {
           {
             "name": "places",
             "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Json",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "Json",
+              "ofType": null
             }
           },
           {
@@ -17281,25 +17606,30 @@ export type introspection = {
             }
           },
           {
-            "name": "requirements",
+            "name": "progressUnit",
             "type": {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "SCALAR",
-                "name": "Json",
+                "name": "String",
                 "ofType": null
               }
             }
           },
           {
+            "name": "requirements",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Json",
+              "ofType": null
+            }
+          },
+          {
             "name": "transitions",
             "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Json",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "Json",
+              "ofType": null
             }
           },
           {
@@ -17316,6 +17646,28 @@ export type introspection = {
         "kind": "INPUT_OBJECT",
         "name": "ProjectCreateWithoutProceduresInput",
         "inputFields": [
+          {
+            "name": "account",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            }
+          },
+          {
+            "name": "archiveBox",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            }
+          },
           {
             "name": "collaborators",
             "type": {
@@ -17347,6 +17699,17 @@ export type introspection = {
               "ofType": {
                 "kind": "SCALAR",
                 "name": "String",
+                "ofType": null
+              }
+            }
+          },
+          {
+            "name": "goal",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
                 "ofType": null
               }
             }
@@ -17406,10 +17769,18 @@ export type introspection = {
           {
             "name": "places",
             "type": {
+              "kind": "SCALAR",
+              "name": "Json",
+              "ofType": null
+            }
+          },
+          {
+            "name": "progressUnit",
+            "type": {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "SCALAR",
-                "name": "Json",
+                "name": "String",
                 "ofType": null
               }
             }
@@ -17417,23 +17788,17 @@ export type introspection = {
           {
             "name": "requirements",
             "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Json",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "Json",
+              "ofType": null
             }
           },
           {
             "name": "transitions",
             "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Json",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "Json",
+              "ofType": null
             }
           },
           {
@@ -17481,6 +17846,22 @@ export type introspection = {
         "name": "ProjectMaxOrderByAggregateInput",
         "inputFields": [
           {
+            "name": "account",
+            "type": {
+              "kind": "ENUM",
+              "name": "SortOrder",
+              "ofType": null
+            }
+          },
+          {
+            "name": "archiveBox",
+            "type": {
+              "kind": "ENUM",
+              "name": "SortOrder",
+              "ofType": null
+            }
+          },
+          {
             "name": "createdAt",
             "type": {
               "kind": "ENUM",
@@ -17498,6 +17879,14 @@ export type introspection = {
           },
           {
             "name": "description",
+            "type": {
+              "kind": "ENUM",
+              "name": "SortOrder",
+              "ofType": null
+            }
+          },
+          {
+            "name": "goal",
             "type": {
               "kind": "ENUM",
               "name": "SortOrder",
@@ -17538,6 +17927,14 @@ export type introspection = {
           },
           {
             "name": "name",
+            "type": {
+              "kind": "ENUM",
+              "name": "SortOrder",
+              "ofType": null
+            }
+          },
+          {
+            "name": "progressUnit",
             "type": {
               "kind": "ENUM",
               "name": "SortOrder",
@@ -17559,6 +17956,22 @@ export type introspection = {
         "name": "ProjectMinOrderByAggregateInput",
         "inputFields": [
           {
+            "name": "account",
+            "type": {
+              "kind": "ENUM",
+              "name": "SortOrder",
+              "ofType": null
+            }
+          },
+          {
+            "name": "archiveBox",
+            "type": {
+              "kind": "ENUM",
+              "name": "SortOrder",
+              "ofType": null
+            }
+          },
+          {
             "name": "createdAt",
             "type": {
               "kind": "ENUM",
@@ -17576,6 +17989,14 @@ export type introspection = {
           },
           {
             "name": "description",
+            "type": {
+              "kind": "ENUM",
+              "name": "SortOrder",
+              "ofType": null
+            }
+          },
+          {
+            "name": "goal",
             "type": {
               "kind": "ENUM",
               "name": "SortOrder",
@@ -17616,6 +18037,14 @@ export type introspection = {
           },
           {
             "name": "name",
+            "type": {
+              "kind": "ENUM",
+              "name": "SortOrder",
+              "ofType": null
+            }
+          },
+          {
+            "name": "progressUnit",
             "type": {
               "kind": "ENUM",
               "name": "SortOrder",
@@ -17673,6 +18102,14 @@ export type introspection = {
         "name": "ProjectOrderByWithAggregationInput",
         "inputFields": [
           {
+            "name": "_avg",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "ProjectAvgOrderByAggregateInput",
+              "ofType": null
+            }
+          },
+          {
             "name": "_count",
             "type": {
               "kind": "INPUT_OBJECT",
@@ -17697,6 +18134,30 @@ export type introspection = {
             }
           },
           {
+            "name": "_sum",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "ProjectSumOrderByAggregateInput",
+              "ofType": null
+            }
+          },
+          {
+            "name": "account",
+            "type": {
+              "kind": "ENUM",
+              "name": "SortOrder",
+              "ofType": null
+            }
+          },
+          {
+            "name": "archiveBox",
+            "type": {
+              "kind": "ENUM",
+              "name": "SortOrder",
+              "ofType": null
+            }
+          },
+          {
             "name": "createdAt",
             "type": {
               "kind": "ENUM",
@@ -17714,6 +18175,14 @@ export type introspection = {
           },
           {
             "name": "description",
+            "type": {
+              "kind": "ENUM",
+              "name": "SortOrder",
+              "ofType": null
+            }
+          },
+          {
+            "name": "goal",
             "type": {
               "kind": "ENUM",
               "name": "SortOrder",
@@ -17769,6 +18238,14 @@ export type introspection = {
             }
           },
           {
+            "name": "progressUnit",
+            "type": {
+              "kind": "ENUM",
+              "name": "SortOrder",
+              "ofType": null
+            }
+          },
+          {
             "name": "requirements",
             "type": {
               "kind": "ENUM",
@@ -17799,6 +18276,22 @@ export type introspection = {
         "name": "ProjectOrderByWithRelationInput",
         "inputFields": [
           {
+            "name": "account",
+            "type": {
+              "kind": "ENUM",
+              "name": "SortOrder",
+              "ofType": null
+            }
+          },
+          {
+            "name": "archiveBox",
+            "type": {
+              "kind": "ENUM",
+              "name": "SortOrder",
+              "ofType": null
+            }
+          },
+          {
             "name": "collaborators",
             "type": {
               "kind": "INPUT_OBJECT",
@@ -17824,6 +18317,14 @@ export type introspection = {
           },
           {
             "name": "description",
+            "type": {
+              "kind": "ENUM",
+              "name": "SortOrder",
+              "ofType": null
+            }
+          },
+          {
+            "name": "goal",
             "type": {
               "kind": "ENUM",
               "name": "SortOrder",
@@ -17903,6 +18404,14 @@ export type introspection = {
             }
           },
           {
+            "name": "progressUnit",
+            "type": {
+              "kind": "ENUM",
+              "name": "SortOrder",
+              "ofType": null
+            }
+          },
+          {
             "name": "requirements",
             "type": {
               "kind": "ENUM",
@@ -17933,6 +18442,12 @@ export type introspection = {
         "name": "ProjectScalarFieldEnum",
         "enumValues": [
           {
+            "name": "account"
+          },
+          {
+            "name": "archiveBox"
+          },
+          {
             "name": "createdAt"
           },
           {
@@ -17940,6 +18455,9 @@ export type introspection = {
           },
           {
             "name": "description"
+          },
+          {
+            "name": "goal"
           },
           {
             "name": "id"
@@ -17958,6 +18476,9 @@ export type introspection = {
           },
           {
             "name": "places"
+          },
+          {
+            "name": "progressUnit"
           },
           {
             "name": "requirements"
@@ -18017,6 +18538,22 @@ export type introspection = {
             }
           },
           {
+            "name": "account",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "StringFilter",
+              "ofType": null
+            }
+          },
+          {
+            "name": "archiveBox",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "StringFilter",
+              "ofType": null
+            }
+          },
+          {
             "name": "createdAt",
             "type": {
               "kind": "INPUT_OBJECT",
@@ -18037,6 +18574,14 @@ export type introspection = {
             "type": {
               "kind": "INPUT_OBJECT",
               "name": "StringFilter",
+              "ofType": null
+            }
+          },
+          {
+            "name": "goal",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "IntFilter",
               "ofType": null
             }
           },
@@ -18084,7 +18629,15 @@ export type introspection = {
             "name": "places",
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "JsonFilter",
+              "name": "JsonNullableFilter",
+              "ofType": null
+            }
+          },
+          {
+            "name": "progressUnit",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "StringFilter",
               "ofType": null
             }
           },
@@ -18092,7 +18645,7 @@ export type introspection = {
             "name": "requirements",
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "JsonFilter",
+              "name": "JsonNullableFilter",
               "ofType": null
             }
           },
@@ -18100,7 +18653,7 @@ export type introspection = {
             "name": "transitions",
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "JsonFilter",
+              "name": "JsonNullableFilter",
               "ofType": null
             }
           },
@@ -18161,6 +18714,22 @@ export type introspection = {
             }
           },
           {
+            "name": "account",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "StringWithAggregatesFilter",
+              "ofType": null
+            }
+          },
+          {
+            "name": "archiveBox",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "StringWithAggregatesFilter",
+              "ofType": null
+            }
+          },
+          {
             "name": "createdAt",
             "type": {
               "kind": "INPUT_OBJECT",
@@ -18181,6 +18750,14 @@ export type introspection = {
             "type": {
               "kind": "INPUT_OBJECT",
               "name": "StringWithAggregatesFilter",
+              "ofType": null
+            }
+          },
+          {
+            "name": "goal",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "IntWithAggregatesFilter",
               "ofType": null
             }
           },
@@ -18228,7 +18805,15 @@ export type introspection = {
             "name": "places",
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "JsonWithAggregatesFilter",
+              "name": "JsonNullableWithAggregatesFilter",
+              "ofType": null
+            }
+          },
+          {
+            "name": "progressUnit",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "StringWithAggregatesFilter",
               "ofType": null
             }
           },
@@ -18236,7 +18821,7 @@ export type introspection = {
             "name": "requirements",
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "JsonWithAggregatesFilter",
+              "name": "JsonNullableWithAggregatesFilter",
               "ofType": null
             }
           },
@@ -18244,7 +18829,7 @@ export type introspection = {
             "name": "transitions",
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "JsonWithAggregatesFilter",
+              "name": "JsonNullableWithAggregatesFilter",
               "ofType": null
             }
           },
@@ -18260,8 +18845,38 @@ export type introspection = {
       },
       {
         "kind": "INPUT_OBJECT",
+        "name": "ProjectSumOrderByAggregateInput",
+        "inputFields": [
+          {
+            "name": "goal",
+            "type": {
+              "kind": "ENUM",
+              "name": "SortOrder",
+              "ofType": null
+            }
+          }
+        ]
+      },
+      {
+        "kind": "INPUT_OBJECT",
         "name": "ProjectUpdateInput",
         "inputFields": [
+          {
+            "name": "account",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "StringFieldUpdateOperationsInput",
+              "ofType": null
+            }
+          },
+          {
+            "name": "archiveBox",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "StringFieldUpdateOperationsInput",
+              "ofType": null
+            }
+          },
           {
             "name": "collaborators",
             "type": {
@@ -18291,6 +18906,14 @@ export type introspection = {
             "type": {
               "kind": "INPUT_OBJECT",
               "name": "StringFieldUpdateOperationsInput",
+              "ofType": null
+            }
+          },
+          {
+            "name": "goal",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "IntFieldUpdateOperationsInput",
               "ofType": null
             }
           },
@@ -18351,6 +18974,14 @@ export type introspection = {
             }
           },
           {
+            "name": "progressUnit",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "StringFieldUpdateOperationsInput",
+              "ofType": null
+            }
+          },
+          {
             "name": "requirements",
             "type": {
               "kind": "SCALAR",
@@ -18381,6 +19012,22 @@ export type introspection = {
         "name": "ProjectUpdateManyMutationInput",
         "inputFields": [
           {
+            "name": "account",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "StringFieldUpdateOperationsInput",
+              "ofType": null
+            }
+          },
+          {
+            "name": "archiveBox",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "StringFieldUpdateOperationsInput",
+              "ofType": null
+            }
+          },
+          {
             "name": "createdAt",
             "type": {
               "kind": "INPUT_OBJECT",
@@ -18401,6 +19048,14 @@ export type introspection = {
             "type": {
               "kind": "INPUT_OBJECT",
               "name": "StringFieldUpdateOperationsInput",
+              "ofType": null
+            }
+          },
+          {
+            "name": "goal",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "IntFieldUpdateOperationsInput",
               "ofType": null
             }
           },
@@ -18433,6 +19088,14 @@ export type introspection = {
             "type": {
               "kind": "SCALAR",
               "name": "Json",
+              "ofType": null
+            }
+          },
+          {
+            "name": "progressUnit",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "StringFieldUpdateOperationsInput",
               "ofType": null
             }
           },
@@ -19176,6 +19839,22 @@ export type introspection = {
         "name": "ProjectUpdateWithoutCollaboratorsInput",
         "inputFields": [
           {
+            "name": "account",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "StringFieldUpdateOperationsInput",
+              "ofType": null
+            }
+          },
+          {
+            "name": "archiveBox",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "StringFieldUpdateOperationsInput",
+              "ofType": null
+            }
+          },
+          {
             "name": "createdAt",
             "type": {
               "kind": "INPUT_OBJECT",
@@ -19196,6 +19875,14 @@ export type introspection = {
             "type": {
               "kind": "INPUT_OBJECT",
               "name": "StringFieldUpdateOperationsInput",
+              "ofType": null
+            }
+          },
+          {
+            "name": "goal",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "IntFieldUpdateOperationsInput",
               "ofType": null
             }
           },
@@ -19252,6 +19939,14 @@ export type introspection = {
             "type": {
               "kind": "INPUT_OBJECT",
               "name": "ProcedureUpdateManyWithoutProjectNestedInput",
+              "ofType": null
+            }
+          },
+          {
+            "name": "progressUnit",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "StringFieldUpdateOperationsInput",
               "ofType": null
             }
           },
@@ -19286,6 +19981,22 @@ export type introspection = {
         "name": "ProjectUpdateWithoutLeaderInput",
         "inputFields": [
           {
+            "name": "account",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "StringFieldUpdateOperationsInput",
+              "ofType": null
+            }
+          },
+          {
+            "name": "archiveBox",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "StringFieldUpdateOperationsInput",
+              "ofType": null
+            }
+          },
+          {
             "name": "collaborators",
             "type": {
               "kind": "INPUT_OBJECT",
@@ -19314,6 +20025,14 @@ export type introspection = {
             "type": {
               "kind": "INPUT_OBJECT",
               "name": "StringFieldUpdateOperationsInput",
+              "ofType": null
+            }
+          },
+          {
+            "name": "goal",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "IntFieldUpdateOperationsInput",
               "ofType": null
             }
           },
@@ -19362,6 +20081,14 @@ export type introspection = {
             "type": {
               "kind": "INPUT_OBJECT",
               "name": "ProcedureUpdateManyWithoutProjectNestedInput",
+              "ofType": null
+            }
+          },
+          {
+            "name": "progressUnit",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "StringFieldUpdateOperationsInput",
               "ofType": null
             }
           },
@@ -19396,6 +20123,22 @@ export type introspection = {
         "name": "ProjectUpdateWithoutLevelInput",
         "inputFields": [
           {
+            "name": "account",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "StringFieldUpdateOperationsInput",
+              "ofType": null
+            }
+          },
+          {
+            "name": "archiveBox",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "StringFieldUpdateOperationsInput",
+              "ofType": null
+            }
+          },
+          {
             "name": "collaborators",
             "type": {
               "kind": "INPUT_OBJECT",
@@ -19424,6 +20167,14 @@ export type introspection = {
             "type": {
               "kind": "INPUT_OBJECT",
               "name": "StringFieldUpdateOperationsInput",
+              "ofType": null
+            }
+          },
+          {
+            "name": "goal",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "IntFieldUpdateOperationsInput",
               "ofType": null
             }
           },
@@ -19476,6 +20227,14 @@ export type introspection = {
             }
           },
           {
+            "name": "progressUnit",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "StringFieldUpdateOperationsInput",
+              "ofType": null
+            }
+          },
+          {
             "name": "requirements",
             "type": {
               "kind": "SCALAR",
@@ -19506,6 +20265,22 @@ export type introspection = {
         "name": "ProjectUpdateWithoutProceduresInput",
         "inputFields": [
           {
+            "name": "account",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "StringFieldUpdateOperationsInput",
+              "ofType": null
+            }
+          },
+          {
+            "name": "archiveBox",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "StringFieldUpdateOperationsInput",
+              "ofType": null
+            }
+          },
+          {
             "name": "collaborators",
             "type": {
               "kind": "INPUT_OBJECT",
@@ -19534,6 +20309,14 @@ export type introspection = {
             "type": {
               "kind": "INPUT_OBJECT",
               "name": "StringFieldUpdateOperationsInput",
+              "ofType": null
+            }
+          },
+          {
+            "name": "goal",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "IntFieldUpdateOperationsInput",
               "ofType": null
             }
           },
@@ -19582,6 +20365,14 @@ export type introspection = {
             "type": {
               "kind": "SCALAR",
               "name": "Json",
+              "ofType": null
+            }
+          },
+          {
+            "name": "progressUnit",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "StringFieldUpdateOperationsInput",
               "ofType": null
             }
           },
@@ -19811,6 +20602,22 @@ export type introspection = {
             }
           },
           {
+            "name": "account",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "StringFilter",
+              "ofType": null
+            }
+          },
+          {
+            "name": "archiveBox",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "StringFilter",
+              "ofType": null
+            }
+          },
+          {
             "name": "collaborators",
             "type": {
               "kind": "INPUT_OBJECT",
@@ -19839,6 +20646,14 @@ export type introspection = {
             "type": {
               "kind": "INPUT_OBJECT",
               "name": "StringFilter",
+              "ofType": null
+            }
+          },
+          {
+            "name": "goal",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "IntFilter",
               "ofType": null
             }
           },
@@ -19902,7 +20717,7 @@ export type introspection = {
             "name": "places",
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "JsonFilter",
+              "name": "JsonNullableFilter",
               "ofType": null
             }
           },
@@ -19915,10 +20730,18 @@ export type introspection = {
             }
           },
           {
+            "name": "progressUnit",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "StringFilter",
+              "ofType": null
+            }
+          },
+          {
             "name": "requirements",
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "JsonFilter",
+              "name": "JsonNullableFilter",
               "ofType": null
             }
           },
@@ -19926,7 +20749,7 @@ export type introspection = {
             "name": "transitions",
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "JsonFilter",
+              "name": "JsonNullableFilter",
               "ofType": null
             }
           },
@@ -19987,6 +20810,22 @@ export type introspection = {
             }
           },
           {
+            "name": "account",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "StringFilter",
+              "ofType": null
+            }
+          },
+          {
+            "name": "archiveBox",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "StringFilter",
+              "ofType": null
+            }
+          },
+          {
             "name": "collaborators",
             "type": {
               "kind": "INPUT_OBJECT",
@@ -20015,6 +20854,14 @@ export type introspection = {
             "type": {
               "kind": "INPUT_OBJECT",
               "name": "StringFilter",
+              "ofType": null
+            }
+          },
+          {
+            "name": "goal",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "IntFilter",
               "ofType": null
             }
           },
@@ -20061,8 +20908,8 @@ export type introspection = {
           {
             "name": "machineName",
             "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "StringFilter",
+              "kind": "SCALAR",
+              "name": "String",
               "ofType": null
             }
           },
@@ -20078,7 +20925,7 @@ export type introspection = {
             "name": "places",
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "JsonFilter",
+              "name": "JsonNullableFilter",
               "ofType": null
             }
           },
@@ -20091,10 +20938,18 @@ export type introspection = {
             }
           },
           {
+            "name": "progressUnit",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "StringFilter",
+              "ofType": null
+            }
+          },
+          {
             "name": "requirements",
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "JsonFilter",
+              "name": "JsonNullableFilter",
               "ofType": null
             }
           },
@@ -20102,7 +20957,7 @@ export type introspection = {
             "name": "transitions",
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "JsonFilter",
+              "name": "JsonNullableFilter",
               "ofType": null
             }
           },

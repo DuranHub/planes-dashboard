@@ -1,4 +1,4 @@
-import { ChevronsUpDown } from "lucide-react";
+import { CheckIcon, ChevronsUpDown } from "lucide-react";
 import { useSpinDelay } from "spin-delay";
 
 import { Button } from "~/components/ui/button";
@@ -17,9 +17,12 @@ import {
 import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { invariant } from "@epic-web/invariant";
 import { useFetcher } from "@remix-run/react";
-import { useState } from "react";
+import { ComponentProps, Fragment, useMemo, useState } from "react";
 import { graphql, graphqlClient } from "~/graphql/client.server";
 import { authenticator } from "~/services/auth/auth.server";
+import { useFormContext } from "react-hook-form";
+import { Input } from "~/components/ui/input";
+import { FormControl } from "~/components/ui/form";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   await authenticator.isAuthenticated(request, {
@@ -29,6 +32,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const query = url.searchParams.get("query");
   invariant(typeof query === "string", "query is required");
+
+  if (query.length < 3) {
+    return json({
+      users: [],
+    });
+  }
 
   const usersQuery = graphql(`
     query Users($name: String!) {
@@ -79,14 +88,40 @@ function Spinner({ showSpinner }: { showSpinner: boolean }) {
   );
 }
 
-export function SearchUserCombobox() {
-  const userFetcher = useFetcher<typeof loader>();
+type BaseProps = ComponentProps<typeof Input>;
+
+interface Props extends BaseProps {
+  options: { value: string; label: string }[];
+  field: { name: string; value: string };
+}
+
+export function SearchUserCombobox({ field, options, defaultValue }: Props) {
+  const userFetcher = useFetcher<typeof loader>({ key: "searchUser" });
+  const form = useFormContext();
+  const { setValue: setFormValue, clearErrors } = form;
 
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(defaultValue ?? "");
   const [query, setQuery] = useState("");
 
-  const users = userFetcher.data?.users ?? [];
+  // const users = userFetcher.data?.users ?? options;
+  const users = useMemo(() => {
+    const optionsToSelectItem = options.map((option) => ({
+      id: option.value,
+      name: option.label,
+    }));
+
+    if (userFetcher.data?.users) {
+      // Remove duplicates
+      const newUsers = userFetcher.data?.users.filter(
+        (user) => !optionsToSelectItem.some((option) => option.id === user.id)
+      );
+
+      optionsToSelectItem.push(...newUsers);
+    }
+
+    return optionsToSelectItem;
+  }, [userFetcher.data?.users, options]);
   const isLoading = userFetcher.state !== "idle";
 
   const showSpinner = useSpinDelay(isLoading, {
@@ -94,62 +129,88 @@ export function SearchUserCombobox() {
     minDuration: 500,
   });
 
+  const displayValue = users.find((user) => user.id === value)?.name;
+
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className="w-full justify-between"
-        >
-          {value ? value : "Search a user"}
-          {showSpinner ? (
-            <Spinner showSpinner={showSpinner} />
-          ) : (
-            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-          )}
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent align="start" className="w-[600px] p-0">
-        <Command shouldFilter={false}>
-          <CommandInput
-            value={query}
-            onValueChange={(args) => {
-              setQuery(args);
-              userFetcher.submit(
-                { query: args ?? "" },
-                {
-                  method: "GET",
-                  action: "/resources/search-user",
+    <Fragment>
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <FormControl>
+            <Button
+              type="button"
+              variant="outline"
+              role="combobox"
+              aria-expanded={open}
+              className="w-full justify-between"
+            >
+              {displayValue ? displayValue : "Search a user"}
+              {showSpinner ? (
+                <Spinner showSpinner={showSpinner} />
+              ) : (
+                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+              )}
+            </Button>
+          </FormControl>
+        </PopoverTrigger>
+        <PopoverContent align="start" className="w-[600px] p-0">
+          <Command shouldFilter={false}>
+            <CommandInput
+              asChild
+              name="searchUser"
+              value={query}
+              onValueChange={(args) => {
+                if (args !== query) {
+                  setQuery(args);
+                  userFetcher.load(`/resources/search-user?query=${args}`);
                 }
-              );
-            }}
-            placeholder="Start typing to search"
-          />
-          <CommandEmpty>
-            {query.length > 0
-              ? "Type at least 3 characters to search"
-              : isLoading
-              ? "Loading..."
-              : "No results found"}
-          </CommandEmpty>
-          <CommandList>
-            {users.filter(Boolean).map((user) => (
-              <CommandItem
-                key={user.id}
-                value={user.id as string}
-                onSelect={(currentValue) => {
-                  setValue(currentValue === value ? "" : currentValue);
-                  setOpen(false);
-                }}
-              >
-                {user.name}
-              </CommandItem>
-            ))}
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
+              }}
+              placeholder="Start typing to search"
+            >
+              <input type="text" />
+            </CommandInput>
+            <CommandEmpty>
+              {query.length < 3
+                ? "Type at least 3 characters to search"
+                : isLoading
+                ? "Loading..."
+                : "No results found"}
+            </CommandEmpty>
+            <CommandList>
+              {users.filter(Boolean).map((user) => (
+                <CommandItem
+                  key={user.id}
+                  value={user.id as string}
+                  onSelect={(currentValue) => {
+                    setValue(currentValue === value ? "" : currentValue);
+                    setFormValue(
+                      field.name,
+                      currentValue === value ? "" : currentValue
+                    );
+                    clearErrors(field.name);
+                    setOpen(false);
+                  }}
+                >
+                  {user.id === value ? (
+                    <CheckIcon className="w-4 mr-2" />
+                  ) : user.id === options[0].value ? (
+                    "(Original) "
+                  ) : null}
+                  {user.name}
+                </CommandItem>
+              ))}
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
+      {/* Hidden input to store the selected value and submit it with the form */}
+      <input
+        className="hidden"
+        type="hidden"
+        id={field.name}
+        name={field.name}
+        value={field.value}
+        onChange={() => {}}
+      />
+    </Fragment>
   );
 }

@@ -1,3 +1,4 @@
+import { ComponentProps, useMemo } from "react";
 import { FormGenerator } from "./Form";
 import { getInputsFromSchema } from "./Inputs";
 import { buildJsonSchema } from "./Inputs/rules";
@@ -22,9 +23,10 @@ function getDefaultValues(schema: Schema) {
 }
 
 export const useFormGenerator = ({ schema, formConfig }: FormGeneratorArgs) => {
-  const inputs = getInputsFromSchema(schema);
-  const jsonSchema = buildJsonSchema(schema);
+  const inputs = useMemo(() => getInputsFromSchema(schema), [schema]);
+  const jsonSchema = useMemo(() => buildJsonSchema(schema), [schema]);
   const { method, saveButtonText } = { ...defaultFormConfig, ...formConfig };
+
   return {
     FormGenerated: ({
       actions,
@@ -44,3 +46,34 @@ export const useFormGenerator = ({ schema, formConfig }: FormGeneratorArgs) => {
     ),
   };
 };
+
+interface FormGProps extends FormGeneratorArgs {
+  fetcher: ComponentProps<typeof FormGenerator>["fetcher"];
+  actions?: ComponentProps<typeof FormGenerator>["actions"];
+  callback?: ComponentProps<typeof FormGenerator>["onSubmitCallback"];
+}
+
+export function FormGenerate({
+  schema,
+  formConfig,
+  actions,
+  fetcher,
+  callback,
+}: FormGProps) {
+  const inputs = useMemo(() => getInputsFromSchema(schema), [schema]);
+  const jsonSchema = useMemo(() => buildJsonSchema(schema), [schema]);
+  const { method, saveButtonText } = { ...defaultFormConfig, ...formConfig };
+
+  return (
+    <FormGenerator
+      inputs={inputs}
+      schema={jsonSchema}
+      method={method}
+      saveButtonText={saveButtonText}
+      defaultValues={getDefaultValues(schema)}
+      fetcher={fetcher}
+      actions={actions}
+      onSubmitCallback={callback}
+    />
+  );
+}

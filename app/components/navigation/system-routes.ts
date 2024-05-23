@@ -13,8 +13,8 @@ export const systemRoutes = [
         icon: HomeIcon,
     },
     {
-        to: "/levels",
-        text: "Levels",
+        to: "/level-categories",
+        text: "Level Categories",
         icon: ListChecksIcon,
     },
     {
@@ -28,8 +28,8 @@ export const systemRoutes = [
         icon: UserRoundCogIcon,
     },
     {
-        to: "/projects",
-        text: "Projects",
+        to: "/levels",
+        text: "Levels",
         icon: MonitorPlayIcon,
     }
 ]

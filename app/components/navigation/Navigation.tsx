@@ -6,6 +6,7 @@ import { Button } from "~/components/ui/button";
 import { Drawer, DrawerContent, DrawerTrigger } from "~/components/ui/drawer";
 import { Separator } from "~/components/ui/separator";
 import { LucideIcon, MenuIcon } from "lucide-react";
+import UserNav from "./UserNav";
 
 interface Props {
   procedures: { to: string; text: string; icon: string | LucideIcon }[];
@@ -15,20 +16,23 @@ export default function Navigation({ procedures }: Props) {
   return (
     <Fragment>
       <aside className="hidden lg:block min-h-full w-[270px] p-4 bg-stone-50 border-r">
-        <LinkList links={systemRoutes} />
-        <Separator className="my-4" />
-        {procedures.length > 0 ? (
-          <LinkList links={procedures} />
-        ) : (
-          <div>
-            <p className="text-sm text-gray-500 mb-4">
-              No procedures available
-            </p>
-            <Button asChild variant="default" size="sm">
-              <Link to="/projects/new">Create Procedure</Link>
-            </Button>
-          </div>
-        )}
+        <div className="flex flex-col h-full">
+          <LinkList links={systemRoutes} />
+          <Separator className="my-4" />
+          {procedures.length > 0 ? (
+            <LinkList links={procedures} />
+          ) : (
+            <div>
+              <p className="text-sm text-gray-500 mb-4">
+                No procedures available
+              </p>
+              <Button asChild variant="default" size="sm">
+                <Link to="/projects/new">Create Procedure</Link>
+              </Button>
+            </div>
+          )}
+          <UserNav />
+        </div>
       </aside>
 
       {/* Mobile navigation */}

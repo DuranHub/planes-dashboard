@@ -40,8 +40,12 @@ export const FormGenerator = ({
   const form = useForm({
     defaultValues: defaultValues,
     mode: "onBlur",
-    reValidateMode: "onChange",
-    resolver: ajvResolver(schema, { allErrors: true, formats: fullFormats }),
+    resolver: ajvResolver(schema, {
+      allErrors: true,
+      formats: fullFormats,
+      coerceTypes: true,
+      validateSchema: "log"
+    }),
   });
 
   const formRef = useRef<HTMLFormElement>(null);

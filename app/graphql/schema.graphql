@@ -2069,10 +2069,13 @@ input ProcedureWhereUniqueInput {
 }
 
 type Project {
+  account: String!
+  archiveBox: String!
   collaborators(cursor: UserWhereUniqueInput, distinct: [UserScalarFieldEnum!], orderBy: [UserOrderByWithRelationInput!], skip: Int, take: Int, where: UserWhereInput): [User!]!
   createdAt: DateTime!
   deleteAt: DateTime
   description: String!
+  goal: Int!
   id: ID!
   leader: User!
   leaderId: String!
@@ -2080,71 +2083,92 @@ type Project {
   levelId: String!
   machineName: String!
   name: String!
-  places: Json!
+  places: Json
   procedures(cursor: ProcedureWhereUniqueInput, distinct: [ProcedureScalarFieldEnum!], orderBy: [ProcedureOrderByWithRelationInput!], skip: Int, take: Int, where: ProcedureWhereInput): [Procedure!]!
-  requirements: Json!
-  transitions: Json!
+  progressUnit: String!
+  requirements: Json
+  transitions: Json
   updatedAt: DateTime!
 }
 
+input ProjectAvgOrderByAggregateInput {
+  goal: SortOrder
+}
+
 input ProjectCountOrderByAggregateInput {
+  account: SortOrder
+  archiveBox: SortOrder
   createdAt: SortOrder
   deleteAt: SortOrder
   description: SortOrder
+  goal: SortOrder
   id: SortOrder
   leaderId: SortOrder
   levelId: SortOrder
   machineName: SortOrder
   name: SortOrder
   places: SortOrder
+  progressUnit: SortOrder
   requirements: SortOrder
   transitions: SortOrder
   updatedAt: SortOrder
 }
 
 input ProjectCreateInput {
+  account: String!
+  archiveBox: String!
   collaborators: UserCreateNestedManyWithoutCollaboratorOfInput
   createdAt: DateTime
   deleteAt: DateTime
   description: String!
+  goal: Int!
   id: String
   leader: UserCreateNestedOneWithoutLeaderOfInput!
   level: LevelCreateNestedOneWithoutProjectInput!
   machineName: String!
   name: String!
-  places: Json!
+  places: Json
   procedures: ProcedureCreateNestedManyWithoutProjectInput
-  requirements: Json!
-  transitions: Json!
+  progressUnit: String!
+  requirements: Json
+  transitions: Json
   updatedAt: DateTime
 }
 
 input ProjectCreateManyInput {
+  account: String!
+  archiveBox: String!
   createdAt: DateTime
   deleteAt: DateTime
   description: String!
+  goal: Int!
   id: String
   leaderId: String!
   levelId: String!
   machineName: String!
   name: String!
-  places: Json!
-  requirements: Json!
-  transitions: Json!
+  places: Json
+  progressUnit: String!
+  requirements: Json
+  transitions: Json
   updatedAt: DateTime
 }
 
 input ProjectCreateManyLeaderInput {
+  account: String!
+  archiveBox: String!
   createdAt: DateTime
   deleteAt: DateTime
   description: String!
+  goal: Int!
   id: String
   levelId: String!
   machineName: String!
   name: String!
-  places: Json!
-  requirements: Json!
-  transitions: Json!
+  places: Json
+  progressUnit: String!
+  requirements: Json
+  transitions: Json
   updatedAt: DateTime
 }
 
@@ -2154,16 +2178,20 @@ input ProjectCreateManyLeaderInputEnvelope {
 }
 
 input ProjectCreateManyLevelInput {
+  account: String!
+  archiveBox: String!
   createdAt: DateTime
   deleteAt: DateTime
   description: String!
+  goal: Int!
   id: String
   leaderId: String!
   machineName: String!
   name: String!
-  places: Json!
-  requirements: Json!
-  transitions: Json!
+  places: Json
+  progressUnit: String!
+  requirements: Json
+  transitions: Json
   updatedAt: DateTime
 }
 
@@ -2219,66 +2247,82 @@ input ProjectCreateOrConnectWithoutProceduresInput {
 }
 
 input ProjectCreateWithoutCollaboratorsInput {
+  account: String!
+  archiveBox: String!
   createdAt: DateTime
   deleteAt: DateTime
   description: String!
+  goal: Int!
   id: String
   leader: UserCreateNestedOneWithoutLeaderOfInput!
   level: LevelCreateNestedOneWithoutProjectInput!
   machineName: String!
   name: String!
-  places: Json!
+  places: Json
   procedures: ProcedureCreateNestedManyWithoutProjectInput
-  requirements: Json!
-  transitions: Json!
+  progressUnit: String!
+  requirements: Json
+  transitions: Json
   updatedAt: DateTime
 }
 
 input ProjectCreateWithoutLeaderInput {
+  account: String!
+  archiveBox: String!
   collaborators: UserCreateNestedManyWithoutCollaboratorOfInput
   createdAt: DateTime
   deleteAt: DateTime
   description: String!
+  goal: Int!
   id: String
   level: LevelCreateNestedOneWithoutProjectInput!
   machineName: String!
   name: String!
-  places: Json!
+  places: Json
   procedures: ProcedureCreateNestedManyWithoutProjectInput
-  requirements: Json!
-  transitions: Json!
+  progressUnit: String!
+  requirements: Json
+  transitions: Json
   updatedAt: DateTime
 }
 
 input ProjectCreateWithoutLevelInput {
+  account: String!
+  archiveBox: String!
   collaborators: UserCreateNestedManyWithoutCollaboratorOfInput
   createdAt: DateTime
   deleteAt: DateTime
   description: String!
+  goal: Int!
   id: String
   leader: UserCreateNestedOneWithoutLeaderOfInput!
   machineName: String!
   name: String!
-  places: Json!
+  places: Json
   procedures: ProcedureCreateNestedManyWithoutProjectInput
-  requirements: Json!
-  transitions: Json!
+  progressUnit: String!
+  requirements: Json
+  transitions: Json
   updatedAt: DateTime
 }
 
 input ProjectCreateWithoutProceduresInput {
+  account: String!
+  archiveBox: String!
   collaborators: UserCreateNestedManyWithoutCollaboratorOfInput
   createdAt: DateTime
   deleteAt: DateTime
   description: String!
+  goal: Int!
   id: String
   leader: UserCreateNestedOneWithoutLeaderOfInput!
   level: LevelCreateNestedOneWithoutProjectInput!
   machineName: String!
   name: String!
-  places: Json!
-  requirements: Json!
-  transitions: Json!
+  places: Json
+  progressUnit: String!
+  requirements: Json
+  transitions: Json
   updatedAt: DateTime
 }
 
@@ -2289,26 +2333,34 @@ input ProjectListRelationFilter {
 }
 
 input ProjectMaxOrderByAggregateInput {
+  account: SortOrder
+  archiveBox: SortOrder
   createdAt: SortOrder
   deleteAt: SortOrder
   description: SortOrder
+  goal: SortOrder
   id: SortOrder
   leaderId: SortOrder
   levelId: SortOrder
   machineName: SortOrder
   name: SortOrder
+  progressUnit: SortOrder
   updatedAt: SortOrder
 }
 
 input ProjectMinOrderByAggregateInput {
+  account: SortOrder
+  archiveBox: SortOrder
   createdAt: SortOrder
   deleteAt: SortOrder
   description: SortOrder
+  goal: SortOrder
   id: SortOrder
   leaderId: SortOrder
   levelId: SortOrder
   machineName: SortOrder
   name: SortOrder
+  progressUnit: SortOrder
   updatedAt: SortOrder
 }
 
@@ -2322,28 +2374,37 @@ input ProjectOrderByRelationAggregateInput {
 }
 
 input ProjectOrderByWithAggregationInput {
+  _avg: ProjectAvgOrderByAggregateInput
   _count: ProjectCountOrderByAggregateInput
   _max: ProjectMaxOrderByAggregateInput
   _min: ProjectMinOrderByAggregateInput
+  _sum: ProjectSumOrderByAggregateInput
+  account: SortOrder
+  archiveBox: SortOrder
   createdAt: SortOrder
   deleteAt: SortOrder
   description: SortOrder
+  goal: SortOrder
   id: SortOrder
   leaderId: SortOrder
   levelId: SortOrder
   machineName: SortOrder
   name: SortOrder
   places: SortOrder
+  progressUnit: SortOrder
   requirements: SortOrder
   transitions: SortOrder
   updatedAt: SortOrder
 }
 
 input ProjectOrderByWithRelationInput {
+  account: SortOrder
+  archiveBox: SortOrder
   collaborators: UserOrderByRelationAggregateInput
   createdAt: SortOrder
   deleteAt: SortOrder
   description: SortOrder
+  goal: SortOrder
   id: SortOrder
   leader: UserOrderByWithRelationInput
   leaderId: SortOrder
@@ -2353,21 +2414,26 @@ input ProjectOrderByWithRelationInput {
   name: SortOrder
   places: SortOrder
   procedures: ProcedureOrderByRelationAggregateInput
+  progressUnit: SortOrder
   requirements: SortOrder
   transitions: SortOrder
   updatedAt: SortOrder
 }
 
 enum ProjectScalarFieldEnum {
+  account
+  archiveBox
   createdAt
   deleteAt
   description
+  goal
   id
   leaderId
   levelId
   machineName
   name
   places
+  progressUnit
   requirements
   transitions
   updatedAt
@@ -2377,17 +2443,21 @@ input ProjectScalarWhereInput {
   AND: [ProjectScalarWhereInput!]
   NOT: [ProjectScalarWhereInput!]
   OR: [ProjectScalarWhereInput!]
+  account: StringFilter
+  archiveBox: StringFilter
   createdAt: DateTimeFilter
   deleteAt: DateTimeNullableFilter
   description: StringFilter
+  goal: IntFilter
   id: StringFilter
   leaderId: StringFilter
   levelId: StringFilter
   machineName: StringFilter
   name: StringFilter
-  places: JsonFilter
-  requirements: JsonFilter
-  transitions: JsonFilter
+  places: JsonNullableFilter
+  progressUnit: StringFilter
+  requirements: JsonNullableFilter
+  transitions: JsonNullableFilter
   updatedAt: DateTimeFilter
 }
 
@@ -2395,25 +2465,36 @@ input ProjectScalarWhereWithAggregatesInput {
   AND: [ProjectScalarWhereWithAggregatesInput!]
   NOT: [ProjectScalarWhereWithAggregatesInput!]
   OR: [ProjectScalarWhereWithAggregatesInput!]
+  account: StringWithAggregatesFilter
+  archiveBox: StringWithAggregatesFilter
   createdAt: DateTimeWithAggregatesFilter
   deleteAt: DateTimeNullableWithAggregatesFilter
   description: StringWithAggregatesFilter
+  goal: IntWithAggregatesFilter
   id: StringWithAggregatesFilter
   leaderId: StringWithAggregatesFilter
   levelId: StringWithAggregatesFilter
   machineName: StringWithAggregatesFilter
   name: StringWithAggregatesFilter
-  places: JsonWithAggregatesFilter
-  requirements: JsonWithAggregatesFilter
-  transitions: JsonWithAggregatesFilter
+  places: JsonNullableWithAggregatesFilter
+  progressUnit: StringWithAggregatesFilter
+  requirements: JsonNullableWithAggregatesFilter
+  transitions: JsonNullableWithAggregatesFilter
   updatedAt: DateTimeWithAggregatesFilter
 }
 
+input ProjectSumOrderByAggregateInput {
+  goal: SortOrder
+}
+
 input ProjectUpdateInput {
+  account: StringFieldUpdateOperationsInput
+  archiveBox: StringFieldUpdateOperationsInput
   collaborators: UserUpdateManyWithoutCollaboratorOfNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
   deleteAt: NullableDateTimeFieldUpdateOperationsInput
   description: StringFieldUpdateOperationsInput
+  goal: IntFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
   leader: UserUpdateOneRequiredWithoutLeaderOfNestedInput
   level: LevelUpdateOneRequiredWithoutProjectNestedInput
@@ -2421,19 +2502,24 @@ input ProjectUpdateInput {
   name: StringFieldUpdateOperationsInput
   places: Json
   procedures: ProcedureUpdateManyWithoutProjectNestedInput
+  progressUnit: StringFieldUpdateOperationsInput
   requirements: Json
   transitions: Json
   updatedAt: DateTimeFieldUpdateOperationsInput
 }
 
 input ProjectUpdateManyMutationInput {
+  account: StringFieldUpdateOperationsInput
+  archiveBox: StringFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
   deleteAt: NullableDateTimeFieldUpdateOperationsInput
   description: StringFieldUpdateOperationsInput
+  goal: IntFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
   machineName: StringFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
   places: Json
+  progressUnit: StringFieldUpdateOperationsInput
   requirements: Json
   transitions: Json
   updatedAt: DateTimeFieldUpdateOperationsInput
@@ -2526,9 +2612,12 @@ input ProjectUpdateWithWhereUniqueWithoutLevelInput {
 }
 
 input ProjectUpdateWithoutCollaboratorsInput {
+  account: StringFieldUpdateOperationsInput
+  archiveBox: StringFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
   deleteAt: NullableDateTimeFieldUpdateOperationsInput
   description: StringFieldUpdateOperationsInput
+  goal: IntFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
   leader: UserUpdateOneRequiredWithoutLeaderOfNestedInput
   level: LevelUpdateOneRequiredWithoutProjectNestedInput
@@ -2536,54 +2625,67 @@ input ProjectUpdateWithoutCollaboratorsInput {
   name: StringFieldUpdateOperationsInput
   places: Json
   procedures: ProcedureUpdateManyWithoutProjectNestedInput
+  progressUnit: StringFieldUpdateOperationsInput
   requirements: Json
   transitions: Json
   updatedAt: DateTimeFieldUpdateOperationsInput
 }
 
 input ProjectUpdateWithoutLeaderInput {
+  account: StringFieldUpdateOperationsInput
+  archiveBox: StringFieldUpdateOperationsInput
   collaborators: UserUpdateManyWithoutCollaboratorOfNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
   deleteAt: NullableDateTimeFieldUpdateOperationsInput
   description: StringFieldUpdateOperationsInput
+  goal: IntFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
   level: LevelUpdateOneRequiredWithoutProjectNestedInput
   machineName: StringFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
   places: Json
   procedures: ProcedureUpdateManyWithoutProjectNestedInput
+  progressUnit: StringFieldUpdateOperationsInput
   requirements: Json
   transitions: Json
   updatedAt: DateTimeFieldUpdateOperationsInput
 }
 
 input ProjectUpdateWithoutLevelInput {
+  account: StringFieldUpdateOperationsInput
+  archiveBox: StringFieldUpdateOperationsInput
   collaborators: UserUpdateManyWithoutCollaboratorOfNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
   deleteAt: NullableDateTimeFieldUpdateOperationsInput
   description: StringFieldUpdateOperationsInput
+  goal: IntFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
   leader: UserUpdateOneRequiredWithoutLeaderOfNestedInput
   machineName: StringFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
   places: Json
   procedures: ProcedureUpdateManyWithoutProjectNestedInput
+  progressUnit: StringFieldUpdateOperationsInput
   requirements: Json
   transitions: Json
   updatedAt: DateTimeFieldUpdateOperationsInput
 }
 
 input ProjectUpdateWithoutProceduresInput {
+  account: StringFieldUpdateOperationsInput
+  archiveBox: StringFieldUpdateOperationsInput
   collaborators: UserUpdateManyWithoutCollaboratorOfNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
   deleteAt: NullableDateTimeFieldUpdateOperationsInput
   description: StringFieldUpdateOperationsInput
+  goal: IntFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
   leader: UserUpdateOneRequiredWithoutLeaderOfNestedInput
   level: LevelUpdateOneRequiredWithoutProjectNestedInput
   machineName: StringFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
   places: Json
+  progressUnit: StringFieldUpdateOperationsInput
   requirements: Json
   transitions: Json
   updatedAt: DateTimeFieldUpdateOperationsInput
@@ -2617,10 +2719,13 @@ input ProjectWhereInput {
   AND: [ProjectWhereInput!]
   NOT: [ProjectWhereInput!]
   OR: [ProjectWhereInput!]
+  account: StringFilter
+  archiveBox: StringFilter
   collaborators: UserListRelationFilter
   createdAt: DateTimeFilter
   deleteAt: DateTimeNullableFilter
   description: StringFilter
+  goal: IntFilter
   id: StringFilter
   leader: UserWhereInput
   leaderId: StringFilter
@@ -2628,10 +2733,11 @@ input ProjectWhereInput {
   levelId: StringFilter
   machineName: StringFilter
   name: StringFilter
-  places: JsonFilter
+  places: JsonNullableFilter
   procedures: ProcedureListRelationFilter
-  requirements: JsonFilter
-  transitions: JsonFilter
+  progressUnit: StringFilter
+  requirements: JsonNullableFilter
+  transitions: JsonNullableFilter
   updatedAt: DateTimeFilter
 }
 
@@ -2639,21 +2745,25 @@ input ProjectWhereUniqueInput {
   AND: [ProjectWhereInput!]
   NOT: [ProjectWhereInput!]
   OR: [ProjectWhereInput!]
+  account: StringFilter
+  archiveBox: StringFilter
   collaborators: UserListRelationFilter
   createdAt: DateTimeFilter
   deleteAt: DateTimeNullableFilter
   description: StringFilter
+  goal: IntFilter
   id: String
   leader: UserWhereInput
   leaderId: StringFilter
   level: LevelWhereInput
   levelId: StringFilter
-  machineName: StringFilter
+  machineName: String
   name: StringFilter
-  places: JsonFilter
+  places: JsonNullableFilter
   procedures: ProcedureListRelationFilter
-  requirements: JsonFilter
-  transitions: JsonFilter
+  progressUnit: StringFilter
+  requirements: JsonNullableFilter
+  transitions: JsonNullableFilter
   updatedAt: DateTimeFilter
 }
 

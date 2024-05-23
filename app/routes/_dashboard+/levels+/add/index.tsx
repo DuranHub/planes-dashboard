@@ -4,28 +4,36 @@ import {
   useFetcher,
   useLoaderData,
   useNavigate,
+  useSearchParams,
 } from "@remix-run/react";
 import { ClientOnly } from "remix-utils/client-only";
 import { Schema } from "~/components/FormGenerator/types";
 import Modal from "~/components/ui/modal";
-import { graphqlClient } from "~/graphql/client.server";
-import { findAssignmentAreasQuery } from "~/graphql/models/assignmentArea/queries.server";
+import { graphql, graphqlClient } from "~/graphql/client.server";
+import {
+  findAssignmentAreasQuery,
+  listAssignmentAreasQuery,
+} from "~/graphql/models/assignmentArea/queries.server";
 import { ComposeSchema } from "~/components/FormGenerator/lib/composeSchema";
 import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node";
 import { validateFormJsonSchema } from "~/components/FormGenerator/lib/validateFormAjv.server";
-import { updateUserMutation } from "~/graphql/models/user/mutations";
 import { useFormGenerator } from "~/components/FormGenerator";
 import { Button } from "~/components/ui/button";
-import { invariant } from "@epic-web/invariant";
 import { Suspense, useEffect } from "react";
 import { Skeleton } from "~/components/ui/skeleton";
-import { getUserSchema } from "./loader";
+import { formatMachineName } from "~/lib/utils.server";
 
-const createUserSchema = [
+const createAssigmentAreaSchema = [
   {
     kind: "alphabetic",
     name: "name",
     label: "Name",
+    required: true,
+  },
+  {
+    kind: "alphanumeric",
+    label: "Description",
+    name: "description",
     required: true,
   },
   {
@@ -35,43 +43,40 @@ const createUserSchema = [
     options: [],
     required: true,
   },
-  {
-    kind: "email",
-    label: "Email",
-    name: "email",
-    required: true,
-  },
-  {
-    kind: "alphanumeric",
-    label: "Identification",
-    name: "identification",
-    required: true,
-    helpText: "The identification of the user",
-  },
-  {
-    kind: "alphabetic",
-    label: "Position",
-    name: "position",
-    required: true,
-    helpText: "The position of the user",
-  },
 ] as const satisfies Schema;
 
-export async function loader({ params }: LoaderFunctionArgs) {
-  const userId = params.userid;
-  invariant(userId, "User ID is required");
+export async function loader({ request }: LoaderFunctionArgs) {
+  const url = new URL(request.url);
+  const parentArea = url.searchParams.get("selected-area");
+  async function getSchema() {
+    const { data } = await graphqlClient.query(listAssignmentAreasQuery, {});
+
+    const assignmentAreas = data?.findManyAssignmentArea || [];
+    const composeSchema = new ComposeSchema(createAssigmentAreaSchema);
+    composeSchema.setOptions(
+      "assignmentArea",
+      assignmentAreas.map((area) => ({
+        label: area.name,
+        value: area.machineName,
+      }))
+    );
+    if (parentArea) {
+      composeSchema.setDefaultValue("assignmentArea", parentArea);
+    }
+
+    return composeSchema.getSchema();
+  }
 
   return defer({
-    editUserSchema: getUserSchema(userId, createUserSchema),
+    schema: getSchema(),
   });
 }
 
-export async function action({ request, params }: ActionFunctionArgs) {
-  invariant(params.userid, "User ID is required");
+export async function action({ request }: ActionFunctionArgs) {
   // Format the validator
   const { data } = await graphqlClient.query(findAssignmentAreasQuery, {});
   const assignmentAreas = data?.findManyAssignmentArea || [];
-  const validatorSchema = new ComposeSchema(createUserSchema);
+  const validatorSchema = new ComposeSchema(createAssigmentAreaSchema);
   validatorSchema.setOptions(
     "assignmentArea",
     assignmentAreas.map((area) => ({
@@ -82,7 +87,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   // Validation of form data
   const result = validateFormJsonSchema(
-    await request.formData(),
+    await request.formData(), 
     validatorSchema.getSchema()
   );
 
@@ -93,70 +98,73 @@ export async function action({ request, params }: ActionFunctionArgs) {
   }
 
   // Extract variables
-  const { assignmentArea, email, identification, name, position } = result.data;
-
+  const { assignmentArea, name, description } = result.data;
+  const machineName = formatMachineName(name);
   // Buisness logic
+  const createAssignmentAreaMutation = graphql(`
+    mutation CreateAssignmentArea($input: AssignmentAreaCreateInput!) {
+      createOneAssignmentArea(data: $input) {
+        id
+      }
+    }
+  `);
+
   const { data: user, error } = await graphqlClient.mutation(
-    updateUserMutation,
+    createAssignmentAreaMutation,
     {
       input: {
-        email: {
-          set: email,
-        },
-        name: {
-          set: name,
-        },
-        // avatar: `https://api.dicebear.com/8.x/avataaars-neutral/svg?seed=${name}`,
-        identification: {
-          set: identification,
-        },
-        position: {
-          set: position,
-        },
-        assignmentArea: {
+        name,
+        description,
+        ParentArea: {
           connect: {
             machineName: assignmentArea,
           },
         },
+        machineName,
       },
-      id: params.userid,
     }
   );
 
   if (error || !user) {
-    return json({ error: "Error creating user" }, { status: 500 });
+    return json({ error: "Error creating assignment area" }, { status: 500 });
   }
 
   return json({ success: true });
 }
 
-export default function Edit() {
-  const { editUserSchema } = useLoaderData<typeof loader>();
+export default function AddUser() {
+  const { schema } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const parentArea = searchParams.get("selected-area");
 
   return (
     <ClientOnly fallback={<div />}>
       {() => (
         <Modal
+          showTrigger={false}
+          triggerLabel="Create Assignment Area"
+          title="Create a new assignment area"
+          description="Fill in the form below to create a new assignment area."
           openByDefault
           controls={{
             open: true,
-            onOpenChange: (isOpen) => {
-              if (!isOpen) {
-                navigate("/users");
+            onOpenChange: (open) => {
+              if (!open) {
+                navigate(
+                  `/assignment-areas${
+                    parentArea ? `?selected-area=${parentArea}` : ""
+                  }`
+                );
               }
             },
           }}
-          triggerLabel="Edit Profile"
-          showTrigger={false}
-          title="Edit Profile"
-          description="Update your profile information."
         >
           {({ closeModal }) => (
             <Suspense fallback={<Skeleton className="h-96" />}>
-              <Await resolve={editUserSchema}>
+              <Await resolve={schema}>
                 {(schema) => (
-                  <EditForm schema={schema} closeModal={closeModal} />
+                  <AddForm schema={schema} closeModal={closeModal} />
                 )}
               </Await>
             </Suspense>
@@ -167,7 +175,7 @@ export default function Edit() {
   );
 }
 
-function EditForm({
+function AddForm({
   schema,
   closeModal,
 }: {

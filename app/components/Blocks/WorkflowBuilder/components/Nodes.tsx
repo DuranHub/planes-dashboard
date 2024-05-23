@@ -2,16 +2,14 @@ import { useFetcher } from "@remix-run/react";
 import { Fragment, memo, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import { Handle, NodeProps, Position } from "reactflow";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "~/components/ui/popover";
 
 import { cn } from "~/lib/utils";
 
@@ -98,19 +96,28 @@ export const inputNode = memo(function InputNode({
 export const commentNode = memo(function CommentNode() {
   return (
     <Fragment>
-      <Card className="">
-        <CardHeader>
-          <CardTitle>Create project</CardTitle>
-          <CardDescription>
-            Deploy your new project in one-click.
-          </CardDescription>
-        </CardHeader>
-        <CardContent></CardContent>
-        <CardFooter className="flex justify-between">
-          <Button variant="outline">Cancel</Button>
-          <Button>Deploy</Button>
-        </CardFooter>
-      </Card>
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button
+            variant="ghost"
+            className="relative h-8 w-8 rounded-full mt-auto"
+          >
+            <Avatar className="h-8 w-8">
+              <AvatarImage
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGARx09qceP-KQTPCEfL6ob0s1-M4M9wh5MAJvMyegqA&s"
+                alt="@shadcn"
+              />
+              <AvatarFallback>SC</AvatarFallback>
+            </Avatar>
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent>
+          Hit you unexpectedly kitty ipsum dolor sit amet, shed everywhere shed
+          everywhere stretching attack your ankles chase the red dot, hairball
+          run catnip eat the grass sniff human give me attention meow so spit up
+          on light gray carpet instead of adjacent linoleum.
+        </PopoverContent>
+      </Popover>
     </Fragment>
   );
 });

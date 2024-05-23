@@ -13,9 +13,9 @@ import {
   findAssignmentAreasQuery,
   listAssignmentAreasQuery,
 } from "~/graphql/models/assignmentArea/queries.server";
-import { ComposeSchema } from "~/lib/composeSchema";
+import { ComposeSchema } from "~/components/FormGenerator/lib/composeSchema";
 import { ActionFunctionArgs, json } from "@remix-run/node";
-import { validateFormJsonSchema } from "~/lib/validateFormAjv.server";
+import { validateFormJsonSchema } from "~/components/FormGenerator/lib/validateFormAjv.server";
 import { createUserMutation } from "~/graphql/models/user/mutations";
 import { useFormGenerator } from "~/components/FormGenerator";
 import { Button } from "~/components/ui/button";

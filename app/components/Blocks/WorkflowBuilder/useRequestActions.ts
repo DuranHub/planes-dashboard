@@ -7,7 +7,6 @@ const INTENTS = {
     connect: "connect",
 } as const;
 
-const workflowAction = "/workflows/create";
 
 export default function useRequestActions() {
     const fetcher = useFetcher();
@@ -20,7 +19,6 @@ export default function useRequestActions() {
             },
             {
                 method: "post",
-                action: workflowAction,
             }
         );
     };
@@ -33,7 +31,6 @@ export default function useRequestActions() {
             },
             {
                 method: "post",
-                action: workflowAction,
             }
         );
     };
@@ -46,7 +43,6 @@ export default function useRequestActions() {
             },
             {
                 method: "post",
-                action: workflowAction,
             }
         );
     };

@@ -14,6 +14,7 @@ import { MessageCircleQuestion } from "lucide-react";
 import TextInput from "./TextInput";
 import { SelectInput } from "./Select";
 import { FormItem, FormLabel, FormMessage } from "~/components/ui/form";
+import { SearchUserCombobox } from "~/routes/resources+/search-user";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const inputMap: Record<InputUnion["kind"], React.FC<any>> = {
@@ -22,6 +23,9 @@ const inputMap: Record<InputUnion["kind"], React.FC<any>> = {
   alphabetic: TextInput,
   password: TextInput,
   select: SelectInput,
+  number: TextInput,
+  "user-autocomplete": SearchUserCombobox,
+  "free-text": TextInput,
 };
 
 const inputPropsByKind: Record<InputUnion["kind"], Record<string, unknown>> = {
@@ -39,6 +43,15 @@ const inputPropsByKind: Record<InputUnion["kind"], Record<string, unknown>> = {
   },
   select: {
     type: "select",
+  },
+  number: {
+    type: "number",
+  },
+  "user-autocomplete": {
+    type: "select",
+  },
+  "free-text": {
+    type: "text",
   },
 };
 
@@ -68,7 +81,7 @@ const LabelBlock = ({ input }: { input: InputUnion }) => {
 };
 
 const isInputSelect = (input: InputUnion): input is SelectInputDefinition => {
-  return input.kind === "select";
+  return input.kind === "select" || input.kind === "user-autocomplete";
 };
 
 export const getInputsFromSchema = (schema: Schema) => {
@@ -79,10 +92,11 @@ export const getInputsFromSchema = (schema: Schema) => {
 
     const Component = function Field({ field }: FieldProps) {
       return (
-        <FormItem>
+        <FormItem className={input.hidden ? "hidden" : ""}>
           <LabelBlock input={input} />
           <InputComponent
             {...inputProps}
+            type={input.hidden ? "hidden" : inputProps.type}
             field={field}
             name={input.name}
             defaultValue={input.defaultValue}

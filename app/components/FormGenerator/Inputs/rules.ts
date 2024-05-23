@@ -10,6 +10,9 @@ const inputKindToJSONSchemaType: Record<InputUnion['kind'], JSONSchemaTypes> = {
     alphabetic: "string",
     password: "string",
     select: "string",
+    number: "number",
+    "user-autocomplete": "string",
+    "free-text": "string",
 }
 
 /**
@@ -23,6 +26,9 @@ const inputKindToJSONSchemaFormat: Record<InputUnion['kind'], FormatName | undef
     email: "email",
     password: "password",
     select: undefined,
+    number: undefined,
+    "user-autocomplete": undefined,
+    "free-text": undefined,
 }
 
 export const buildJsonSchema = (schema: Schema) => {
@@ -69,12 +75,30 @@ export const buildJsonSchema = (schema: Schema) => {
                 pattern: "Only alphabetic characters are allowed",
             };
         }
+
+        if (kind === 'free-text') {
+            baseSchema.minLength = field.minLength ? field.minLength : field.required ? 1 : undefined;
+            baseSchema.errorMessage = {
+                minLength: field.minLength ? `Minimum length is ${field.minLength}` : field.required ? "Field is required" : '',
+            };
+        }
+
         if (kind === 'select') {
             baseSchema.enum = field.options.map((option) => option.value);
             baseSchema.errorMessage = {
                 required: "Field is required",
                 empty: "Field cannot be empty",
                 enum: "Invalid option",
+            };
+        }
+        if (kind === 'number') {
+            baseSchema.minimum = field.min;
+            baseSchema.maximum = field.max;
+            baseSchema.errorMessage = {
+                minimum: field.min ? `Minimum value is ${field.min}` : '',
+                maximum: field.max ? `Maximum value is ${field.max}` : '',
+                required: "Field is required",
+                type: "Field must be a number",
             };
         }
 

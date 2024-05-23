@@ -60,11 +60,13 @@
     "reactflow": "^11.10.3",
     "remix-auth": "^3.6.0",
     "remix-auth-totp": "^3.1.0",
+    "remix-hook-form": "^4.3.1",
     "remix-utils": "^7.6.0",
     "sonner": "^1.4.0",
     "spin-delay": "^2.0.0",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
+    "use-resize-observer": "^9.1.0",
     "vaul": "^0.9.0",
     "zod": "^3.23.5"
   },

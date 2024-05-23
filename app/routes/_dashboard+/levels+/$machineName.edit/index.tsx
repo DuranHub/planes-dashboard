@@ -8,20 +8,21 @@ import {
 import { ClientOnly } from "remix-utils/client-only";
 import { Schema } from "~/components/FormGenerator/types";
 import Modal from "~/components/ui/modal";
-import { graphqlClient } from "~/graphql/client.server";
-import { findAssignmentAreasQuery } from "~/graphql/models/assignmentArea/queries.server";
+import { graphql, graphqlClient } from "~/graphql/client.server";
+import {
+  findAssignmentAreasQuery,
+  listAssignmentAreasQuery,
+} from "~/graphql/models/assignmentArea/queries.server";
 import { ComposeSchema } from "~/components/FormGenerator/lib/composeSchema";
 import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node";
 import { validateFormJsonSchema } from "~/components/FormGenerator/lib/validateFormAjv.server";
-import { updateUserMutation } from "~/graphql/models/user/mutations";
 import { useFormGenerator } from "~/components/FormGenerator";
 import { Button } from "~/components/ui/button";
 import { invariant } from "@epic-web/invariant";
 import { Suspense, useEffect } from "react";
 import { Skeleton } from "~/components/ui/skeleton";
-import { getUserSchema } from "./loader";
 
-const createUserSchema = [
+const createAssigmentAreaSchema = [
   {
     kind: "alphabetic",
     name: "name",
@@ -29,51 +30,91 @@ const createUserSchema = [
     required: true,
   },
   {
+    kind: "alphanumeric",
+    label: "Description",
+    name: "description",
+    required: true,
+  },
+  {
     kind: "select",
     label: "Assignment Area",
-    name: "assignmentArea",
+    name: "parentArea",
     options: [],
     required: true,
-  },
-  {
-    kind: "email",
-    label: "Email",
-    name: "email",
-    required: true,
-  },
-  {
-    kind: "alphanumeric",
-    label: "Identification",
-    name: "identification",
-    required: true,
-    helpText: "The identification of the user",
-  },
-  {
-    kind: "alphabetic",
-    label: "Position",
-    name: "position",
-    required: true,
-    helpText: "The position of the user",
   },
 ] as const satisfies Schema;
 
 export async function loader({ params }: LoaderFunctionArgs) {
-  const userId = params.userid;
-  invariant(userId, "User ID is required");
+  const machineName = params.machineName;
+  const findAssigmentAreaByMachineNameQuery = graphql(`
+    query findAssigmentAreaByMachineNameQuery($machineName: String!) {
+      findUniqueAssignmentArea(where: { machineName: $machineName }) {
+        id
+        name
+        description
+        ParentArea {
+          machineName
+          name
+        }
+      }
+    }
+  `);
+
+  async function getEditAssignmentAreaSchema() {
+    invariant(machineName, "Machine Name is required");
+
+    const { data: findAssigmentAreaByMachineName, error } =
+      await graphqlClient.query(findAssigmentAreaByMachineNameQuery, {
+        machineName,
+      });
+    const { data } = await graphqlClient.query(listAssignmentAreasQuery, {
+      filter: {
+        machineName: {
+          not: {
+            equals: machineName,
+          },
+        },
+      },
+    });
+
+    const assigmentAreaList = data?.findManyAssignmentArea || [];
+
+    if (error || !findAssigmentAreaByMachineName?.findUniqueAssignmentArea) {
+      throw new Error("Assignment Area not found");
+    }
+
+    const { findUniqueAssignmentArea } = findAssigmentAreaByMachineName;
+
+    const composeSchema = new ComposeSchema(createAssigmentAreaSchema);
+    composeSchema.setDefaultValues({
+      name: findUniqueAssignmentArea.name,
+      description: findUniqueAssignmentArea.description,
+      parentArea: findUniqueAssignmentArea.ParentArea?.machineName || "",
+    });
+    composeSchema.setOptions(
+      "parentArea",
+      assigmentAreaList.map((area) => ({
+        label: area.name,
+        value: area.machineName,
+      }))
+    );
+
+    return composeSchema.getSchema();
+  }
 
   return defer({
-    editUserSchema: getUserSchema(userId, createUserSchema),
+    editUserSchema: getEditAssignmentAreaSchema(),
   });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
-  invariant(params.userid, "User ID is required");
+  invariant(params.machineName, "Machine Name is required");
   // Format the validator
   const { data } = await graphqlClient.query(findAssignmentAreasQuery, {});
   const assignmentAreas = data?.findManyAssignmentArea || [];
-  const validatorSchema = new ComposeSchema(createUserSchema);
+  const validatorSchema = new ComposeSchema(createAssigmentAreaSchema);
   validatorSchema.setOptions(
-    "assignmentArea",
+    "parentArea",
     assignmentAreas.map((area) => ({
       label: area.name,
       value: area.machineName,
@@ -93,38 +134,46 @@ export async function action({ request, params }: ActionFunctionArgs) {
   }
 
   // Extract variables
-  const { assignmentArea, email, identification, name, position } = result.data;
+  const { parentArea, description, name } = result.data;
 
   // Buisness logic
-  const { data: user, error } = await graphqlClient.mutation(
-    updateUserMutation,
+  const updateAssignmentAreaMutation = graphql(`
+    mutation updateAssignmentAreaMutation(
+      $input: AssignmentAreaUpdateInput!
+      $machineName: String!
+    ) {
+      updateOneAssignmentArea(
+        where: { machineName: $machineName }
+        data: $input
+      ) {
+        id
+      }
+    }
+  `);
+
+  const { data: area, error } = await graphqlClient.mutation(
+    updateAssignmentAreaMutation,
     {
       input: {
-        email: {
-          set: email,
-        },
         name: {
           set: name,
         },
+        description: {
+          set: description,
+        },
         // avatar: `https://api.dicebear.com/8.x/avataaars-neutral/svg?seed=${name}`,
-        identification: {
-          set: identification,
-        },
-        position: {
-          set: position,
-        },
-        assignmentArea: {
+        ParentArea: {
           connect: {
-            machineName: assignmentArea,
+            machineName: parentArea,
           },
         },
       },
-      id: params.userid,
+      machineName: params.machineName,
     }
   );
 
-  if (error || !user) {
-    return json({ error: "Error creating user" }, { status: 500 });
+  if (error || !area) {
+    return json({ error: "Error creating Assignment Area" }, { status: 500 });
   }
 
   return json({ success: true });
@@ -133,7 +182,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
 export default function Edit() {
   const { editUserSchema } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
-
   return (
     <ClientOnly fallback={<div />}>
       {() => (
@@ -143,7 +191,7 @@ export default function Edit() {
             open: true,
             onOpenChange: (isOpen) => {
               if (!isOpen) {
-                navigate("/users");
+                navigate("/assignment-areas");
               }
             },
           }}

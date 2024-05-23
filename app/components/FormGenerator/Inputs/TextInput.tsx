@@ -7,10 +7,10 @@ interface Props extends BaseProps {
   field: { name: string; value: string };
 }
 
-export default function BaseInput({ field }: Props) {
+export default function BaseInput({ field, ...props }: Props) {
   return (
     <FormControl>
-      <Input {...field} />
+      <Input {...field} {...props} />
     </FormControl>
   );
 }

@@ -41,8 +41,8 @@ export const findAssignmentAreasQuery = graphql(`
 );
 
 export const listAssignmentAreasQuery = graphql(`
-      query AssignmentAreas {
-        findManyAssignmentArea {
+      query AssignmentAreas($filter: AssignmentAreaWhereInput) {
+        findManyAssignmentArea(where: $filter) {
           id
           name
           machineName

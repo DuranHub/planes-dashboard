@@ -3,7 +3,7 @@ import { defer } from "@remix-run/node";
 
 import { fetchUsers } from "./users.server";
 import { Fragment, Suspense } from "react";
-import { DataTable } from "~/components/data-table";
+import { DataTable } from "~/components/DataTable";
 import { columns } from "./components/datatable/columns";
 import { Skeleton } from "~/components/ui/skeleton";
 import PageHeader from "~/components/PageHeader";

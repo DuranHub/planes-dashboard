@@ -24,8 +24,9 @@ authenticator.use(
             sendTOTP: async ({ email, code, magicLink }) => {
                 if (process.env.NODE_ENV === 'development') {
                     console.info('[Dev-Only] TOTP Code:', code)
+                } else {
+                    await sendAuthEmail({ email, code, magicLink })
                 }
-                await sendAuthEmail({ email, code, magicLink })
             },
         },
         async ({ email }) => {
