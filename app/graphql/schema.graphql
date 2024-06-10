@@ -3,6 +3,654 @@ schema {
   mutation: Mutation
 }
 
+type Arrow {
+  arrowData: ArrowData!
+  arrowDataId: String!
+  id: ID!
+  label: String!
+  source: Node!
+  sourceId: String!
+  target: Node!
+  targetId: String!
+}
+
+input ArrowCountOrderByAggregateInput {
+  arrowDataId: SortOrder
+  id: SortOrder
+  label: SortOrder
+  sourceId: SortOrder
+  targetId: SortOrder
+}
+
+input ArrowCreateInput {
+  arrowData: ArrowDataCreateNestedOneWithoutArrowInput!
+  id: String
+  label: String!
+  source: NodeCreateNestedOneWithoutFromArrowsInput!
+  target: NodeCreateNestedOneWithoutToArrowsInput!
+}
+
+input ArrowCreateManyInput {
+  arrowDataId: String!
+  id: String
+  label: String!
+  sourceId: String!
+  targetId: String!
+}
+
+input ArrowCreateManySourceInput {
+  arrowDataId: String!
+  id: String
+  label: String!
+  targetId: String!
+}
+
+input ArrowCreateManySourceInputEnvelope {
+  data: [ArrowCreateManySourceInput!]!
+  skipDuplicates: Boolean
+}
+
+input ArrowCreateManyTargetInput {
+  arrowDataId: String!
+  id: String
+  label: String!
+  sourceId: String!
+}
+
+input ArrowCreateManyTargetInputEnvelope {
+  data: [ArrowCreateManyTargetInput!]!
+  skipDuplicates: Boolean
+}
+
+input ArrowCreateNestedManyWithoutSourceInput {
+  connect: [ArrowWhereUniqueInput!]
+  connectOrCreate: [ArrowCreateOrConnectWithoutSourceInput!]
+  create: [ArrowCreateWithoutSourceInput!]
+  createMany: ArrowCreateManySourceInputEnvelope
+}
+
+input ArrowCreateNestedManyWithoutTargetInput {
+  connect: [ArrowWhereUniqueInput!]
+  connectOrCreate: [ArrowCreateOrConnectWithoutTargetInput!]
+  create: [ArrowCreateWithoutTargetInput!]
+  createMany: ArrowCreateManyTargetInputEnvelope
+}
+
+input ArrowCreateNestedOneWithoutArrowDataInput {
+  connect: ArrowWhereUniqueInput
+  connectOrCreate: ArrowCreateOrConnectWithoutArrowDataInput
+  create: ArrowCreateWithoutArrowDataInput
+}
+
+input ArrowCreateOrConnectWithoutArrowDataInput {
+  create: ArrowCreateWithoutArrowDataInput!
+  where: ArrowWhereUniqueInput!
+}
+
+input ArrowCreateOrConnectWithoutSourceInput {
+  create: ArrowCreateWithoutSourceInput!
+  where: ArrowWhereUniqueInput!
+}
+
+input ArrowCreateOrConnectWithoutTargetInput {
+  create: ArrowCreateWithoutTargetInput!
+  where: ArrowWhereUniqueInput!
+}
+
+input ArrowCreateWithoutArrowDataInput {
+  id: String
+  label: String!
+  source: NodeCreateNestedOneWithoutFromArrowsInput!
+  target: NodeCreateNestedOneWithoutToArrowsInput!
+}
+
+input ArrowCreateWithoutSourceInput {
+  arrowData: ArrowDataCreateNestedOneWithoutArrowInput!
+  id: String
+  label: String!
+  target: NodeCreateNestedOneWithoutToArrowsInput!
+}
+
+input ArrowCreateWithoutTargetInput {
+  arrowData: ArrowDataCreateNestedOneWithoutArrowInput!
+  id: String
+  label: String!
+  source: NodeCreateNestedOneWithoutFromArrowsInput!
+}
+
+type ArrowData {
+  arrow: Arrow
+  id: ID!
+  indicators: Json!
+  procedure: Json!
+  requirements(cursor: RequirementWhereUniqueInput, distinct: [RequirementScalarFieldEnum!], orderBy: [RequirementOrderByWithRelationInput!], skip: Int, take: Int, where: RequirementWhereInput): [Requirement!]!
+  responsability: Responsibility!
+  responsibilityId: String!
+}
+
+input ArrowDataCountOrderByAggregateInput {
+  id: SortOrder
+  indicators: SortOrder
+  procedure: SortOrder
+  responsibilityId: SortOrder
+}
+
+input ArrowDataCreateInput {
+  arrow: ArrowCreateNestedOneWithoutArrowDataInput
+  id: String
+  indicators: Json!
+  procedure: Json!
+  requirements: RequirementCreateNestedManyWithoutArrowDataInput
+  responsability: ResponsibilityCreateNestedOneWithoutArrowDataInput!
+}
+
+input ArrowDataCreateManyInput {
+  id: String
+  indicators: Json!
+  procedure: Json!
+  responsibilityId: String!
+}
+
+input ArrowDataCreateManyResponsabilityInput {
+  id: String
+  indicators: Json!
+  procedure: Json!
+}
+
+input ArrowDataCreateManyResponsabilityInputEnvelope {
+  data: [ArrowDataCreateManyResponsabilityInput!]!
+  skipDuplicates: Boolean
+}
+
+input ArrowDataCreateNestedManyWithoutResponsabilityInput {
+  connect: [ArrowDataWhereUniqueInput!]
+  connectOrCreate: [ArrowDataCreateOrConnectWithoutResponsabilityInput!]
+  create: [ArrowDataCreateWithoutResponsabilityInput!]
+  createMany: ArrowDataCreateManyResponsabilityInputEnvelope
+}
+
+input ArrowDataCreateNestedOneWithoutArrowInput {
+  connect: ArrowDataWhereUniqueInput
+  connectOrCreate: ArrowDataCreateOrConnectWithoutArrowInput
+  create: ArrowDataCreateWithoutArrowInput
+}
+
+input ArrowDataCreateNestedOneWithoutRequirementsInput {
+  connect: ArrowDataWhereUniqueInput
+  connectOrCreate: ArrowDataCreateOrConnectWithoutRequirementsInput
+  create: ArrowDataCreateWithoutRequirementsInput
+}
+
+input ArrowDataCreateOrConnectWithoutArrowInput {
+  create: ArrowDataCreateWithoutArrowInput!
+  where: ArrowDataWhereUniqueInput!
+}
+
+input ArrowDataCreateOrConnectWithoutRequirementsInput {
+  create: ArrowDataCreateWithoutRequirementsInput!
+  where: ArrowDataWhereUniqueInput!
+}
+
+input ArrowDataCreateOrConnectWithoutResponsabilityInput {
+  create: ArrowDataCreateWithoutResponsabilityInput!
+  where: ArrowDataWhereUniqueInput!
+}
+
+input ArrowDataCreateWithoutArrowInput {
+  id: String
+  indicators: Json!
+  procedure: Json!
+  requirements: RequirementCreateNestedManyWithoutArrowDataInput
+  responsability: ResponsibilityCreateNestedOneWithoutArrowDataInput!
+}
+
+input ArrowDataCreateWithoutRequirementsInput {
+  arrow: ArrowCreateNestedOneWithoutArrowDataInput
+  id: String
+  indicators: Json!
+  procedure: Json!
+  responsability: ResponsibilityCreateNestedOneWithoutArrowDataInput!
+}
+
+input ArrowDataCreateWithoutResponsabilityInput {
+  arrow: ArrowCreateNestedOneWithoutArrowDataInput
+  id: String
+  indicators: Json!
+  procedure: Json!
+  requirements: RequirementCreateNestedManyWithoutArrowDataInput
+}
+
+input ArrowDataListRelationFilter {
+  every: ArrowDataWhereInput
+  none: ArrowDataWhereInput
+  some: ArrowDataWhereInput
+}
+
+input ArrowDataMaxOrderByAggregateInput {
+  id: SortOrder
+  responsibilityId: SortOrder
+}
+
+input ArrowDataMinOrderByAggregateInput {
+  id: SortOrder
+  responsibilityId: SortOrder
+}
+
+input ArrowDataOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input ArrowDataOrderByWithAggregationInput {
+  _count: ArrowDataCountOrderByAggregateInput
+  _max: ArrowDataMaxOrderByAggregateInput
+  _min: ArrowDataMinOrderByAggregateInput
+  id: SortOrder
+  indicators: SortOrder
+  procedure: SortOrder
+  responsibilityId: SortOrder
+}
+
+input ArrowDataOrderByWithRelationInput {
+  arrow: ArrowOrderByWithRelationInput
+  id: SortOrder
+  indicators: SortOrder
+  procedure: SortOrder
+  requirements: RequirementOrderByRelationAggregateInput
+  responsability: ResponsibilityOrderByWithRelationInput
+  responsibilityId: SortOrder
+}
+
+input ArrowDataRelationFilter {
+  is: ArrowDataWhereInput
+  isNot: ArrowDataWhereInput
+}
+
+enum ArrowDataScalarFieldEnum {
+  id
+  indicators
+  procedure
+  responsibilityId
+}
+
+input ArrowDataScalarWhereInput {
+  AND: [ArrowDataScalarWhereInput!]
+  NOT: [ArrowDataScalarWhereInput!]
+  OR: [ArrowDataScalarWhereInput!]
+  id: StringFilter
+  indicators: JsonFilter
+  procedure: JsonFilter
+  responsibilityId: StringFilter
+}
+
+input ArrowDataScalarWhereWithAggregatesInput {
+  AND: [ArrowDataScalarWhereWithAggregatesInput!]
+  NOT: [ArrowDataScalarWhereWithAggregatesInput!]
+  OR: [ArrowDataScalarWhereWithAggregatesInput!]
+  id: StringWithAggregatesFilter
+  indicators: JsonWithAggregatesFilter
+  procedure: JsonWithAggregatesFilter
+  responsibilityId: StringWithAggregatesFilter
+}
+
+input ArrowDataUpdateInput {
+  arrow: ArrowUpdateOneWithoutArrowDataNestedInput
+  id: StringFieldUpdateOperationsInput
+  indicators: Json
+  procedure: Json
+  requirements: RequirementUpdateManyWithoutArrowDataNestedInput
+  responsability: ResponsibilityUpdateOneRequiredWithoutArrowDataNestedInput
+}
+
+input ArrowDataUpdateManyMutationInput {
+  id: StringFieldUpdateOperationsInput
+  indicators: Json
+  procedure: Json
+}
+
+input ArrowDataUpdateManyWithWhereWithoutResponsabilityInput {
+  data: ArrowDataUpdateManyMutationInput!
+  where: ArrowDataScalarWhereInput!
+}
+
+input ArrowDataUpdateManyWithoutResponsabilityNestedInput {
+  connect: [ArrowDataWhereUniqueInput!]
+  connectOrCreate: [ArrowDataCreateOrConnectWithoutResponsabilityInput!]
+  create: [ArrowDataCreateWithoutResponsabilityInput!]
+  createMany: ArrowDataCreateManyResponsabilityInputEnvelope
+  delete: [ArrowDataWhereUniqueInput!]
+  deleteMany: [ArrowDataScalarWhereInput!]
+  disconnect: [ArrowDataWhereUniqueInput!]
+  set: [ArrowDataWhereUniqueInput!]
+  update: [ArrowDataUpdateWithWhereUniqueWithoutResponsabilityInput!]
+  updateMany: [ArrowDataUpdateManyWithWhereWithoutResponsabilityInput!]
+  upsert: [ArrowDataUpsertWithWhereUniqueWithoutResponsabilityInput!]
+}
+
+input ArrowDataUpdateOneRequiredWithoutArrowNestedInput {
+  connect: ArrowDataWhereUniqueInput
+  connectOrCreate: ArrowDataCreateOrConnectWithoutArrowInput
+  create: ArrowDataCreateWithoutArrowInput
+  update: ArrowDataUpdateToOneWithWhereWithoutArrowInput
+  upsert: ArrowDataUpsertWithoutArrowInput
+}
+
+input ArrowDataUpdateOneRequiredWithoutRequirementsNestedInput {
+  connect: ArrowDataWhereUniqueInput
+  connectOrCreate: ArrowDataCreateOrConnectWithoutRequirementsInput
+  create: ArrowDataCreateWithoutRequirementsInput
+  update: ArrowDataUpdateToOneWithWhereWithoutRequirementsInput
+  upsert: ArrowDataUpsertWithoutRequirementsInput
+}
+
+input ArrowDataUpdateToOneWithWhereWithoutArrowInput {
+  data: ArrowDataUpdateWithoutArrowInput!
+  where: ArrowDataWhereInput
+}
+
+input ArrowDataUpdateToOneWithWhereWithoutRequirementsInput {
+  data: ArrowDataUpdateWithoutRequirementsInput!
+  where: ArrowDataWhereInput
+}
+
+input ArrowDataUpdateWithWhereUniqueWithoutResponsabilityInput {
+  data: ArrowDataUpdateWithoutResponsabilityInput!
+  where: ArrowDataWhereUniqueInput!
+}
+
+input ArrowDataUpdateWithoutArrowInput {
+  id: StringFieldUpdateOperationsInput
+  indicators: Json
+  procedure: Json
+  requirements: RequirementUpdateManyWithoutArrowDataNestedInput
+  responsability: ResponsibilityUpdateOneRequiredWithoutArrowDataNestedInput
+}
+
+input ArrowDataUpdateWithoutRequirementsInput {
+  arrow: ArrowUpdateOneWithoutArrowDataNestedInput
+  id: StringFieldUpdateOperationsInput
+  indicators: Json
+  procedure: Json
+  responsability: ResponsibilityUpdateOneRequiredWithoutArrowDataNestedInput
+}
+
+input ArrowDataUpdateWithoutResponsabilityInput {
+  arrow: ArrowUpdateOneWithoutArrowDataNestedInput
+  id: StringFieldUpdateOperationsInput
+  indicators: Json
+  procedure: Json
+  requirements: RequirementUpdateManyWithoutArrowDataNestedInput
+}
+
+input ArrowDataUpsertWithWhereUniqueWithoutResponsabilityInput {
+  create: ArrowDataCreateWithoutResponsabilityInput!
+  update: ArrowDataUpdateWithoutResponsabilityInput!
+  where: ArrowDataWhereUniqueInput!
+}
+
+input ArrowDataUpsertWithoutArrowInput {
+  create: ArrowDataCreateWithoutArrowInput!
+  update: ArrowDataUpdateWithoutArrowInput!
+  where: ArrowDataWhereInput
+}
+
+input ArrowDataUpsertWithoutRequirementsInput {
+  create: ArrowDataCreateWithoutRequirementsInput!
+  update: ArrowDataUpdateWithoutRequirementsInput!
+  where: ArrowDataWhereInput
+}
+
+input ArrowDataWhereInput {
+  AND: [ArrowDataWhereInput!]
+  NOT: [ArrowDataWhereInput!]
+  OR: [ArrowDataWhereInput!]
+  arrow: ArrowWhereInput
+  id: StringFilter
+  indicators: JsonFilter
+  procedure: JsonFilter
+  requirements: RequirementListRelationFilter
+  responsability: ResponsibilityWhereInput
+  responsibilityId: StringFilter
+}
+
+input ArrowDataWhereUniqueInput {
+  AND: [ArrowDataWhereInput!]
+  NOT: [ArrowDataWhereInput!]
+  OR: [ArrowDataWhereInput!]
+  arrow: ArrowWhereInput
+  id: String
+  indicators: JsonFilter
+  procedure: JsonFilter
+  requirements: RequirementListRelationFilter
+  responsability: ResponsibilityWhereInput
+  responsibilityId: StringFilter
+}
+
+input ArrowListRelationFilter {
+  every: ArrowWhereInput
+  none: ArrowWhereInput
+  some: ArrowWhereInput
+}
+
+input ArrowMaxOrderByAggregateInput {
+  arrowDataId: SortOrder
+  id: SortOrder
+  label: SortOrder
+  sourceId: SortOrder
+  targetId: SortOrder
+}
+
+input ArrowMinOrderByAggregateInput {
+  arrowDataId: SortOrder
+  id: SortOrder
+  label: SortOrder
+  sourceId: SortOrder
+  targetId: SortOrder
+}
+
+input ArrowNullableRelationFilter {
+  is: ArrowWhereInput
+  isNot: ArrowWhereInput
+}
+
+input ArrowOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input ArrowOrderByWithAggregationInput {
+  _count: ArrowCountOrderByAggregateInput
+  _max: ArrowMaxOrderByAggregateInput
+  _min: ArrowMinOrderByAggregateInput
+  arrowDataId: SortOrder
+  id: SortOrder
+  label: SortOrder
+  sourceId: SortOrder
+  targetId: SortOrder
+}
+
+input ArrowOrderByWithRelationInput {
+  arrowData: ArrowDataOrderByWithRelationInput
+  arrowDataId: SortOrder
+  id: SortOrder
+  label: SortOrder
+  source: NodeOrderByWithRelationInput
+  sourceId: SortOrder
+  target: NodeOrderByWithRelationInput
+  targetId: SortOrder
+}
+
+enum ArrowScalarFieldEnum {
+  arrowDataId
+  id
+  label
+  sourceId
+  targetId
+}
+
+input ArrowScalarWhereInput {
+  AND: [ArrowScalarWhereInput!]
+  NOT: [ArrowScalarWhereInput!]
+  OR: [ArrowScalarWhereInput!]
+  arrowDataId: StringFilter
+  id: StringFilter
+  label: StringFilter
+  sourceId: StringFilter
+  targetId: StringFilter
+}
+
+input ArrowScalarWhereWithAggregatesInput {
+  AND: [ArrowScalarWhereWithAggregatesInput!]
+  NOT: [ArrowScalarWhereWithAggregatesInput!]
+  OR: [ArrowScalarWhereWithAggregatesInput!]
+  arrowDataId: StringWithAggregatesFilter
+  id: StringWithAggregatesFilter
+  label: StringWithAggregatesFilter
+  sourceId: StringWithAggregatesFilter
+  targetId: StringWithAggregatesFilter
+}
+
+input ArrowUpdateInput {
+  arrowData: ArrowDataUpdateOneRequiredWithoutArrowNestedInput
+  id: StringFieldUpdateOperationsInput
+  label: StringFieldUpdateOperationsInput
+  source: NodeUpdateOneRequiredWithoutFromArrowsNestedInput
+  target: NodeUpdateOneRequiredWithoutToArrowsNestedInput
+}
+
+input ArrowUpdateManyMutationInput {
+  id: StringFieldUpdateOperationsInput
+  label: StringFieldUpdateOperationsInput
+}
+
+input ArrowUpdateManyWithWhereWithoutSourceInput {
+  data: ArrowUpdateManyMutationInput!
+  where: ArrowScalarWhereInput!
+}
+
+input ArrowUpdateManyWithWhereWithoutTargetInput {
+  data: ArrowUpdateManyMutationInput!
+  where: ArrowScalarWhereInput!
+}
+
+input ArrowUpdateManyWithoutSourceNestedInput {
+  connect: [ArrowWhereUniqueInput!]
+  connectOrCreate: [ArrowCreateOrConnectWithoutSourceInput!]
+  create: [ArrowCreateWithoutSourceInput!]
+  createMany: ArrowCreateManySourceInputEnvelope
+  delete: [ArrowWhereUniqueInput!]
+  deleteMany: [ArrowScalarWhereInput!]
+  disconnect: [ArrowWhereUniqueInput!]
+  set: [ArrowWhereUniqueInput!]
+  update: [ArrowUpdateWithWhereUniqueWithoutSourceInput!]
+  updateMany: [ArrowUpdateManyWithWhereWithoutSourceInput!]
+  upsert: [ArrowUpsertWithWhereUniqueWithoutSourceInput!]
+}
+
+input ArrowUpdateManyWithoutTargetNestedInput {
+  connect: [ArrowWhereUniqueInput!]
+  connectOrCreate: [ArrowCreateOrConnectWithoutTargetInput!]
+  create: [ArrowCreateWithoutTargetInput!]
+  createMany: ArrowCreateManyTargetInputEnvelope
+  delete: [ArrowWhereUniqueInput!]
+  deleteMany: [ArrowScalarWhereInput!]
+  disconnect: [ArrowWhereUniqueInput!]
+  set: [ArrowWhereUniqueInput!]
+  update: [ArrowUpdateWithWhereUniqueWithoutTargetInput!]
+  updateMany: [ArrowUpdateManyWithWhereWithoutTargetInput!]
+  upsert: [ArrowUpsertWithWhereUniqueWithoutTargetInput!]
+}
+
+input ArrowUpdateOneWithoutArrowDataNestedInput {
+  connect: ArrowWhereUniqueInput
+  connectOrCreate: ArrowCreateOrConnectWithoutArrowDataInput
+  create: ArrowCreateWithoutArrowDataInput
+  delete: ArrowWhereInput
+  disconnect: ArrowWhereInput
+  update: ArrowUpdateToOneWithWhereWithoutArrowDataInput
+  upsert: ArrowUpsertWithoutArrowDataInput
+}
+
+input ArrowUpdateToOneWithWhereWithoutArrowDataInput {
+  data: ArrowUpdateWithoutArrowDataInput!
+  where: ArrowWhereInput
+}
+
+input ArrowUpdateWithWhereUniqueWithoutSourceInput {
+  data: ArrowUpdateWithoutSourceInput!
+  where: ArrowWhereUniqueInput!
+}
+
+input ArrowUpdateWithWhereUniqueWithoutTargetInput {
+  data: ArrowUpdateWithoutTargetInput!
+  where: ArrowWhereUniqueInput!
+}
+
+input ArrowUpdateWithoutArrowDataInput {
+  id: StringFieldUpdateOperationsInput
+  label: StringFieldUpdateOperationsInput
+  source: NodeUpdateOneRequiredWithoutFromArrowsNestedInput
+  target: NodeUpdateOneRequiredWithoutToArrowsNestedInput
+}
+
+input ArrowUpdateWithoutSourceInput {
+  arrowData: ArrowDataUpdateOneRequiredWithoutArrowNestedInput
+  id: StringFieldUpdateOperationsInput
+  label: StringFieldUpdateOperationsInput
+  target: NodeUpdateOneRequiredWithoutToArrowsNestedInput
+}
+
+input ArrowUpdateWithoutTargetInput {
+  arrowData: ArrowDataUpdateOneRequiredWithoutArrowNestedInput
+  id: StringFieldUpdateOperationsInput
+  label: StringFieldUpdateOperationsInput
+  source: NodeUpdateOneRequiredWithoutFromArrowsNestedInput
+}
+
+input ArrowUpsertWithWhereUniqueWithoutSourceInput {
+  create: ArrowCreateWithoutSourceInput!
+  update: ArrowUpdateWithoutSourceInput!
+  where: ArrowWhereUniqueInput!
+}
+
+input ArrowUpsertWithWhereUniqueWithoutTargetInput {
+  create: ArrowCreateWithoutTargetInput!
+  update: ArrowUpdateWithoutTargetInput!
+  where: ArrowWhereUniqueInput!
+}
+
+input ArrowUpsertWithoutArrowDataInput {
+  create: ArrowCreateWithoutArrowDataInput!
+  update: ArrowUpdateWithoutArrowDataInput!
+  where: ArrowWhereInput
+}
+
+input ArrowWhereInput {
+  AND: [ArrowWhereInput!]
+  NOT: [ArrowWhereInput!]
+  OR: [ArrowWhereInput!]
+  arrowData: ArrowDataWhereInput
+  arrowDataId: StringFilter
+  id: StringFilter
+  label: StringFilter
+  source: NodeWhereInput
+  sourceId: StringFilter
+  target: NodeWhereInput
+  targetId: StringFilter
+}
+
+input ArrowWhereUniqueInput {
+  AND: [ArrowWhereInput!]
+  NOT: [ArrowWhereInput!]
+  OR: [ArrowWhereInput!]
+  arrowData: ArrowDataWhereInput
+  arrowDataId: String
+  id: String
+  label: StringFilter
+  source: NodeWhereInput
+  sourceId: StringFilter
+  target: NodeWhereInput
+  targetId: StringFilter
+}
+
 type AssignmentArea {
   ChildAreas(cursor: AssignmentAreaWhereUniqueInput, distinct: [AssignmentAreaScalarFieldEnum!], orderBy: [AssignmentAreaOrderByWithRelationInput!], skip: Int, take: Int, where: AssignmentAreaWhereInput): [AssignmentArea!]!
   ParentArea: AssignmentArea
@@ -412,6 +1060,23 @@ type BatchPayload {
   count: Int!
 }
 
+input BoolFieldUpdateOperationsInput {
+  set: Boolean
+}
+
+input BoolFilter {
+  equals: Boolean
+  not: NestedBoolFilter
+}
+
+input BoolWithAggregatesFilter {
+  _count: NestedIntFilter
+  _max: NestedBoolFilter
+  _min: NestedBoolFilter
+  equals: Boolean
+  not: NestedBoolWithAggregatesFilter
+}
+
 scalar DateTime
 
 input DateTimeFieldUpdateOperationsInput {
@@ -466,6 +1131,27 @@ input DateTimeWithAggregatesFilter {
   lte: DateTime
   not: NestedDateTimeWithAggregatesFilter
   notIn: [DateTime!]
+}
+
+input EnumNodeTypeFieldUpdateOperationsInput {
+  set: NodeType
+}
+
+input EnumNodeTypeFilter {
+  equals: NodeType
+  in: [NodeType!]
+  not: NodeType
+  notIn: [NodeType!]
+}
+
+input EnumNodeTypeWithAggregatesFilter {
+  _count: NestedIntFilter
+  _max: NestedEnumNodeTypeFilter
+  _min: NestedEnumNodeTypeFilter
+  equals: NodeType
+  in: [NodeType!]
+  not: NodeType
+  notIn: [NodeType!]
 }
 
 input IntFieldUpdateOperationsInput {
@@ -1553,48 +2239,95 @@ input LevelWhereUniqueInput {
 }
 
 type Mutation {
+  createManyArrow(data: [ArrowCreateInput!]!): [Arrow!]!
+  createManyArrowData(data: [ArrowDataCreateInput!]!): [ArrowData!]!
   createManyAssignmentArea(data: [AssignmentAreaCreateInput!]!): [AssignmentArea!]!
   createManyLevel(data: [LevelCreateInput!]!): [Level!]!
   createManyLevelCategory(data: [LevelCategoryCreateInput!]!): [LevelCategory!]!
+  createManyNode(data: [NodeCreateInput!]!): [Node!]!
   createManyProcedure(data: [ProcedureCreateInput!]!): [Procedure!]!
-  createManyProject(data: [ProjectCreateInput!]!): [Project!]!
+  createManyRequirement(data: [RequirementCreateInput!]!): [Requirement!]!
+  createManyResponsibility(data: [ResponsibilityCreateInput!]!): [Responsibility!]!
   createManyUser(data: [UserCreateInput!]!): [User!]!
+  createOneArrow(data: ArrowCreateInput!): Arrow!
+  createOneArrowData(data: ArrowDataCreateInput!): ArrowData!
   createOneAssignmentArea(data: AssignmentAreaCreateInput!): AssignmentArea!
   createOneLevel(data: LevelCreateInput!): Level!
   createOneLevelCategory(data: LevelCategoryCreateInput!): LevelCategory!
+  createOneNode(data: NodeCreateInput!): Node!
   createOneProcedure(data: ProcedureCreateInput!): Procedure!
-  createOneProject(data: ProjectCreateInput!): Project!
+  createOneRequirement(data: RequirementCreateInput!): Requirement!
+  createOneResponsibility(data: ResponsibilityCreateInput!): Responsibility!
   createOneUser(data: UserCreateInput!): User!
+  deleteManyArrow(where: ArrowWhereInput!): BatchPayload
+  deleteManyArrowData(where: ArrowDataWhereInput!): BatchPayload
   deleteManyAssignmentArea(where: AssignmentAreaWhereInput!): BatchPayload
   deleteManyLevel(where: LevelWhereInput!): BatchPayload
   deleteManyLevelCategory(where: LevelCategoryWhereInput!): BatchPayload
+  deleteManyNode(where: NodeWhereInput!): BatchPayload
   deleteManyProcedure(where: ProcedureWhereInput!): BatchPayload
-  deleteManyProject(where: ProjectWhereInput!): BatchPayload
+  deleteManyRequirement(where: RequirementWhereInput!): BatchPayload
+  deleteManyResponsibility(where: ResponsibilityWhereInput!): BatchPayload
   deleteManyUser(where: UserWhereInput!): BatchPayload
+  deleteOneArrow(where: ArrowWhereUniqueInput!): Arrow
+  deleteOneArrowData(where: ArrowDataWhereUniqueInput!): ArrowData
   deleteOneAssignmentArea(where: AssignmentAreaWhereUniqueInput!): AssignmentArea
   deleteOneLevel(where: LevelWhereUniqueInput!): Level
   deleteOneLevelCategory(where: LevelCategoryWhereUniqueInput!): LevelCategory
+  deleteOneNode(where: NodeWhereUniqueInput!): Node
   deleteOneProcedure(where: ProcedureWhereUniqueInput!): Procedure
-  deleteOneProject(where: ProjectWhereUniqueInput!): Project
+  deleteOneRequirement(where: RequirementWhereUniqueInput!): Requirement
+  deleteOneResponsibility(where: ResponsibilityWhereUniqueInput!): Responsibility
   deleteOneUser(where: UserWhereUniqueInput!): User
+  updateManyArrow(data: ArrowUpdateManyMutationInput!, where: ArrowWhereInput): BatchPayload!
+  updateManyArrowData(data: ArrowDataUpdateManyMutationInput!, where: ArrowDataWhereInput): BatchPayload!
   updateManyAssignmentArea(data: AssignmentAreaUpdateManyMutationInput!, where: AssignmentAreaWhereInput): BatchPayload!
   updateManyLevel(data: LevelUpdateManyMutationInput!, where: LevelWhereInput): BatchPayload!
   updateManyLevelCategory(data: LevelCategoryUpdateManyMutationInput!, where: LevelCategoryWhereInput): BatchPayload!
+  updateManyNode(data: NodeUpdateManyMutationInput!, where: NodeWhereInput): BatchPayload!
   updateManyProcedure(data: ProcedureUpdateManyMutationInput!, where: ProcedureWhereInput): BatchPayload!
-  updateManyProject(data: ProjectUpdateManyMutationInput!, where: ProjectWhereInput): BatchPayload!
+  updateManyRequirement(data: RequirementUpdateManyMutationInput!, where: RequirementWhereInput): BatchPayload!
+  updateManyResponsibility(data: ResponsibilityUpdateManyMutationInput!, where: ResponsibilityWhereInput): BatchPayload!
   updateManyUser(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
+  updateOneArrow(data: ArrowUpdateInput!, where: ArrowWhereUniqueInput!): Arrow
+  updateOneArrowData(data: ArrowDataUpdateInput!, where: ArrowDataWhereUniqueInput!): ArrowData
   updateOneAssignmentArea(data: AssignmentAreaUpdateInput!, where: AssignmentAreaWhereUniqueInput!): AssignmentArea
   updateOneLevel(data: LevelUpdateInput!, where: LevelWhereUniqueInput!): Level
   updateOneLevelCategory(data: LevelCategoryUpdateInput!, where: LevelCategoryWhereUniqueInput!): LevelCategory
+  updateOneNode(data: NodeUpdateInput!, where: NodeWhereUniqueInput!): Node
   updateOneProcedure(data: ProcedureUpdateInput!, where: ProcedureWhereUniqueInput!): Procedure
-  updateOneProject(data: ProjectUpdateInput!, where: ProjectWhereUniqueInput!): Project
+  updateOneProject(
+    data: ProjectUpdateInput!
+    """The format of the workflow state"""
+    format: StateMachineFormat! = ReactFlow
+    where: ProjectWhereUniqueInput!
+  ): Project
+  updateOneRequirement(data: RequirementUpdateInput!, where: RequirementWhereUniqueInput!): Requirement
+  updateOneResponsibility(data: ResponsibilityUpdateInput!, where: ResponsibilityWhereUniqueInput!): Responsibility
   updateOneUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  upsertOneArrow(create: ArrowCreateInput!, update: ArrowUpdateInput!, where: ArrowWhereUniqueInput!): Arrow!
+  upsertOneArrowData(create: ArrowDataCreateInput!, update: ArrowDataUpdateInput!, where: ArrowDataWhereUniqueInput!): ArrowData!
   upsertOneAssignmentArea(create: AssignmentAreaCreateInput!, update: AssignmentAreaUpdateInput!, where: AssignmentAreaWhereUniqueInput!): AssignmentArea!
   upsertOneLevel(create: LevelCreateInput!, update: LevelUpdateInput!, where: LevelWhereUniqueInput!): Level!
   upsertOneLevelCategory(create: LevelCategoryCreateInput!, update: LevelCategoryUpdateInput!, where: LevelCategoryWhereUniqueInput!): LevelCategory!
+  upsertOneNode(create: NodeCreateInput!, update: NodeUpdateInput!, where: NodeWhereUniqueInput!): Node!
   upsertOneProcedure(create: ProcedureCreateInput!, update: ProcedureUpdateInput!, where: ProcedureWhereUniqueInput!): Procedure!
-  upsertOneProject(create: ProjectCreateInput!, update: ProjectUpdateInput!, where: ProjectWhereUniqueInput!): Project!
+  upsertOneRequirement(create: RequirementCreateInput!, update: RequirementUpdateInput!, where: RequirementWhereUniqueInput!): Requirement!
+  upsertOneResponsibility(create: ResponsibilityCreateInput!, update: ResponsibilityUpdateInput!, where: ResponsibilityWhereUniqueInput!): Responsibility!
   upsertOneUser(create: UserCreateInput!, update: UserUpdateInput!, where: UserWhereUniqueInput!): User!
+}
+
+input NestedBoolFilter {
+  equals: Boolean
+  not: NestedBoolFilter
+}
+
+input NestedBoolWithAggregatesFilter {
+  _count: NestedIntFilter
+  _max: NestedBoolFilter
+  _min: NestedBoolFilter
+  equals: Boolean
+  not: NestedBoolWithAggregatesFilter
 }
 
 input NestedDateTimeFilter {
@@ -1645,6 +2378,23 @@ input NestedDateTimeWithAggregatesFilter {
   lte: DateTime
   not: NestedDateTimeWithAggregatesFilter
   notIn: [DateTime!]
+}
+
+input NestedEnumNodeTypeFilter {
+  equals: NodeType
+  in: [NodeType!]
+  not: NodeType
+  notIn: [NodeType!]
+}
+
+input NestedEnumNodeTypeWithAggregatesFilter {
+  _count: NestedIntFilter
+  _max: NestedEnumNodeTypeFilter
+  _min: NestedEnumNodeTypeFilter
+  equals: NodeType
+  in: [NodeType!]
+  not: NodeType
+  notIn: [NodeType!]
 }
 
 input NestedFloatFilter {
@@ -1780,6 +2530,364 @@ input NestedStringWithAggregatesFilter {
   not: NestedStringWithAggregatesFilter
   notIn: [String!]
   startsWith: String
+}
+
+type Node {
+  Project: Project
+  description: String!
+  fromArrows(cursor: ArrowWhereUniqueInput, distinct: [ArrowScalarFieldEnum!], orderBy: [ArrowOrderByWithRelationInput!], skip: Int, take: Int, where: ArrowWhereInput): [Arrow!]!
+  id: ID!
+  label: String!
+  meta: Json!
+  projectId: String
+  toArrows(cursor: ArrowWhereUniqueInput, distinct: [ArrowScalarFieldEnum!], orderBy: [ArrowOrderByWithRelationInput!], skip: Int, take: Int, where: ArrowWhereInput): [Arrow!]!
+  type: NodeType!
+}
+
+input NodeCountOrderByAggregateInput {
+  description: SortOrder
+  id: SortOrder
+  label: SortOrder
+  meta: SortOrder
+  projectId: SortOrder
+  type: SortOrder
+}
+
+input NodeCreateInput {
+  Project: ProjectCreateNestedOneWithoutNodesInput
+  description: String!
+  fromArrows: ArrowCreateNestedManyWithoutSourceInput
+  id: String
+  label: String!
+  meta: Json!
+  toArrows: ArrowCreateNestedManyWithoutTargetInput
+  type: NodeType!
+}
+
+input NodeCreateManyInput {
+  description: String!
+  id: String
+  label: String!
+  meta: Json!
+  projectId: String
+  type: NodeType!
+}
+
+input NodeCreateManyProjectInput {
+  description: String!
+  id: String
+  label: String!
+  meta: Json!
+  type: NodeType!
+}
+
+input NodeCreateManyProjectInputEnvelope {
+  data: [NodeCreateManyProjectInput!]!
+  skipDuplicates: Boolean
+}
+
+input NodeCreateNestedManyWithoutProjectInput {
+  connect: [NodeWhereUniqueInput!]
+  connectOrCreate: [NodeCreateOrConnectWithoutProjectInput!]
+  create: [NodeCreateWithoutProjectInput!]
+  createMany: NodeCreateManyProjectInputEnvelope
+}
+
+input NodeCreateNestedOneWithoutFromArrowsInput {
+  connect: NodeWhereUniqueInput
+  connectOrCreate: NodeCreateOrConnectWithoutFromArrowsInput
+  create: NodeCreateWithoutFromArrowsInput
+}
+
+input NodeCreateNestedOneWithoutToArrowsInput {
+  connect: NodeWhereUniqueInput
+  connectOrCreate: NodeCreateOrConnectWithoutToArrowsInput
+  create: NodeCreateWithoutToArrowsInput
+}
+
+input NodeCreateOrConnectWithoutFromArrowsInput {
+  create: NodeCreateWithoutFromArrowsInput!
+  where: NodeWhereUniqueInput!
+}
+
+input NodeCreateOrConnectWithoutProjectInput {
+  create: NodeCreateWithoutProjectInput!
+  where: NodeWhereUniqueInput!
+}
+
+input NodeCreateOrConnectWithoutToArrowsInput {
+  create: NodeCreateWithoutToArrowsInput!
+  where: NodeWhereUniqueInput!
+}
+
+input NodeCreateWithoutFromArrowsInput {
+  Project: ProjectCreateNestedOneWithoutNodesInput
+  description: String!
+  id: String
+  label: String!
+  meta: Json!
+  toArrows: ArrowCreateNestedManyWithoutTargetInput
+  type: NodeType!
+}
+
+input NodeCreateWithoutProjectInput {
+  description: String!
+  fromArrows: ArrowCreateNestedManyWithoutSourceInput
+  id: String
+  label: String!
+  meta: Json!
+  toArrows: ArrowCreateNestedManyWithoutTargetInput
+  type: NodeType!
+}
+
+input NodeCreateWithoutToArrowsInput {
+  Project: ProjectCreateNestedOneWithoutNodesInput
+  description: String!
+  fromArrows: ArrowCreateNestedManyWithoutSourceInput
+  id: String
+  label: String!
+  meta: Json!
+  type: NodeType!
+}
+
+input NodeListRelationFilter {
+  every: NodeWhereInput
+  none: NodeWhereInput
+  some: NodeWhereInput
+}
+
+input NodeMaxOrderByAggregateInput {
+  description: SortOrder
+  id: SortOrder
+  label: SortOrder
+  projectId: SortOrder
+  type: SortOrder
+}
+
+input NodeMinOrderByAggregateInput {
+  description: SortOrder
+  id: SortOrder
+  label: SortOrder
+  projectId: SortOrder
+  type: SortOrder
+}
+
+input NodeOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input NodeOrderByWithAggregationInput {
+  _count: NodeCountOrderByAggregateInput
+  _max: NodeMaxOrderByAggregateInput
+  _min: NodeMinOrderByAggregateInput
+  description: SortOrder
+  id: SortOrder
+  label: SortOrder
+  meta: SortOrder
+  projectId: SortOrder
+  type: SortOrder
+}
+
+input NodeOrderByWithRelationInput {
+  Project: ProjectOrderByWithRelationInput
+  description: SortOrder
+  fromArrows: ArrowOrderByRelationAggregateInput
+  id: SortOrder
+  label: SortOrder
+  meta: SortOrder
+  projectId: SortOrder
+  toArrows: ArrowOrderByRelationAggregateInput
+  type: SortOrder
+}
+
+input NodeRelationFilter {
+  is: NodeWhereInput
+  isNot: NodeWhereInput
+}
+
+enum NodeScalarFieldEnum {
+  description
+  id
+  label
+  meta
+  projectId
+  type
+}
+
+input NodeScalarWhereInput {
+  AND: [NodeScalarWhereInput!]
+  NOT: [NodeScalarWhereInput!]
+  OR: [NodeScalarWhereInput!]
+  description: StringFilter
+  id: StringFilter
+  label: StringFilter
+  meta: JsonFilter
+  projectId: StringNullableFilter
+  type: EnumNodeTypeFilter
+}
+
+input NodeScalarWhereWithAggregatesInput {
+  AND: [NodeScalarWhereWithAggregatesInput!]
+  NOT: [NodeScalarWhereWithAggregatesInput!]
+  OR: [NodeScalarWhereWithAggregatesInput!]
+  description: StringWithAggregatesFilter
+  id: StringWithAggregatesFilter
+  label: StringWithAggregatesFilter
+  meta: JsonWithAggregatesFilter
+  projectId: StringNullableWithAggregatesFilter
+  type: EnumNodeTypeWithAggregatesFilter
+}
+
+enum NodeType {
+  COMMENT
+  NODE
+}
+
+input NodeUpdateInput {
+  Project: ProjectUpdateOneWithoutNodesNestedInput
+  description: StringFieldUpdateOperationsInput
+  fromArrows: ArrowUpdateManyWithoutSourceNestedInput
+  id: StringFieldUpdateOperationsInput
+  label: StringFieldUpdateOperationsInput
+  meta: Json
+  toArrows: ArrowUpdateManyWithoutTargetNestedInput
+  type: EnumNodeTypeFieldUpdateOperationsInput
+}
+
+input NodeUpdateManyMutationInput {
+  description: StringFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
+  label: StringFieldUpdateOperationsInput
+  meta: Json
+  type: EnumNodeTypeFieldUpdateOperationsInput
+}
+
+input NodeUpdateManyWithWhereWithoutProjectInput {
+  data: NodeUpdateManyMutationInput!
+  where: NodeScalarWhereInput!
+}
+
+input NodeUpdateManyWithoutProjectNestedInput {
+  connect: [NodeWhereUniqueInput!]
+  connectOrCreate: [NodeCreateOrConnectWithoutProjectInput!]
+  create: [NodeCreateWithoutProjectInput!]
+  createMany: NodeCreateManyProjectInputEnvelope
+  delete: [NodeWhereUniqueInput!]
+  deleteMany: [NodeScalarWhereInput!]
+  disconnect: [NodeWhereUniqueInput!]
+  set: [NodeWhereUniqueInput!]
+  update: [NodeUpdateWithWhereUniqueWithoutProjectInput!]
+  updateMany: [NodeUpdateManyWithWhereWithoutProjectInput!]
+  upsert: [NodeUpsertWithWhereUniqueWithoutProjectInput!]
+}
+
+input NodeUpdateOneRequiredWithoutFromArrowsNestedInput {
+  connect: NodeWhereUniqueInput
+  connectOrCreate: NodeCreateOrConnectWithoutFromArrowsInput
+  create: NodeCreateWithoutFromArrowsInput
+  update: NodeUpdateToOneWithWhereWithoutFromArrowsInput
+  upsert: NodeUpsertWithoutFromArrowsInput
+}
+
+input NodeUpdateOneRequiredWithoutToArrowsNestedInput {
+  connect: NodeWhereUniqueInput
+  connectOrCreate: NodeCreateOrConnectWithoutToArrowsInput
+  create: NodeCreateWithoutToArrowsInput
+  update: NodeUpdateToOneWithWhereWithoutToArrowsInput
+  upsert: NodeUpsertWithoutToArrowsInput
+}
+
+input NodeUpdateToOneWithWhereWithoutFromArrowsInput {
+  data: NodeUpdateWithoutFromArrowsInput!
+  where: NodeWhereInput
+}
+
+input NodeUpdateToOneWithWhereWithoutToArrowsInput {
+  data: NodeUpdateWithoutToArrowsInput!
+  where: NodeWhereInput
+}
+
+input NodeUpdateWithWhereUniqueWithoutProjectInput {
+  data: NodeUpdateWithoutProjectInput!
+  where: NodeWhereUniqueInput!
+}
+
+input NodeUpdateWithoutFromArrowsInput {
+  Project: ProjectUpdateOneWithoutNodesNestedInput
+  description: StringFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
+  label: StringFieldUpdateOperationsInput
+  meta: Json
+  toArrows: ArrowUpdateManyWithoutTargetNestedInput
+  type: EnumNodeTypeFieldUpdateOperationsInput
+}
+
+input NodeUpdateWithoutProjectInput {
+  description: StringFieldUpdateOperationsInput
+  fromArrows: ArrowUpdateManyWithoutSourceNestedInput
+  id: StringFieldUpdateOperationsInput
+  label: StringFieldUpdateOperationsInput
+  meta: Json
+  toArrows: ArrowUpdateManyWithoutTargetNestedInput
+  type: EnumNodeTypeFieldUpdateOperationsInput
+}
+
+input NodeUpdateWithoutToArrowsInput {
+  Project: ProjectUpdateOneWithoutNodesNestedInput
+  description: StringFieldUpdateOperationsInput
+  fromArrows: ArrowUpdateManyWithoutSourceNestedInput
+  id: StringFieldUpdateOperationsInput
+  label: StringFieldUpdateOperationsInput
+  meta: Json
+  type: EnumNodeTypeFieldUpdateOperationsInput
+}
+
+input NodeUpsertWithWhereUniqueWithoutProjectInput {
+  create: NodeCreateWithoutProjectInput!
+  update: NodeUpdateWithoutProjectInput!
+  where: NodeWhereUniqueInput!
+}
+
+input NodeUpsertWithoutFromArrowsInput {
+  create: NodeCreateWithoutFromArrowsInput!
+  update: NodeUpdateWithoutFromArrowsInput!
+  where: NodeWhereInput
+}
+
+input NodeUpsertWithoutToArrowsInput {
+  create: NodeCreateWithoutToArrowsInput!
+  update: NodeUpdateWithoutToArrowsInput!
+  where: NodeWhereInput
+}
+
+input NodeWhereInput {
+  AND: [NodeWhereInput!]
+  NOT: [NodeWhereInput!]
+  OR: [NodeWhereInput!]
+  Project: ProjectWhereInput
+  description: StringFilter
+  fromArrows: ArrowListRelationFilter
+  id: StringFilter
+  label: StringFilter
+  meta: JsonFilter
+  projectId: StringNullableFilter
+  toArrows: ArrowListRelationFilter
+  type: EnumNodeTypeFilter
+}
+
+input NodeWhereUniqueInput {
+  AND: [NodeWhereInput!]
+  NOT: [NodeWhereInput!]
+  OR: [NodeWhereInput!]
+  Project: ProjectWhereInput
+  description: StringFilter
+  fromArrows: ArrowListRelationFilter
+  id: String
+  label: StringFilter
+  meta: JsonFilter
+  projectId: StringNullableFilter
+  toArrows: ArrowListRelationFilter
+  type: EnumNodeTypeFilter
 }
 
 input NullableDateTimeFieldUpdateOperationsInput {
@@ -2083,12 +3191,15 @@ type Project {
   levelId: String!
   machineName: String!
   name: String!
-  places: Json
+  nodes(cursor: NodeWhereUniqueInput, distinct: [NodeScalarFieldEnum!], orderBy: [NodeOrderByWithRelationInput!], skip: Int, take: Int, where: NodeWhereInput): [Node!]!
   procedures(cursor: ProcedureWhereUniqueInput, distinct: [ProcedureScalarFieldEnum!], orderBy: [ProcedureOrderByWithRelationInput!], skip: Int, take: Int, where: ProcedureWhereInput): [Procedure!]!
   progressUnit: String!
-  requirements: Json
-  transitions: Json
   updatedAt: DateTime!
+  """My field desc"""
+  workflow(
+    """The format of the workflow state"""
+    format: StateMachineFormat! = ReactFlow
+  ): Json!
 }
 
 input ProjectAvgOrderByAggregateInput {
@@ -2107,10 +3218,7 @@ input ProjectCountOrderByAggregateInput {
   levelId: SortOrder
   machineName: SortOrder
   name: SortOrder
-  places: SortOrder
   progressUnit: SortOrder
-  requirements: SortOrder
-  transitions: SortOrder
   updatedAt: SortOrder
 }
 
@@ -2127,11 +3235,9 @@ input ProjectCreateInput {
   level: LevelCreateNestedOneWithoutProjectInput!
   machineName: String!
   name: String!
-  places: Json
+  nodes: NodeCreateNestedManyWithoutProjectInput
   procedures: ProcedureCreateNestedManyWithoutProjectInput
   progressUnit: String!
-  requirements: Json
-  transitions: Json
   updatedAt: DateTime
 }
 
@@ -2147,10 +3253,7 @@ input ProjectCreateManyInput {
   levelId: String!
   machineName: String!
   name: String!
-  places: Json
   progressUnit: String!
-  requirements: Json
-  transitions: Json
   updatedAt: DateTime
 }
 
@@ -2165,10 +3268,7 @@ input ProjectCreateManyLeaderInput {
   levelId: String!
   machineName: String!
   name: String!
-  places: Json
   progressUnit: String!
-  requirements: Json
-  transitions: Json
   updatedAt: DateTime
 }
 
@@ -2188,10 +3288,7 @@ input ProjectCreateManyLevelInput {
   leaderId: String!
   machineName: String!
   name: String!
-  places: Json
   progressUnit: String!
-  requirements: Json
-  transitions: Json
   updatedAt: DateTime
 }
 
@@ -2220,6 +3317,12 @@ input ProjectCreateNestedManyWithoutLevelInput {
   createMany: ProjectCreateManyLevelInputEnvelope
 }
 
+input ProjectCreateNestedOneWithoutNodesInput {
+  connect: ProjectWhereUniqueInput
+  connectOrCreate: ProjectCreateOrConnectWithoutNodesInput
+  create: ProjectCreateWithoutNodesInput
+}
+
 input ProjectCreateNestedOneWithoutProceduresInput {
   connect: ProjectWhereUniqueInput
   connectOrCreate: ProjectCreateOrConnectWithoutProceduresInput
@@ -2241,6 +3344,11 @@ input ProjectCreateOrConnectWithoutLevelInput {
   where: ProjectWhereUniqueInput!
 }
 
+input ProjectCreateOrConnectWithoutNodesInput {
+  create: ProjectCreateWithoutNodesInput!
+  where: ProjectWhereUniqueInput!
+}
+
 input ProjectCreateOrConnectWithoutProceduresInput {
   create: ProjectCreateWithoutProceduresInput!
   where: ProjectWhereUniqueInput!
@@ -2258,11 +3366,9 @@ input ProjectCreateWithoutCollaboratorsInput {
   level: LevelCreateNestedOneWithoutProjectInput!
   machineName: String!
   name: String!
-  places: Json
+  nodes: NodeCreateNestedManyWithoutProjectInput
   procedures: ProcedureCreateNestedManyWithoutProjectInput
   progressUnit: String!
-  requirements: Json
-  transitions: Json
   updatedAt: DateTime
 }
 
@@ -2278,11 +3384,9 @@ input ProjectCreateWithoutLeaderInput {
   level: LevelCreateNestedOneWithoutProjectInput!
   machineName: String!
   name: String!
-  places: Json
+  nodes: NodeCreateNestedManyWithoutProjectInput
   procedures: ProcedureCreateNestedManyWithoutProjectInput
   progressUnit: String!
-  requirements: Json
-  transitions: Json
   updatedAt: DateTime
 }
 
@@ -2298,11 +3402,27 @@ input ProjectCreateWithoutLevelInput {
   leader: UserCreateNestedOneWithoutLeaderOfInput!
   machineName: String!
   name: String!
-  places: Json
+  nodes: NodeCreateNestedManyWithoutProjectInput
   procedures: ProcedureCreateNestedManyWithoutProjectInput
   progressUnit: String!
-  requirements: Json
-  transitions: Json
+  updatedAt: DateTime
+}
+
+input ProjectCreateWithoutNodesInput {
+  account: String!
+  archiveBox: String!
+  collaborators: UserCreateNestedManyWithoutCollaboratorOfInput
+  createdAt: DateTime
+  deleteAt: DateTime
+  description: String!
+  goal: Int!
+  id: String
+  leader: UserCreateNestedOneWithoutLeaderOfInput!
+  level: LevelCreateNestedOneWithoutProjectInput!
+  machineName: String!
+  name: String!
+  procedures: ProcedureCreateNestedManyWithoutProjectInput
+  progressUnit: String!
   updatedAt: DateTime
 }
 
@@ -2319,10 +3439,8 @@ input ProjectCreateWithoutProceduresInput {
   level: LevelCreateNestedOneWithoutProjectInput!
   machineName: String!
   name: String!
-  places: Json
+  nodes: NodeCreateNestedManyWithoutProjectInput
   progressUnit: String!
-  requirements: Json
-  transitions: Json
   updatedAt: DateTime
 }
 
@@ -2390,10 +3508,7 @@ input ProjectOrderByWithAggregationInput {
   levelId: SortOrder
   machineName: SortOrder
   name: SortOrder
-  places: SortOrder
   progressUnit: SortOrder
-  requirements: SortOrder
-  transitions: SortOrder
   updatedAt: SortOrder
 }
 
@@ -2412,11 +3527,9 @@ input ProjectOrderByWithRelationInput {
   levelId: SortOrder
   machineName: SortOrder
   name: SortOrder
-  places: SortOrder
+  nodes: NodeOrderByRelationAggregateInput
   procedures: ProcedureOrderByRelationAggregateInput
   progressUnit: SortOrder
-  requirements: SortOrder
-  transitions: SortOrder
   updatedAt: SortOrder
 }
 
@@ -2432,10 +3545,7 @@ enum ProjectScalarFieldEnum {
   levelId
   machineName
   name
-  places
   progressUnit
-  requirements
-  transitions
   updatedAt
 }
 
@@ -2454,10 +3564,7 @@ input ProjectScalarWhereInput {
   levelId: StringFilter
   machineName: StringFilter
   name: StringFilter
-  places: JsonNullableFilter
   progressUnit: StringFilter
-  requirements: JsonNullableFilter
-  transitions: JsonNullableFilter
   updatedAt: DateTimeFilter
 }
 
@@ -2476,10 +3583,7 @@ input ProjectScalarWhereWithAggregatesInput {
   levelId: StringWithAggregatesFilter
   machineName: StringWithAggregatesFilter
   name: StringWithAggregatesFilter
-  places: JsonNullableWithAggregatesFilter
   progressUnit: StringWithAggregatesFilter
-  requirements: JsonNullableWithAggregatesFilter
-  transitions: JsonNullableWithAggregatesFilter
   updatedAt: DateTimeWithAggregatesFilter
 }
 
@@ -2500,11 +3604,9 @@ input ProjectUpdateInput {
   level: LevelUpdateOneRequiredWithoutProjectNestedInput
   machineName: StringFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
-  places: Json
+  nodes: NodeUpdateManyWithoutProjectNestedInput
   procedures: ProcedureUpdateManyWithoutProjectNestedInput
   progressUnit: StringFieldUpdateOperationsInput
-  requirements: Json
-  transitions: Json
   updatedAt: DateTimeFieldUpdateOperationsInput
 }
 
@@ -2518,10 +3620,7 @@ input ProjectUpdateManyMutationInput {
   id: StringFieldUpdateOperationsInput
   machineName: StringFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
-  places: Json
   progressUnit: StringFieldUpdateOperationsInput
-  requirements: Json
-  transitions: Json
   updatedAt: DateTimeFieldUpdateOperationsInput
 }
 
@@ -2581,6 +3680,16 @@ input ProjectUpdateManyWithoutLevelNestedInput {
   upsert: [ProjectUpsertWithWhereUniqueWithoutLevelInput!]
 }
 
+input ProjectUpdateOneWithoutNodesNestedInput {
+  connect: ProjectWhereUniqueInput
+  connectOrCreate: ProjectCreateOrConnectWithoutNodesInput
+  create: ProjectCreateWithoutNodesInput
+  delete: ProjectWhereInput
+  disconnect: ProjectWhereInput
+  update: ProjectUpdateToOneWithWhereWithoutNodesInput
+  upsert: ProjectUpsertWithoutNodesInput
+}
+
 input ProjectUpdateOneWithoutProceduresNestedInput {
   connect: ProjectWhereUniqueInput
   connectOrCreate: ProjectCreateOrConnectWithoutProceduresInput
@@ -2589,6 +3698,11 @@ input ProjectUpdateOneWithoutProceduresNestedInput {
   disconnect: ProjectWhereInput
   update: ProjectUpdateToOneWithWhereWithoutProceduresInput
   upsert: ProjectUpsertWithoutProceduresInput
+}
+
+input ProjectUpdateToOneWithWhereWithoutNodesInput {
+  data: ProjectUpdateWithoutNodesInput!
+  where: ProjectWhereInput
 }
 
 input ProjectUpdateToOneWithWhereWithoutProceduresInput {
@@ -2623,11 +3737,9 @@ input ProjectUpdateWithoutCollaboratorsInput {
   level: LevelUpdateOneRequiredWithoutProjectNestedInput
   machineName: StringFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
-  places: Json
+  nodes: NodeUpdateManyWithoutProjectNestedInput
   procedures: ProcedureUpdateManyWithoutProjectNestedInput
   progressUnit: StringFieldUpdateOperationsInput
-  requirements: Json
-  transitions: Json
   updatedAt: DateTimeFieldUpdateOperationsInput
 }
 
@@ -2643,11 +3755,9 @@ input ProjectUpdateWithoutLeaderInput {
   level: LevelUpdateOneRequiredWithoutProjectNestedInput
   machineName: StringFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
-  places: Json
+  nodes: NodeUpdateManyWithoutProjectNestedInput
   procedures: ProcedureUpdateManyWithoutProjectNestedInput
   progressUnit: StringFieldUpdateOperationsInput
-  requirements: Json
-  transitions: Json
   updatedAt: DateTimeFieldUpdateOperationsInput
 }
 
@@ -2663,11 +3773,27 @@ input ProjectUpdateWithoutLevelInput {
   leader: UserUpdateOneRequiredWithoutLeaderOfNestedInput
   machineName: StringFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
-  places: Json
+  nodes: NodeUpdateManyWithoutProjectNestedInput
   procedures: ProcedureUpdateManyWithoutProjectNestedInput
   progressUnit: StringFieldUpdateOperationsInput
-  requirements: Json
-  transitions: Json
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input ProjectUpdateWithoutNodesInput {
+  account: StringFieldUpdateOperationsInput
+  archiveBox: StringFieldUpdateOperationsInput
+  collaborators: UserUpdateManyWithoutCollaboratorOfNestedInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  deleteAt: NullableDateTimeFieldUpdateOperationsInput
+  description: StringFieldUpdateOperationsInput
+  goal: IntFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
+  leader: UserUpdateOneRequiredWithoutLeaderOfNestedInput
+  level: LevelUpdateOneRequiredWithoutProjectNestedInput
+  machineName: StringFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
+  procedures: ProcedureUpdateManyWithoutProjectNestedInput
+  progressUnit: StringFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
 }
 
@@ -2684,10 +3810,8 @@ input ProjectUpdateWithoutProceduresInput {
   level: LevelUpdateOneRequiredWithoutProjectNestedInput
   machineName: StringFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
-  places: Json
+  nodes: NodeUpdateManyWithoutProjectNestedInput
   progressUnit: StringFieldUpdateOperationsInput
-  requirements: Json
-  transitions: Json
   updatedAt: DateTimeFieldUpdateOperationsInput
 }
 
@@ -2707,6 +3831,12 @@ input ProjectUpsertWithWhereUniqueWithoutLevelInput {
   create: ProjectCreateWithoutLevelInput!
   update: ProjectUpdateWithoutLevelInput!
   where: ProjectWhereUniqueInput!
+}
+
+input ProjectUpsertWithoutNodesInput {
+  create: ProjectCreateWithoutNodesInput!
+  update: ProjectUpdateWithoutNodesInput!
+  where: ProjectWhereInput
 }
 
 input ProjectUpsertWithoutProceduresInput {
@@ -2733,11 +3863,9 @@ input ProjectWhereInput {
   levelId: StringFilter
   machineName: StringFilter
   name: StringFilter
-  places: JsonNullableFilter
+  nodes: NodeListRelationFilter
   procedures: ProcedureListRelationFilter
   progressUnit: StringFilter
-  requirements: JsonNullableFilter
-  transitions: JsonNullableFilter
   updatedAt: DateTimeFilter
 }
 
@@ -2759,39 +3887,58 @@ input ProjectWhereUniqueInput {
   levelId: StringFilter
   machineName: String
   name: StringFilter
-  places: JsonNullableFilter
+  nodes: NodeListRelationFilter
   procedures: ProcedureListRelationFilter
   progressUnit: StringFilter
-  requirements: JsonNullableFilter
-  transitions: JsonNullableFilter
   updatedAt: DateTimeFilter
 }
 
 type Query {
+  countArrow(cursor: ArrowWhereUniqueInput, distinct: [ArrowScalarFieldEnum!], orderBy: [ArrowOrderByWithRelationInput!], skip: Int, take: Int, where: ArrowWhereInput): Int!
+  countArrowData(cursor: ArrowDataWhereUniqueInput, distinct: [ArrowDataScalarFieldEnum!], orderBy: [ArrowDataOrderByWithRelationInput!], skip: Int, take: Int, where: ArrowDataWhereInput): Int!
   countAssignmentArea(cursor: AssignmentAreaWhereUniqueInput, distinct: [AssignmentAreaScalarFieldEnum!], orderBy: [AssignmentAreaOrderByWithRelationInput!], skip: Int, take: Int, where: AssignmentAreaWhereInput): Int!
   countLevel(cursor: LevelWhereUniqueInput, distinct: [LevelScalarFieldEnum!], orderBy: [LevelOrderByWithRelationInput!], skip: Int, take: Int, where: LevelWhereInput): Int!
   countLevelCategory(cursor: LevelCategoryWhereUniqueInput, distinct: [LevelCategoryScalarFieldEnum!], orderBy: [LevelCategoryOrderByWithRelationInput!], skip: Int, take: Int, where: LevelCategoryWhereInput): Int!
+  countNode(cursor: NodeWhereUniqueInput, distinct: [NodeScalarFieldEnum!], orderBy: [NodeOrderByWithRelationInput!], skip: Int, take: Int, where: NodeWhereInput): Int!
   countProcedure(cursor: ProcedureWhereUniqueInput, distinct: [ProcedureScalarFieldEnum!], orderBy: [ProcedureOrderByWithRelationInput!], skip: Int, take: Int, where: ProcedureWhereInput): Int!
   countProject(cursor: ProjectWhereUniqueInput, distinct: [ProjectScalarFieldEnum!], orderBy: [ProjectOrderByWithRelationInput!], skip: Int, take: Int, where: ProjectWhereInput): Int!
+  countRequirement(cursor: RequirementWhereUniqueInput, distinct: [RequirementScalarFieldEnum!], orderBy: [RequirementOrderByWithRelationInput!], skip: Int, take: Int, where: RequirementWhereInput): Int!
+  countResponsibility(cursor: ResponsibilityWhereUniqueInput, distinct: [ResponsibilityScalarFieldEnum!], orderBy: [ResponsibilityOrderByWithRelationInput!], skip: Int, take: Int, where: ResponsibilityWhereInput): Int!
   countUser(cursor: UserWhereUniqueInput, distinct: [UserScalarFieldEnum!], orderBy: [UserOrderByWithRelationInput!], skip: Int, take: Int, where: UserWhereInput): Int!
+  findFirstArrow(cursor: ArrowWhereUniqueInput, distinct: [ArrowScalarFieldEnum!], orderBy: [ArrowOrderByWithRelationInput!], skip: Int, take: Int, where: ArrowWhereInput): Arrow
+  findFirstArrowData(cursor: ArrowDataWhereUniqueInput, distinct: [ArrowDataScalarFieldEnum!], orderBy: [ArrowDataOrderByWithRelationInput!], skip: Int, take: Int, where: ArrowDataWhereInput): ArrowData
   findFirstAssignmentArea(cursor: AssignmentAreaWhereUniqueInput, distinct: [AssignmentAreaScalarFieldEnum!], orderBy: [AssignmentAreaOrderByWithRelationInput!], skip: Int, take: Int, where: AssignmentAreaWhereInput): AssignmentArea
   findFirstLevel(cursor: LevelWhereUniqueInput, distinct: [LevelScalarFieldEnum!], orderBy: [LevelOrderByWithRelationInput!], skip: Int, take: Int, where: LevelWhereInput): Level
   findFirstLevelCategory(cursor: LevelCategoryWhereUniqueInput, distinct: [LevelCategoryScalarFieldEnum!], orderBy: [LevelCategoryOrderByWithRelationInput!], skip: Int, take: Int, where: LevelCategoryWhereInput): LevelCategory
+  findFirstNode(cursor: NodeWhereUniqueInput, distinct: [NodeScalarFieldEnum!], orderBy: [NodeOrderByWithRelationInput!], skip: Int, take: Int, where: NodeWhereInput): Node
   findFirstProcedure(cursor: ProcedureWhereUniqueInput, distinct: [ProcedureScalarFieldEnum!], orderBy: [ProcedureOrderByWithRelationInput!], skip: Int, take: Int, where: ProcedureWhereInput): Procedure
   findFirstProject(cursor: ProjectWhereUniqueInput, distinct: [ProjectScalarFieldEnum!], orderBy: [ProjectOrderByWithRelationInput!], skip: Int, take: Int, where: ProjectWhereInput): Project
+  findFirstRequirement(cursor: RequirementWhereUniqueInput, distinct: [RequirementScalarFieldEnum!], orderBy: [RequirementOrderByWithRelationInput!], skip: Int, take: Int, where: RequirementWhereInput): Requirement
+  findFirstResponsibility(cursor: ResponsibilityWhereUniqueInput, distinct: [ResponsibilityScalarFieldEnum!], orderBy: [ResponsibilityOrderByWithRelationInput!], skip: Int, take: Int, where: ResponsibilityWhereInput): Responsibility
   findFirstUser(cursor: UserWhereUniqueInput, distinct: [UserScalarFieldEnum!], orderBy: [UserOrderByWithRelationInput!], skip: Int, take: Int, where: UserWhereInput): User
+  findManyArrow(cursor: ArrowWhereUniqueInput, distinct: [ArrowScalarFieldEnum!], orderBy: [ArrowOrderByWithRelationInput!], skip: Int, take: Int, where: ArrowWhereInput): [Arrow!]!
+  findManyArrowData(cursor: ArrowDataWhereUniqueInput, distinct: [ArrowDataScalarFieldEnum!], orderBy: [ArrowDataOrderByWithRelationInput!], skip: Int, take: Int, where: ArrowDataWhereInput): [ArrowData!]!
   findManyAssignmentArea(cursor: AssignmentAreaWhereUniqueInput, distinct: [AssignmentAreaScalarFieldEnum!], orderBy: [AssignmentAreaOrderByWithRelationInput!], skip: Int, take: Int, where: AssignmentAreaWhereInput): [AssignmentArea!]!
   findManyLevel(cursor: LevelWhereUniqueInput, distinct: [LevelScalarFieldEnum!], orderBy: [LevelOrderByWithRelationInput!], skip: Int, take: Int, where: LevelWhereInput): [Level!]!
   findManyLevelCategory(cursor: LevelCategoryWhereUniqueInput, distinct: [LevelCategoryScalarFieldEnum!], orderBy: [LevelCategoryOrderByWithRelationInput!], skip: Int, take: Int, where: LevelCategoryWhereInput): [LevelCategory!]!
+  findManyNode(cursor: NodeWhereUniqueInput, distinct: [NodeScalarFieldEnum!], orderBy: [NodeOrderByWithRelationInput!], skip: Int, take: Int, where: NodeWhereInput): [Node!]!
   findManyProcedure(cursor: ProcedureWhereUniqueInput, distinct: [ProcedureScalarFieldEnum!], orderBy: [ProcedureOrderByWithRelationInput!], skip: Int, take: Int, where: ProcedureWhereInput): [Procedure!]!
   findManyProject(cursor: ProjectWhereUniqueInput, distinct: [ProjectScalarFieldEnum!], orderBy: [ProjectOrderByWithRelationInput!], skip: Int, take: Int, where: ProjectWhereInput): [Project!]!
+  findManyRequirement(cursor: RequirementWhereUniqueInput, distinct: [RequirementScalarFieldEnum!], orderBy: [RequirementOrderByWithRelationInput!], skip: Int, take: Int, where: RequirementWhereInput): [Requirement!]!
+  findManyResponsibility(cursor: ResponsibilityWhereUniqueInput, distinct: [ResponsibilityScalarFieldEnum!], orderBy: [ResponsibilityOrderByWithRelationInput!], skip: Int, take: Int, where: ResponsibilityWhereInput): [Responsibility!]!
   findManyUser(cursor: UserWhereUniqueInput, distinct: [UserScalarFieldEnum!], orderBy: [UserOrderByWithRelationInput!], skip: Int, take: Int, where: UserWhereInput): [User!]!
+  findUniqueArrow(where: ArrowWhereUniqueInput!): Arrow
+  findUniqueArrowData(where: ArrowDataWhereUniqueInput!): ArrowData
   findUniqueAssignmentArea(where: AssignmentAreaWhereUniqueInput!): AssignmentArea
   findUniqueLevel(where: LevelWhereUniqueInput!): Level
   findUniqueLevelCategory(where: LevelCategoryWhereUniqueInput!): LevelCategory
+  findUniqueNode(where: NodeWhereUniqueInput!): Node
   findUniqueProcedure(where: ProcedureWhereUniqueInput!): Procedure
   findUniqueProject(where: ProjectWhereUniqueInput!): Project
+  findUniqueRequirement(where: RequirementWhereUniqueInput!): Requirement
+  findUniqueResponsibility(where: ResponsibilityWhereUniqueInput!): Responsibility
   findUniqueUser(where: UserWhereUniqueInput!): User
+  health: String!
 }
 
 enum QueryMode {
@@ -2799,9 +3946,402 @@ enum QueryMode {
   insensitive
 }
 
+type Requirement {
+  ArrowData: ArrowData!
+  arrowDataId: String!
+  id: ID!
+  label: String!
+  machineName: String!
+  value: Boolean!
+}
+
+input RequirementCountOrderByAggregateInput {
+  arrowDataId: SortOrder
+  id: SortOrder
+  label: SortOrder
+  machineName: SortOrder
+  value: SortOrder
+}
+
+input RequirementCreateInput {
+  ArrowData: ArrowDataCreateNestedOneWithoutRequirementsInput!
+  id: String
+  label: String!
+  machineName: String!
+  value: Boolean!
+}
+
+input RequirementCreateManyArrowDataInput {
+  id: String
+  label: String!
+  machineName: String!
+  value: Boolean!
+}
+
+input RequirementCreateManyArrowDataInputEnvelope {
+  data: [RequirementCreateManyArrowDataInput!]!
+  skipDuplicates: Boolean
+}
+
+input RequirementCreateManyInput {
+  arrowDataId: String!
+  id: String
+  label: String!
+  machineName: String!
+  value: Boolean!
+}
+
+input RequirementCreateNestedManyWithoutArrowDataInput {
+  connect: [RequirementWhereUniqueInput!]
+  connectOrCreate: [RequirementCreateOrConnectWithoutArrowDataInput!]
+  create: [RequirementCreateWithoutArrowDataInput!]
+  createMany: RequirementCreateManyArrowDataInputEnvelope
+}
+
+input RequirementCreateOrConnectWithoutArrowDataInput {
+  create: RequirementCreateWithoutArrowDataInput!
+  where: RequirementWhereUniqueInput!
+}
+
+input RequirementCreateWithoutArrowDataInput {
+  id: String
+  label: String!
+  machineName: String!
+  value: Boolean!
+}
+
+input RequirementListRelationFilter {
+  every: RequirementWhereInput
+  none: RequirementWhereInput
+  some: RequirementWhereInput
+}
+
+input RequirementMaxOrderByAggregateInput {
+  arrowDataId: SortOrder
+  id: SortOrder
+  label: SortOrder
+  machineName: SortOrder
+  value: SortOrder
+}
+
+input RequirementMinOrderByAggregateInput {
+  arrowDataId: SortOrder
+  id: SortOrder
+  label: SortOrder
+  machineName: SortOrder
+  value: SortOrder
+}
+
+input RequirementOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input RequirementOrderByWithAggregationInput {
+  _count: RequirementCountOrderByAggregateInput
+  _max: RequirementMaxOrderByAggregateInput
+  _min: RequirementMinOrderByAggregateInput
+  arrowDataId: SortOrder
+  id: SortOrder
+  label: SortOrder
+  machineName: SortOrder
+  value: SortOrder
+}
+
+input RequirementOrderByWithRelationInput {
+  ArrowData: ArrowDataOrderByWithRelationInput
+  arrowDataId: SortOrder
+  id: SortOrder
+  label: SortOrder
+  machineName: SortOrder
+  value: SortOrder
+}
+
+enum RequirementScalarFieldEnum {
+  arrowDataId
+  id
+  label
+  machineName
+  value
+}
+
+input RequirementScalarWhereInput {
+  AND: [RequirementScalarWhereInput!]
+  NOT: [RequirementScalarWhereInput!]
+  OR: [RequirementScalarWhereInput!]
+  arrowDataId: StringFilter
+  id: StringFilter
+  label: StringFilter
+  machineName: StringFilter
+  value: BoolFilter
+}
+
+input RequirementScalarWhereWithAggregatesInput {
+  AND: [RequirementScalarWhereWithAggregatesInput!]
+  NOT: [RequirementScalarWhereWithAggregatesInput!]
+  OR: [RequirementScalarWhereWithAggregatesInput!]
+  arrowDataId: StringWithAggregatesFilter
+  id: StringWithAggregatesFilter
+  label: StringWithAggregatesFilter
+  machineName: StringWithAggregatesFilter
+  value: BoolWithAggregatesFilter
+}
+
+input RequirementUpdateInput {
+  ArrowData: ArrowDataUpdateOneRequiredWithoutRequirementsNestedInput
+  id: StringFieldUpdateOperationsInput
+  label: StringFieldUpdateOperationsInput
+  machineName: StringFieldUpdateOperationsInput
+  value: BoolFieldUpdateOperationsInput
+}
+
+input RequirementUpdateManyMutationInput {
+  id: StringFieldUpdateOperationsInput
+  label: StringFieldUpdateOperationsInput
+  machineName: StringFieldUpdateOperationsInput
+  value: BoolFieldUpdateOperationsInput
+}
+
+input RequirementUpdateManyWithWhereWithoutArrowDataInput {
+  data: RequirementUpdateManyMutationInput!
+  where: RequirementScalarWhereInput!
+}
+
+input RequirementUpdateManyWithoutArrowDataNestedInput {
+  connect: [RequirementWhereUniqueInput!]
+  connectOrCreate: [RequirementCreateOrConnectWithoutArrowDataInput!]
+  create: [RequirementCreateWithoutArrowDataInput!]
+  createMany: RequirementCreateManyArrowDataInputEnvelope
+  delete: [RequirementWhereUniqueInput!]
+  deleteMany: [RequirementScalarWhereInput!]
+  disconnect: [RequirementWhereUniqueInput!]
+  set: [RequirementWhereUniqueInput!]
+  update: [RequirementUpdateWithWhereUniqueWithoutArrowDataInput!]
+  updateMany: [RequirementUpdateManyWithWhereWithoutArrowDataInput!]
+  upsert: [RequirementUpsertWithWhereUniqueWithoutArrowDataInput!]
+}
+
+input RequirementUpdateWithWhereUniqueWithoutArrowDataInput {
+  data: RequirementUpdateWithoutArrowDataInput!
+  where: RequirementWhereUniqueInput!
+}
+
+input RequirementUpdateWithoutArrowDataInput {
+  id: StringFieldUpdateOperationsInput
+  label: StringFieldUpdateOperationsInput
+  machineName: StringFieldUpdateOperationsInput
+  value: BoolFieldUpdateOperationsInput
+}
+
+input RequirementUpsertWithWhereUniqueWithoutArrowDataInput {
+  create: RequirementCreateWithoutArrowDataInput!
+  update: RequirementUpdateWithoutArrowDataInput!
+  where: RequirementWhereUniqueInput!
+}
+
+input RequirementWhereInput {
+  AND: [RequirementWhereInput!]
+  ArrowData: ArrowDataWhereInput
+  NOT: [RequirementWhereInput!]
+  OR: [RequirementWhereInput!]
+  arrowDataId: StringFilter
+  id: StringFilter
+  label: StringFilter
+  machineName: StringFilter
+  value: BoolFilter
+}
+
+input RequirementWhereUniqueInput {
+  AND: [RequirementWhereInput!]
+  ArrowData: ArrowDataWhereInput
+  NOT: [RequirementWhereInput!]
+  OR: [RequirementWhereInput!]
+  arrowDataId: StringFilter
+  id: String
+  label: StringFilter
+  machineName: StringFilter
+  value: BoolFilter
+}
+
+type Responsibility {
+  ArrowData(cursor: ArrowDataWhereUniqueInput, distinct: [ArrowDataScalarFieldEnum!], orderBy: [ArrowDataOrderByWithRelationInput!], skip: Int, take: Int, where: ArrowDataWhereInput): [ArrowData!]!
+  collaborators(cursor: UserWhereUniqueInput, distinct: [UserScalarFieldEnum!], orderBy: [UserOrderByWithRelationInput!], skip: Int, take: Int, where: UserWhereInput): [User!]!
+  id: ID!
+}
+
+input ResponsibilityCountOrderByAggregateInput {
+  id: SortOrder
+}
+
+input ResponsibilityCreateInput {
+  ArrowData: ArrowDataCreateNestedManyWithoutResponsabilityInput
+  collaborators: UserCreateNestedManyWithoutResponsibilityInput
+  id: String
+}
+
+input ResponsibilityCreateManyInput {
+  id: String
+}
+
+input ResponsibilityCreateNestedOneWithoutArrowDataInput {
+  connect: ResponsibilityWhereUniqueInput
+  connectOrCreate: ResponsibilityCreateOrConnectWithoutArrowDataInput
+  create: ResponsibilityCreateWithoutArrowDataInput
+}
+
+input ResponsibilityCreateNestedOneWithoutCollaboratorsInput {
+  connect: ResponsibilityWhereUniqueInput
+  connectOrCreate: ResponsibilityCreateOrConnectWithoutCollaboratorsInput
+  create: ResponsibilityCreateWithoutCollaboratorsInput
+}
+
+input ResponsibilityCreateOrConnectWithoutArrowDataInput {
+  create: ResponsibilityCreateWithoutArrowDataInput!
+  where: ResponsibilityWhereUniqueInput!
+}
+
+input ResponsibilityCreateOrConnectWithoutCollaboratorsInput {
+  create: ResponsibilityCreateWithoutCollaboratorsInput!
+  where: ResponsibilityWhereUniqueInput!
+}
+
+input ResponsibilityCreateWithoutArrowDataInput {
+  collaborators: UserCreateNestedManyWithoutResponsibilityInput
+  id: String
+}
+
+input ResponsibilityCreateWithoutCollaboratorsInput {
+  ArrowData: ArrowDataCreateNestedManyWithoutResponsabilityInput
+  id: String
+}
+
+input ResponsibilityMaxOrderByAggregateInput {
+  id: SortOrder
+}
+
+input ResponsibilityMinOrderByAggregateInput {
+  id: SortOrder
+}
+
+input ResponsibilityNullableRelationFilter {
+  is: ResponsibilityWhereInput
+  isNot: ResponsibilityWhereInput
+}
+
+input ResponsibilityOrderByWithAggregationInput {
+  _count: ResponsibilityCountOrderByAggregateInput
+  _max: ResponsibilityMaxOrderByAggregateInput
+  _min: ResponsibilityMinOrderByAggregateInput
+  id: SortOrder
+}
+
+input ResponsibilityOrderByWithRelationInput {
+  ArrowData: ArrowDataOrderByRelationAggregateInput
+  collaborators: UserOrderByRelationAggregateInput
+  id: SortOrder
+}
+
+input ResponsibilityRelationFilter {
+  is: ResponsibilityWhereInput
+  isNot: ResponsibilityWhereInput
+}
+
+enum ResponsibilityScalarFieldEnum {
+  id
+}
+
+input ResponsibilityScalarWhereWithAggregatesInput {
+  AND: [ResponsibilityScalarWhereWithAggregatesInput!]
+  NOT: [ResponsibilityScalarWhereWithAggregatesInput!]
+  OR: [ResponsibilityScalarWhereWithAggregatesInput!]
+  id: StringWithAggregatesFilter
+}
+
+input ResponsibilityUpdateInput {
+  ArrowData: ArrowDataUpdateManyWithoutResponsabilityNestedInput
+  collaborators: UserUpdateManyWithoutResponsibilityNestedInput
+  id: StringFieldUpdateOperationsInput
+}
+
+input ResponsibilityUpdateManyMutationInput {
+  id: StringFieldUpdateOperationsInput
+}
+
+input ResponsibilityUpdateOneRequiredWithoutArrowDataNestedInput {
+  connect: ResponsibilityWhereUniqueInput
+  connectOrCreate: ResponsibilityCreateOrConnectWithoutArrowDataInput
+  create: ResponsibilityCreateWithoutArrowDataInput
+  update: ResponsibilityUpdateToOneWithWhereWithoutArrowDataInput
+  upsert: ResponsibilityUpsertWithoutArrowDataInput
+}
+
+input ResponsibilityUpdateOneWithoutCollaboratorsNestedInput {
+  connect: ResponsibilityWhereUniqueInput
+  connectOrCreate: ResponsibilityCreateOrConnectWithoutCollaboratorsInput
+  create: ResponsibilityCreateWithoutCollaboratorsInput
+  delete: ResponsibilityWhereInput
+  disconnect: ResponsibilityWhereInput
+  update: ResponsibilityUpdateToOneWithWhereWithoutCollaboratorsInput
+  upsert: ResponsibilityUpsertWithoutCollaboratorsInput
+}
+
+input ResponsibilityUpdateToOneWithWhereWithoutArrowDataInput {
+  data: ResponsibilityUpdateWithoutArrowDataInput!
+  where: ResponsibilityWhereInput
+}
+
+input ResponsibilityUpdateToOneWithWhereWithoutCollaboratorsInput {
+  data: ResponsibilityUpdateWithoutCollaboratorsInput!
+  where: ResponsibilityWhereInput
+}
+
+input ResponsibilityUpdateWithoutArrowDataInput {
+  collaborators: UserUpdateManyWithoutResponsibilityNestedInput
+  id: StringFieldUpdateOperationsInput
+}
+
+input ResponsibilityUpdateWithoutCollaboratorsInput {
+  ArrowData: ArrowDataUpdateManyWithoutResponsabilityNestedInput
+  id: StringFieldUpdateOperationsInput
+}
+
+input ResponsibilityUpsertWithoutArrowDataInput {
+  create: ResponsibilityCreateWithoutArrowDataInput!
+  update: ResponsibilityUpdateWithoutArrowDataInput!
+  where: ResponsibilityWhereInput
+}
+
+input ResponsibilityUpsertWithoutCollaboratorsInput {
+  create: ResponsibilityCreateWithoutCollaboratorsInput!
+  update: ResponsibilityUpdateWithoutCollaboratorsInput!
+  where: ResponsibilityWhereInput
+}
+
+input ResponsibilityWhereInput {
+  AND: [ResponsibilityWhereInput!]
+  ArrowData: ArrowDataListRelationFilter
+  NOT: [ResponsibilityWhereInput!]
+  OR: [ResponsibilityWhereInput!]
+  collaborators: UserListRelationFilter
+  id: StringFilter
+}
+
+input ResponsibilityWhereUniqueInput {
+  AND: [ResponsibilityWhereInput!]
+  ArrowData: ArrowDataListRelationFilter
+  NOT: [ResponsibilityWhereInput!]
+  OR: [ResponsibilityWhereInput!]
+  collaborators: UserListRelationFilter
+  id: String
+}
+
 enum SortOrder {
   asc
   desc
+}
+
+enum StateMachineFormat {
+  Raw
+  ReactFlow
 }
 
 input StringFieldUpdateOperationsInput {
@@ -2879,6 +4419,7 @@ enum TransactionIsolationLevel {
 }
 
 type User {
+  Responsibility: Responsibility
   assignmentArea: AssignmentArea
   assignmentAreaId: String
   avatar: String!
@@ -2893,6 +4434,7 @@ type User {
   notifications: Json
   permissions: Json
   position: String!
+  responsibilityId: String
   updatedAt: DateTime!
 }
 
@@ -2908,10 +4450,12 @@ input UserCountOrderByAggregateInput {
   notifications: SortOrder
   permissions: SortOrder
   position: SortOrder
+  responsibilityId: SortOrder
   updatedAt: SortOrder
 }
 
 input UserCreateInput {
+  Responsibility: ResponsibilityCreateNestedOneWithoutCollaboratorsInput
   assignmentArea: AssignmentAreaCreateNestedOneWithoutUserInput
   avatar: String!
   collaboratorOf: ProjectCreateNestedManyWithoutCollaboratorsInput
@@ -2939,6 +4483,7 @@ input UserCreateManyAssignmentAreaInput {
   notifications: Json
   permissions: Json
   position: String!
+  responsibilityId: String
   updatedAt: DateTime
 }
 
@@ -2959,7 +4504,28 @@ input UserCreateManyInput {
   notifications: Json
   permissions: Json
   position: String!
+  responsibilityId: String
   updatedAt: DateTime
+}
+
+input UserCreateManyResponsibilityInput {
+  assignmentAreaId: String
+  avatar: String!
+  createdAt: DateTime
+  deleteAt: DateTime
+  email: String!
+  id: String
+  identification: String!
+  name: String!
+  notifications: Json
+  permissions: Json
+  position: String!
+  updatedAt: DateTime
+}
+
+input UserCreateManyResponsibilityInputEnvelope {
+  data: [UserCreateManyResponsibilityInput!]!
+  skipDuplicates: Boolean
 }
 
 input UserCreateNestedManyWithoutAssignmentAreaInput {
@@ -2973,6 +4539,13 @@ input UserCreateNestedManyWithoutCollaboratorOfInput {
   connect: [UserWhereUniqueInput!]
   connectOrCreate: [UserCreateOrConnectWithoutCollaboratorOfInput!]
   create: [UserCreateWithoutCollaboratorOfInput!]
+}
+
+input UserCreateNestedManyWithoutResponsibilityInput {
+  connect: [UserWhereUniqueInput!]
+  connectOrCreate: [UserCreateOrConnectWithoutResponsibilityInput!]
+  create: [UserCreateWithoutResponsibilityInput!]
+  createMany: UserCreateManyResponsibilityInputEnvelope
 }
 
 input UserCreateNestedOneWithoutLeaderOfInput {
@@ -2996,7 +4569,13 @@ input UserCreateOrConnectWithoutLeaderOfInput {
   where: UserWhereUniqueInput!
 }
 
+input UserCreateOrConnectWithoutResponsibilityInput {
+  create: UserCreateWithoutResponsibilityInput!
+  where: UserWhereUniqueInput!
+}
+
 input UserCreateWithoutAssignmentAreaInput {
+  Responsibility: ResponsibilityCreateNestedOneWithoutCollaboratorsInput
   avatar: String!
   collaboratorOf: ProjectCreateNestedManyWithoutCollaboratorsInput
   createdAt: DateTime
@@ -3013,6 +4592,7 @@ input UserCreateWithoutAssignmentAreaInput {
 }
 
 input UserCreateWithoutCollaboratorOfInput {
+  Responsibility: ResponsibilityCreateNestedOneWithoutCollaboratorsInput
   assignmentArea: AssignmentAreaCreateNestedOneWithoutUserInput
   avatar: String!
   createdAt: DateTime
@@ -3029,6 +4609,7 @@ input UserCreateWithoutCollaboratorOfInput {
 }
 
 input UserCreateWithoutLeaderOfInput {
+  Responsibility: ResponsibilityCreateNestedOneWithoutCollaboratorsInput
   assignmentArea: AssignmentAreaCreateNestedOneWithoutUserInput
   avatar: String!
   collaboratorOf: ProjectCreateNestedManyWithoutCollaboratorsInput
@@ -3037,6 +4618,23 @@ input UserCreateWithoutLeaderOfInput {
   email: String!
   id: String
   identification: String!
+  name: String!
+  notifications: Json
+  permissions: Json
+  position: String!
+  updatedAt: DateTime
+}
+
+input UserCreateWithoutResponsibilityInput {
+  assignmentArea: AssignmentAreaCreateNestedOneWithoutUserInput
+  avatar: String!
+  collaboratorOf: ProjectCreateNestedManyWithoutCollaboratorsInput
+  createdAt: DateTime
+  deleteAt: DateTime
+  email: String!
+  id: String
+  identification: String!
+  leaderOf: ProjectCreateNestedManyWithoutLeaderInput
   name: String!
   notifications: Json
   permissions: Json
@@ -3060,6 +4658,7 @@ input UserMaxOrderByAggregateInput {
   identification: SortOrder
   name: SortOrder
   position: SortOrder
+  responsibilityId: SortOrder
   updatedAt: SortOrder
 }
 
@@ -3073,6 +4672,7 @@ input UserMinOrderByAggregateInput {
   identification: SortOrder
   name: SortOrder
   position: SortOrder
+  responsibilityId: SortOrder
   updatedAt: SortOrder
 }
 
@@ -3095,10 +4695,12 @@ input UserOrderByWithAggregationInput {
   notifications: SortOrder
   permissions: SortOrder
   position: SortOrder
+  responsibilityId: SortOrder
   updatedAt: SortOrder
 }
 
 input UserOrderByWithRelationInput {
+  Responsibility: ResponsibilityOrderByWithRelationInput
   assignmentArea: AssignmentAreaOrderByWithRelationInput
   assignmentAreaId: SortOrder
   avatar: SortOrder
@@ -3113,6 +4715,7 @@ input UserOrderByWithRelationInput {
   notifications: SortOrder
   permissions: SortOrder
   position: SortOrder
+  responsibilityId: SortOrder
   updatedAt: SortOrder
 }
 
@@ -3133,6 +4736,7 @@ enum UserScalarFieldEnum {
   notifications
   permissions
   position
+  responsibilityId
   updatedAt
 }
 
@@ -3151,6 +4755,7 @@ input UserScalarWhereInput {
   notifications: JsonNullableFilter
   permissions: JsonNullableFilter
   position: StringFilter
+  responsibilityId: StringNullableFilter
   updatedAt: DateTimeFilter
 }
 
@@ -3169,10 +4774,12 @@ input UserScalarWhereWithAggregatesInput {
   notifications: JsonNullableWithAggregatesFilter
   permissions: JsonNullableWithAggregatesFilter
   position: StringWithAggregatesFilter
+  responsibilityId: StringNullableWithAggregatesFilter
   updatedAt: DateTimeWithAggregatesFilter
 }
 
 input UserUpdateInput {
+  Responsibility: ResponsibilityUpdateOneWithoutCollaboratorsNestedInput
   assignmentArea: AssignmentAreaUpdateOneWithoutUserNestedInput
   avatar: StringFieldUpdateOperationsInput
   collaboratorOf: ProjectUpdateManyWithoutCollaboratorsNestedInput
@@ -3213,6 +4820,11 @@ input UserUpdateManyWithWhereWithoutCollaboratorOfInput {
   where: UserScalarWhereInput!
 }
 
+input UserUpdateManyWithWhereWithoutResponsibilityInput {
+  data: UserUpdateManyMutationInput!
+  where: UserScalarWhereInput!
+}
+
 input UserUpdateManyWithoutAssignmentAreaNestedInput {
   connect: [UserWhereUniqueInput!]
   connectOrCreate: [UserCreateOrConnectWithoutAssignmentAreaInput!]
@@ -3240,6 +4852,20 @@ input UserUpdateManyWithoutCollaboratorOfNestedInput {
   upsert: [UserUpsertWithWhereUniqueWithoutCollaboratorOfInput!]
 }
 
+input UserUpdateManyWithoutResponsibilityNestedInput {
+  connect: [UserWhereUniqueInput!]
+  connectOrCreate: [UserCreateOrConnectWithoutResponsibilityInput!]
+  create: [UserCreateWithoutResponsibilityInput!]
+  createMany: UserCreateManyResponsibilityInputEnvelope
+  delete: [UserWhereUniqueInput!]
+  deleteMany: [UserScalarWhereInput!]
+  disconnect: [UserWhereUniqueInput!]
+  set: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutResponsibilityInput!]
+  updateMany: [UserUpdateManyWithWhereWithoutResponsibilityInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutResponsibilityInput!]
+}
+
 input UserUpdateOneRequiredWithoutLeaderOfNestedInput {
   connect: UserWhereUniqueInput
   connectOrCreate: UserCreateOrConnectWithoutLeaderOfInput
@@ -3263,7 +4889,13 @@ input UserUpdateWithWhereUniqueWithoutCollaboratorOfInput {
   where: UserWhereUniqueInput!
 }
 
+input UserUpdateWithWhereUniqueWithoutResponsibilityInput {
+  data: UserUpdateWithoutResponsibilityInput!
+  where: UserWhereUniqueInput!
+}
+
 input UserUpdateWithoutAssignmentAreaInput {
+  Responsibility: ResponsibilityUpdateOneWithoutCollaboratorsNestedInput
   avatar: StringFieldUpdateOperationsInput
   collaboratorOf: ProjectUpdateManyWithoutCollaboratorsNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
@@ -3280,6 +4912,7 @@ input UserUpdateWithoutAssignmentAreaInput {
 }
 
 input UserUpdateWithoutCollaboratorOfInput {
+  Responsibility: ResponsibilityUpdateOneWithoutCollaboratorsNestedInput
   assignmentArea: AssignmentAreaUpdateOneWithoutUserNestedInput
   avatar: StringFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
@@ -3296,6 +4929,7 @@ input UserUpdateWithoutCollaboratorOfInput {
 }
 
 input UserUpdateWithoutLeaderOfInput {
+  Responsibility: ResponsibilityUpdateOneWithoutCollaboratorsNestedInput
   assignmentArea: AssignmentAreaUpdateOneWithoutUserNestedInput
   avatar: StringFieldUpdateOperationsInput
   collaboratorOf: ProjectUpdateManyWithoutCollaboratorsNestedInput
@@ -3304,6 +4938,23 @@ input UserUpdateWithoutLeaderOfInput {
   email: StringFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
   identification: StringFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
+  notifications: Json
+  permissions: Json
+  position: StringFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input UserUpdateWithoutResponsibilityInput {
+  assignmentArea: AssignmentAreaUpdateOneWithoutUserNestedInput
+  avatar: StringFieldUpdateOperationsInput
+  collaboratorOf: ProjectUpdateManyWithoutCollaboratorsNestedInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  deleteAt: NullableDateTimeFieldUpdateOperationsInput
+  email: StringFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
+  identification: StringFieldUpdateOperationsInput
+  leaderOf: ProjectUpdateManyWithoutLeaderNestedInput
   name: StringFieldUpdateOperationsInput
   notifications: Json
   permissions: Json
@@ -3323,6 +4974,12 @@ input UserUpsertWithWhereUniqueWithoutCollaboratorOfInput {
   where: UserWhereUniqueInput!
 }
 
+input UserUpsertWithWhereUniqueWithoutResponsibilityInput {
+  create: UserCreateWithoutResponsibilityInput!
+  update: UserUpdateWithoutResponsibilityInput!
+  where: UserWhereUniqueInput!
+}
+
 input UserUpsertWithoutLeaderOfInput {
   create: UserCreateWithoutLeaderOfInput!
   update: UserUpdateWithoutLeaderOfInput!
@@ -3333,6 +4990,7 @@ input UserWhereInput {
   AND: [UserWhereInput!]
   NOT: [UserWhereInput!]
   OR: [UserWhereInput!]
+  Responsibility: ResponsibilityWhereInput
   assignmentArea: AssignmentAreaWhereInput
   assignmentAreaId: StringNullableFilter
   avatar: StringFilter
@@ -3347,6 +5005,7 @@ input UserWhereInput {
   notifications: JsonNullableFilter
   permissions: JsonNullableFilter
   position: StringFilter
+  responsibilityId: StringNullableFilter
   updatedAt: DateTimeFilter
 }
 
@@ -3354,6 +5013,7 @@ input UserWhereUniqueInput {
   AND: [UserWhereInput!]
   NOT: [UserWhereInput!]
   OR: [UserWhereInput!]
+  Responsibility: ResponsibilityWhereInput
   assignmentArea: AssignmentAreaWhereInput
   assignmentAreaId: StringNullableFilter
   avatar: StringFilter
@@ -3368,5 +5028,6 @@ input UserWhereUniqueInput {
   notifications: JsonNullableFilter
   permissions: JsonNullableFilter
   position: StringFilter
+  responsibilityId: StringNullableFilter
   updatedAt: DateTimeFilter
 }

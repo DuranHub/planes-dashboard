@@ -123,6 +123,6 @@ export const commentNode = memo(function CommentNode() {
 });
 
 export const nodeTypes = {
-  custom: inputNode,
+  node: inputNode,
   comment: commentNode,
 };

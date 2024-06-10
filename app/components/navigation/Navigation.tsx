@@ -36,7 +36,7 @@ export default function Navigation({ procedures }: Props) {
       </aside>
 
       {/* Mobile navigation */}
-      <Drawer direction="right" shouldScaleBackground={false}>
+      {/* <Drawer direction="right" shouldScaleBackground={false}>
         <aside className="lg:hidden p-4 flex justify-end">
           <DrawerTrigger asChild>
             <Button variant="ghost" size="icon">
@@ -50,7 +50,7 @@ export default function Navigation({ procedures }: Props) {
         >
           <LinkList links={systemRoutes} />
         </DrawerContent>
-      </Drawer>
+      </Drawer> */}
     </Fragment>
   );
 }

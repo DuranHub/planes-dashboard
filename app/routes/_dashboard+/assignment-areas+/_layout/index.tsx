@@ -44,14 +44,6 @@ export const loader = async () => {
   });
 };
 
-export const action = async ({ request }: ActionFunctionArgs) => {
-  const formData = await request.formData();
-  for (const [key, value] of formData.entries()) {
-    console.log(`${key}: ${value}`);
-  }
-  return json({ message: "Assignment area created successfully" });
-};
-
 export default function Index() {
   const { assignmentAreas, rootAssignmentAreas } =
     useLoaderData<typeof loader>();

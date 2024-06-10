@@ -1,7 +1,7 @@
 import type { FetcherFormProps } from "react-router-dom";
 import type { ControllerRenderProps, FieldValues } from "react-hook-form";
 
-type InputsKind = "alphanumeric" | "email" | "alphabetic" | "password" | "select" | "number" | "user-autocomplete" | "free-text";
+export type InputsKind = "alphanumeric" | "email" | "alphabetic" | "password" | "select" | "number" | "user-autocomplete" | "free-text";
 
 type InputDefinition = {
     kind: InputsKind;

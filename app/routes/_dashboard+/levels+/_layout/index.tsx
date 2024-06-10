@@ -41,7 +41,7 @@ const updateProjectSchema = [
     required: true,
   },
   {
-    kind: "alphabetic",
+    kind: "free-text",
     name: "description",
     label: "Description",
     required: true,
@@ -110,17 +110,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
           percentage
         }
       }
-    }
-  `);
-  const { data, error } = await graphqlClient.query(listLevelQuery, {});
-
-  if (!data || error) {
-    console.error(error, "Error getting level categories");
-    throw json({ error: "Error getting level categories" }, { status: 500 });
-  }
-
-  const listProjectsQuery = graphql(`
-    query ListProjects {
       findManyProject {
         __typename
         name
@@ -141,16 +130,14 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       }
     }
   `);
+  const { data, error } = await graphqlClient.query(listLevelQuery, {});
 
-  const { data: projectsData, error: projectsError } =
-    await graphqlClient.query(listProjectsQuery, {});
-
-  if (!projectsData || projectsError) {
-    console.error(projectsError, "Error getting projects");
-    throw json({ error: "Error getting projects" }, { status: 500 });
+  if (!data || error) {
+    console.error(error, "Error getting level categories");
+    throw json({ error: "Error getting level categories" }, { status: 500 });
   }
 
-  const projects = projectsData.findManyProject;
+  const projects = data.findManyProject;
   const levels = data.findManyLevel;
 
   const rootLevels = data?.findManyLevel.filter((level) => !level.ParentLevel);
@@ -388,7 +375,10 @@ function ProjectConfiguration() {
         <CardTitle className="mb-2 flex w-full justify-between">
           <span>Project Configuration</span>
           <Button variant="default" asChild>
-            <Link to={`/${activeLevel.machineName}/workflow`} className="flex items-center gap-4">
+            <Link
+              to={`/${activeLevel.machineName}/workflow`}
+              className="flex items-center gap-4"
+            >
               <PresentationIcon className="w-6 h-6" />
               View Workflow
             </Link>

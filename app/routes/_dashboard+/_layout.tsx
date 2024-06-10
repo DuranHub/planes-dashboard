@@ -18,9 +18,9 @@ export default function Layout() {
   return (
     <main className="flex-auto flex flex-col lg:flex-row overflow-hidden min-h-screen">
       <Navigation procedures={procedures} />
-      <div className="w-full bg-background h-full py-4">
+      <article className="w-full bg-background h-full py-4">
         <Outlet />
-      </div>
+      </article>
     </main>
   );
 }

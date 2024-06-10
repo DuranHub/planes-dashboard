@@ -1,4 +1,5 @@
 import { Fragment, useState } from "react";
+import { Avatar, AvatarFallback } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import {
   Card,
@@ -8,7 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import { Checkbox } from "~/components/ui/checkbox";
 import {
   Dialog,
   DialogContent,
@@ -18,21 +18,22 @@ import {
 } from "~/components/ui/dialog";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-import { ScrollArea } from "~/components/ui/scroll-area";
-import { cn } from "~/lib/utils";
+import { PermissionTable } from "./PermissionsTable";
 
-export function RequirementsCard({
+export function CollaboratorsCard({
   labelX,
   labelY,
+  collaborators,
 }: {
   labelX: number;
   labelY: number;
+  collaborators: { name: string; avatar: string }[];
 }) {
   const [open, setOpen] = useState(false);
-  const [requirements, setRequirements] = useState([
-    "Recurso 1",
-    "Recurso 2",
-    "Recurso 3",
+  const [collaboratorsM, setCollaborators] = useState([
+    "John Doe",
+    "Mary Jane",
+    "Peter Parker",
   ]);
 
   return (
@@ -42,16 +43,17 @@ export function RequirementsCard({
           <DialogHeader>
             <DialogTitle>Edit profile</DialogTitle>
             <DialogDescription>
-              Make changes to your profile here. Click save when you&apos;re done.
+              Make changes to your profile here. Click save when you&apos;re
+              done.
             </DialogDescription>
           </DialogHeader>
           <form
-            className={cn("grid items-start gap-4")}
+            className="grid items-start gap-4"
             onSubmit={(e) => {
               e.preventDefault();
               //@ts-expect-error This shoudl not be needed once we have a form library
               const email = e.target.requirement.value;
-              setRequirements((prev) => [...prev, email]);
+              setCollaborators((prev) => [...prev, email]);
             }}
           >
             <div className="grid gap-2">
@@ -60,42 +62,45 @@ export function RequirementsCard({
             </div>
             <Button type="submit">Save changes</Button>
           </form>
-          <ScrollArea type="scroll" className="h-[200px] mt-4">
-            <ul>
-              {requirements.map((requirement, index) => (
-                <li key={index} className="text-sm">
-                  {requirement}
-                </li>
-              ))}
-            </ul>
-          </ScrollArea>
+          <PermissionTable collaborators={collaboratorsM} />
         </DialogContent>
       </Dialog>
       <Card
         style={{
           position: "absolute",
-          transform: `translate(-110%, -120%) translate(${labelX}px,${labelY}px)`,
+          transform: `translate(-110%, 20%) translate(${labelX}px,${labelY}px)`,
           pointerEvents: "all",
         }}
-        className="nodrag nowheel nopan z-50 h-80 w-72 flex flex-col"
+        className="nodrag nopan z-50 h-80 w-72 flex flex-col"
       >
         <CardHeader>
-          <CardTitle>Requerimientos</CardTitle>
+          <CardTitle>Responsables</CardTitle>
           <CardDescription>
-            Recursos necesarios para completar la tarea
+            Colaboradores responsables de la tarea
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <ScrollArea type="scroll" className="h-[100px]">
-            <ul>
-              {requirements.map((requirement, index) => (
-                <li key={index} className="text-sm flex items-center">
-                  <Checkbox className="mr-2" />
-                  {requirement}
-                </li>
-              ))}
-            </ul>
-          </ScrollArea>
+          <p className="text-sm font-bold mb-2">Colaboradores:</p>
+          <div className="flex">
+            {collaborators.slice(0, 3).map(({name, avatar}, index) => (
+              <Avatar
+                key={index}
+                className="w-8 h-8 bg-gray-300 rounded-full mr-2"
+              >
+                <AvatarFallback className="text-xs">
+                  {name.charAt(0).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+            ))}
+
+            {collaborators.length > 3 && (
+              <Avatar className="w-8 h-8 bg-gray-300 rounded-full mr-2">
+                <AvatarFallback className="text-xs">
+                  +{collaborators.length - 3}
+                </AvatarFallback>
+              </Avatar>
+            )}
+          </div>
         </CardContent>
         <CardFooter className="mt-auto">
           <Button

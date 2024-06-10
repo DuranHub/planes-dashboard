@@ -1,10 +1,10 @@
 import { JSONSchemaType } from "ajv";
-import { InputUnion, Schema } from "../types";
+import { InputsKind, Schema } from "../types";
 import { FormatName } from 'ajv-formats'
 
 type JSONSchemaTypes = 'number' | "integer" | "string" | "boolean" | "array" | 'object' | 'null'
 
-const inputKindToJSONSchemaType: Record<InputUnion['kind'], JSONSchemaTypes> = {
+const inputKindToJSONSchemaType: Record<InputsKind, JSONSchemaTypes> = {
     alphanumeric: "string",
     email: "string",
     alphabetic: "string",
@@ -20,7 +20,7 @@ const inputKindToJSONSchemaType: Record<InputUnion['kind'], JSONSchemaTypes> = {
 * @param schema - The schema object
 * @returns JSON schema object
 */
-const inputKindToJSONSchemaFormat: Record<InputUnion['kind'], FormatName | undefined> = {
+const inputKindToJSONSchemaFormat: Record<InputsKind, FormatName | undefined> = {
     alphanumeric: undefined,
     alphabetic: undefined,
     email: "email",

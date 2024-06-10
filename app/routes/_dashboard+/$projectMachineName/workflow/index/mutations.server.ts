@@ -1,25 +1,68 @@
-import { Edge, Node } from "reactflow";
-import { workflows, edges } from "./query.server";
+import { graphqlClient, graphql } from "~/graphql/client.server";
 
-export const createNode = (node: Node) => {
-    workflows.push({
-        id: node.id,
-        type: node.type || "custom",
-        position: node.position,
-        data: node.data,
-        width: node.width || 120,
-        height: node.height || 42,
-    });
-    return node;
+export async function saveWorkflow(workflow: string, projectMachineName: string) {
+    const saveWorkflowMutation = graphql(`
+    mutation SaveWorkflow($workflow: Json!, $projectMachineName: String) {
+        updateOneProject(data: {
+            workflow: $workflow
+        }
+        format: ReactFlow
+        where: {
+            machineName: $projectMachineName
+        }) {
+            id
+            workflow
+        }
+    }
+`)
+
+    const { data, error } = await graphqlClient.mutation(saveWorkflowMutation, {
+        workflow: JSON.parse(workflow),
+        projectMachineName
+    })
+
+    if (error || !data) {
+        throw new Error("Failed to save workflow")
+    }
+
+    return data.updateOneProject
 }
 
-export const updateNode = (node: Node) => {
-    const index = workflows.findIndex((n) => n.id === node.id);
-    workflows[index] = node;
-    return node;
+interface CreateRequirementInput {
+    requirementName: string
+    edgeId: string
+    machineName: string
 }
 
-export const createEdge = (edge: Edge) => {
-    edges.push(edge);
-    return edge;
+export async function createRequirement({ requirementName, edgeId, machineName }: CreateRequirementInput) {
+    console.log("createRequirement", requirementName, edgeId, machineName)
+    const createRequirementMutation = graphql(`
+    mutation CreateRequirement($requirementName: String! $edgeId: String! $machineName: String!) {
+        createOneRequirement(data: {
+            label: $requirementName
+            ArrowData: {
+                connect: {
+                    id: $edgeId
+                }
+            }
+            machineName: $machineName
+            value: false
+        }) {
+            id
+            label
+        }
+    }
+`)
+
+    const { data, error } = await graphqlClient.mutation(createRequirementMutation, {
+        requirementName,
+        edgeId,
+        machineName
+    })
+
+    if (error || !data) {
+        throw new Error("Failed to create requirement")
+    }
+
+    return data.createOneRequirement
 }

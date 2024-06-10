@@ -104,7 +104,6 @@ export function SearchUserCombobox({ field, options, defaultValue }: Props) {
   const [value, setValue] = useState(defaultValue ?? "");
   const [query, setQuery] = useState("");
 
-  // const users = userFetcher.data?.users ?? options;
   const users = useMemo(() => {
     const optionsToSelectItem = options.map((option) => ({
       id: option.value,
@@ -112,7 +111,6 @@ export function SearchUserCombobox({ field, options, defaultValue }: Props) {
     }));
 
     if (userFetcher.data?.users) {
-      // Remove duplicates
       const newUsers = userFetcher.data?.users.filter(
         (user) => !optionsToSelectItem.some((option) => option.id === user.id)
       );

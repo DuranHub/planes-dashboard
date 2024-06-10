@@ -66,13 +66,30 @@ function StadisticsCard({
   );
 }
 
+type DataType = {
+  label: string;
+  id: string;
+  requirements: {
+    label: string;
+    machineName: string;
+    value: boolean;
+  }[];
+  collaborators: {
+    name: string;
+    avatar: string;
+  }[];
+  indicators: any[];
+  procedure: any[];
+};
+
 export default function CustomEdge({
   id,
   sourceX,
   sourceY,
   targetX,
   targetY,
-}: EdgeProps) {
+  data,
+}: EdgeProps<DataType>) {
   const [showCards, setShowCards] = useState(false);
 
   const [edgePath, labelX, labelY] = getSimpleBezierPath({
@@ -81,6 +98,8 @@ export default function CustomEdge({
     targetX,
     targetY,
   });
+
+  if (!data) return null;
 
   return (
     <>
@@ -118,9 +137,18 @@ export default function CustomEdge({
 
         {showCards && (
           <Fragment>
-            <CollaboratorsCard labelX={labelX} labelY={labelY} />
+            <CollaboratorsCard
+              collaborators={data?.collaborators}
+              labelX={labelX}
+              labelY={labelY}
+            />
             <ProcedureCard labelX={labelX} labelY={labelY} />
-            <RequirementsCard labelX={labelX} labelY={labelY} />
+            <RequirementsCard
+              edgeId={data?.id}
+              requirements={data?.requirements || []}
+              labelX={labelX}
+              labelY={labelY}
+            />
             <StadisticsCard labelX={labelX} labelY={labelY} />
           </Fragment>
         )}

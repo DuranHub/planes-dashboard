@@ -111,10 +111,10 @@ export const columns: ColumnDef<AssignmentArea>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem asChild>
-              <Link to={`${assignamentArea.machineName}/edit`}>Edit User</Link>
+              <Link to={`${assignamentArea.machineName}/edit`}>Edit Area</Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link to={`${assignamentArea.machineName}/delete`}>Delete User</Link>
+              <Link to={`${assignamentArea.machineName}/delete`}>Delete Area</Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
