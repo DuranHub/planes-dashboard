@@ -6,56 +6,45 @@ import {
   useNavigate,
 } from "@remix-run/react";
 import { ClientOnly } from "remix-utils/client-only";
-import { Schema } from "~/components/FormGenerator/types";
 import Modal from "~/components/ui/modal";
-import { graphqlClient } from "~/graphql/client.server";
-import { findAssignmentAreasQuery } from "~/graphql/models/assignmentArea/queries.server";
-import { ComposeSchema } from "~/components/FormGenerator/lib/composeSchema";
 import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node";
-import { validateFormJsonSchema } from "~/components/FormGenerator/lib/validateFormAjv.server";
-import { updateUserMutation } from "~/graphql/models/user/mutations";
-import { useFormGenerator } from "~/components/FormGenerator";
 import { Button } from "~/components/ui/button";
 import { invariant } from "@epic-web/invariant";
 import { Suspense, useEffect } from "react";
 import { Skeleton } from "~/components/ui/skeleton";
 import { getUserSchema } from "./loader";
+import { JSONSchema7 } from "json-schema";
+import { FormGenerator } from "~/components/FormGenerator";
 
-const createUserSchema = [
-  {
-    kind: "alphabetic",
-    name: "name",
-    label: "Name",
-    required: true,
+const createUserSchema = {
+  type: "object",
+  title: "Edit user",
+  description: "Fill in the form below to edit the user.",
+  properties: {
+    name: {
+      type: "string",
+      title: "Name",
+    },
+    assignmentArea: {
+      type: "string",
+      title: "Assignment Area",
+      default: "",
+      oneOf: [] as { title: string; const: string }[],
+    },
+    email: {
+      type: "string",
+      title: "Email",
+    },
+    identification: {
+      type: "string",
+      title: "Identification",
+    },
+    position: {
+      type: "string",
+      title: "Position",
+    },
   },
-  {
-    kind: "select",
-    label: "Assignment Area",
-    name: "assignmentArea",
-    options: [],
-    required: true,
-  },
-  {
-    kind: "email",
-    label: "Email",
-    name: "email",
-    required: true,
-  },
-  {
-    kind: "alphanumeric",
-    label: "Identification",
-    name: "identification",
-    required: true,
-    helpText: "The identification of the user",
-  },
-  {
-    kind: "alphabetic",
-    label: "Position",
-    name: "position",
-    required: true,
-    helpText: "The position of the user",
-  },
-] as const satisfies Schema;
+} satisfies JSONSchema7;
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const userId = params.userid;
@@ -69,63 +58,63 @@ export async function loader({ params }: LoaderFunctionArgs) {
 export async function action({ request, params }: ActionFunctionArgs) {
   invariant(params.userid, "User ID is required");
   // Format the validator
-  const { data } = await graphqlClient.query(findAssignmentAreasQuery, {});
-  const assignmentAreas = data?.findManyAssignmentArea || [];
-  const validatorSchema = new ComposeSchema(createUserSchema);
-  validatorSchema.setOptions(
-    "assignmentArea",
-    assignmentAreas.map((area) => ({
-      label: area.name,
-      value: area.machineName,
-    }))
-  );
+  // const { data } = await graphqlClient.query(findAssignmentAreasQuery, {});
+  // const assignmentAreas = data?.findManyAssignmentArea || [];
+  // const validatorSchema = new ComposeSchema(createUserSchema);
+  // validatorSchema.setOptions(
+  //   "assignmentArea",
+  //   assignmentAreas.map((area) => ({
+  //     label: area.name,
+  //     value: area.machineName,
+  //   }))
+  // );
 
-  // Validation of form data
-  const result = validateFormJsonSchema(
-    await request.formData(),
-    validatorSchema.getSchema()
-  );
+  // // Validation of form data
+  // const result = validateFormJsonSchema(
+  //   await request.formData(),
+  //   validatorSchema.getSchema()
+  // );
 
-  if (!result.success) {
-    return json(result.errors, {
-      status: 400,
-    });
-  }
+  // if (!result.success) {
+  //   return json(result.errors, {
+  //     status: 400,
+  //   });
+  // }
 
-  // Extract variables
-  const { assignmentArea, email, identification, name, position } = result.data;
+  // // Extract variables
+  // const { assignmentArea, email, identification, name, position } = result.data;
 
-  // Buisness logic
-  const { data: user, error } = await graphqlClient.mutation(
-    updateUserMutation,
-    {
-      input: {
-        email: {
-          set: email,
-        },
-        name: {
-          set: name,
-        },
-        // avatar: `https://api.dicebear.com/8.x/avataaars-neutral/svg?seed=${name}`,
-        identification: {
-          set: identification,
-        },
-        position: {
-          set: position,
-        },
-        assignmentArea: {
-          connect: {
-            machineName: assignmentArea,
-          },
-        },
-      },
-      id: params.userid,
-    }
-  );
+  // // Buisness logic
+  // const { data: user, error } = await graphqlClient.mutation(
+  //   updateUserMutation,
+  //   {
+  //     input: {
+  //       email: {
+  //         set: email,
+  //       },
+  //       name: {
+  //         set: name,
+  //       },
+  //       // avatar: `https://api.dicebear.com/8.x/avataaars-neutral/svg?seed=${name}`,
+  //       identification: {
+  //         set: identification,
+  //       },
+  //       position: {
+  //         set: position,
+  //       },
+  //       assignmentArea: {
+  //         connect: {
+  //           machineName: assignmentArea,
+  //         },
+  //       },
+  //     },
+  //     id: params.userid,
+  //   }
+  // );
 
-  if (error || !user) {
-    return json({ error: "Error creating user" }, { status: 500 });
-  }
+  // if (error || !user) {
+  //   return json({ error: "Error creating user" }, { status: 500 });
+  // }
 
   return json({ success: true });
 }
@@ -155,44 +144,12 @@ export default function Edit() {
           {({ closeModal }) => (
             <Suspense fallback={<Skeleton className="h-96" />}>
               <Await resolve={editUserSchema}>
-                {(schema) => (
-                  <EditForm schema={schema} closeModal={closeModal} />
-                )}
+                {(schema) => <FormGenerator schema={schema} />}
               </Await>
             </Suspense>
           )}
         </Modal>
       )}
     </ClientOnly>
-  );
-}
-
-function EditForm({
-  schema,
-  closeModal,
-}: {
-  schema: Schema;
-  closeModal: () => void;
-}) {
-  const { FormGenerated } = useFormGenerator({
-    schema,
-  });
-  const fetcher = useFetcher<{ success: boolean }>();
-
-  useEffect(() => {
-    if (fetcher.state === "idle" && fetcher.data?.success) {
-      closeModal();
-    }
-  }, [fetcher.state, fetcher.data, closeModal]);
-
-  return (
-    <FormGenerated
-      fetcher={fetcher}
-      actions={
-        <Button type="button" variant="secondary" onClick={closeModal}>
-          Cancel
-        </Button>
-      }
-    />
   );
 }

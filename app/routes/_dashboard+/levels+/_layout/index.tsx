@@ -25,66 +25,52 @@ import {
 } from "~/components/ui/card";
 import { Tree } from "~/components/ui/tree";
 import { Folder, PresentationIcon, Workflow } from "lucide-react";
-import { Schema } from "~/components/FormGenerator/types";
-import { ComposeSchema } from "~/components/FormGenerator/lib/composeSchema";
-import { FormGenerate } from "~/components/FormGenerator";
+import { FormGenerator } from "~/components/FormGenerator";
 import { invariant } from "@epic-web/invariant";
 import { validateFormJsonSchema } from "~/components/FormGenerator/lib/validateFormAjv.server";
 import { formatMachineName } from "~/lib/utils.server";
 import { recursiveTree } from "./utils";
+import { JSONSchema7 } from "json-schema";
 
-const updateProjectSchema = [
-  {
-    kind: "alphanumeric",
-    name: "name",
-    label: "Name",
-    required: true,
+const updateProjectSchema = {
+  type: "object",
+  title: "Edit project",
+  description: "Fill in the form below to edit the project.",
+  properties: {
+    name: {
+      type: "string",
+      title: "Name",
+    },
+    description: {
+      type: "string",
+      title: "Description",
+    },
+    leader: {
+      type: "string",
+      title: "Leader",
+    },
+    goal: {
+      type: "number",
+      title: "Goal",
+    },
+    account: {
+      type: "string",
+      title: "Account",
+    },
+    archiveBox: {
+      type: "string",
+      title: "Archive Box",
+    },
+    progressUnit: {
+      type: "string",
+      title: "Progress Unit",
+    },
+    machineName: {
+      type: "string",
+      title: "Machine Name",
+    },
   },
-  {
-    kind: "free-text",
-    name: "description",
-    label: "Description",
-    required: true,
-  },
-  {
-    kind: "user-autocomplete",
-    name: "leader",
-    label: "Leader",
-    required: true,
-    options: [],
-  },
-  {
-    kind: "number",
-    name: "goal",
-    label: "Goal",
-    required: true,
-  },
-  {
-    kind: "alphanumeric",
-    name: "account",
-    label: "Account",
-    required: true,
-  },
-  {
-    kind: "alphanumeric",
-    name: "archiveBox",
-    label: "Archive Box",
-    required: true,
-  },
-  {
-    kind: "alphanumeric",
-    name: "progressUnit",
-    label: "Progress Unit",
-    required: true,
-  },
-  {
-    kind: "free-text",
-    name: "machineName",
-    label: "Machine Name",
-    required: true,
-    hidden: true,
-  },
-] as const satisfies Schema;
+} satisfies JSONSchema7;
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
@@ -171,24 +157,40 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const isProject = activeLevel?.__typename === "Project";
 
   if (isProject) {
-    const composeSchema = new ComposeSchema(updateProjectSchema);
-    composeSchema.setOptions("leader", [
-      {
-        label: activeLevel.leader.name,
-        value: activeLevel.leader.id as string,
-      },
-    ]);
-    composeSchema.setDefaultValues({
-      ...activeLevel,
-      goal: String(activeLevel.goal),
-      leader: activeLevel.leader.id as string,
-    });
+    // const composeSchema = new ComposeSchema(updateProjectSchema);
+    // composeSchema.setOptions("leader", [
+    //   {
+    //     label: activeLevel.leader.name,
+    //     value: activeLevel.leader.id as string,
+    //   },
+    // ]);
+    // composeSchema.setDefaultValues({
+    //   ...activeLevel,
+    //   goal: String(activeLevel.goal),
+    //   leader: activeLevel.leader.id as string,
+    // });
+    updateProjectSchema.properties.leader = {
+      type: "string",
+      title: "Leader",
+      default: activeLevel.leader.id,
+    };
+    updateProjectSchema.properties.name.default = activeLevel.name;
+    updateProjectSchema.properties.description.default =
+      activeLevel.description;
+    updateProjectSchema.properties.account.default = activeLevel.account;
+    updateProjectSchema.properties.archiveBox.default = activeLevel.archiveBox;
+    updateProjectSchema.properties.goal.default = activeLevel.goal;
+    updateProjectSchema.properties.progressUnit.default =
+      activeLevel.progressUnit;
+    updateProjectSchema.properties.machineName.default =
+      activeLevel.machineName;
+
     return json({
       levelTree,
       activeLevel,
       isProject,
       datatableData: [],
-      projectSchema: composeSchema.getSchema(),
+      projectSchema: updateProjectSchema,
     });
   }
 
@@ -212,107 +214,107 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
 
   // Format the validator
-  const composeSchema = new ComposeSchema(updateProjectSchema);
+  // const composeSchema = new ComposeSchema(updateProjectSchema);
 
-  // Since this is a project, we need to set the leader options loading the query
-  const findUserByIdQuery = graphql(`
-    query findU($id: String!) {
-      findUniqueUser(where: { id: $id }) {
-        id
-        name
-      }
-    }
-  `);
+  // // Since this is a project, we need to set the leader options loading the query
+  // const findUserByIdQuery = graphql(`
+  //   query findU($id: String!) {
+  //     findUniqueUser(where: { id: $id }) {
+  //       id
+  //       name
+  //     }
+  //   }
+  // `);
 
-  const leaderId = formData.get("leader");
-  invariant(leaderId?.toString(), "Leader is required");
+  // const leaderId = formData.get("leader");
+  // invariant(leaderId?.toString(), "Leader is required");
 
-  const { data: leaderQuery, error: leaderError } = await graphqlClient.query(
-    findUserByIdQuery,
-    {
-      id: leaderId as string,
-    }
-  );
+  // const { data: leaderQuery, error: leaderError } = await graphqlClient.query(
+  //   findUserByIdQuery,
+  //   {
+  //     id: leaderId as string,
+  //   }
+  // );
 
-  if (!leaderQuery?.findUniqueUser || leaderError) {
-    throw json({ error: "Error getting leader" }, { status: 500 });
-  }
-  const leaderData = leaderQuery.findUniqueUser;
-  composeSchema.setOptions("leader", [
-    {
-      label: leaderData.name,
-      value: leaderData?.id as string,
-    },
-  ]);
+  // if (!leaderQuery?.findUniqueUser || leaderError) {
+  //   throw json({ error: "Error getting leader" }, { status: 500 });
+  // }
+  // const leaderData = leaderQuery.findUniqueUser;
+  // composeSchema.setOptions("leader", [
+  //   {
+  //     label: leaderData.name,
+  //     value: leaderData?.id as string,
+  //   },
+  // ]);
 
-  const result = validateFormJsonSchema(formData, composeSchema.getSchema());
+  // const result = validateFormJsonSchema(formData, composeSchema.getSchema());
 
-  if (!result.success) {
-    return json(result.errors, {
-      status: 400,
-    });
-  }
-  const {
-    account,
-    archiveBox,
-    description,
-    goal,
-    leader,
-    name,
-    progressUnit,
-    machineName,
-  } = result.data;
-  const newMachineName = formatMachineName(name);
+  // if (!result.success) {
+  //   return json(result.errors, {
+  //     status: 400,
+  //   });
+  // }
+  // const {
+  //   account,
+  //   archiveBox,
+  //   description,
+  //   goal,
+  //   leader,
+  //   name,
+  //   progressUnit,
+  //   machineName,
+  // } = result.data;
+  // const newMachineName = formatMachineName(name);
 
-  const updateProjectMutation = graphql(`
-    mutation UpdateProject($input: ProjectUpdateInput!, $id: String!) {
-      updateOneProject(where: { machineName: $id }, data: $input) {
-        id
-      }
-    }
-  `);
+  // const updateProjectMutation = graphql(`
+  //   mutation UpdateProject($input: ProjectUpdateInput!, $id: String!) {
+  //     updateOneProject(where: { machineName: $id }, data: $input) {
+  //       id
+  //     }
+  //   }
+  // `);
 
-  const { data: project, error } = await graphqlClient.mutation(
-    updateProjectMutation,
-    {
-      input: {
-        name: {
-          set: name,
-        },
-        description: {
-          set: description,
-        },
-        account: {
-          set: account,
-        },
-        archiveBox: {
-          set: archiveBox,
-        },
-        goal: {
-          set: Number(goal),
-        },
-        progressUnit: {
-          set: progressUnit,
-        },
-        machineName: {
-          set: newMachineName,
-        },
-        leader: {
-          connect: {
-            id: leader,
-          },
-        },
-      },
-      id: machineName,
-    }
-  );
+  // const { data: project, error } = await graphqlClient.mutation(
+  //   updateProjectMutation,
+  //   {
+  //     input: {
+  //       name: {
+  //         set: name,
+  //       },
+  //       description: {
+  //         set: description,
+  //       },
+  //       account: {
+  //         set: account,
+  //       },
+  //       archiveBox: {
+  //         set: archiveBox,
+  //       },
+  //       goal: {
+  //         set: Number(goal),
+  //       },
+  //       progressUnit: {
+  //         set: progressUnit,
+  //       },
+  //       machineName: {
+  //         set: newMachineName,
+  //       },
+  //       leader: {
+  //         connect: {
+  //           id: leader,
+  //         },
+  //       },
+  //     },
+  //     id: machineName,
+  //   }
+  // );
 
-  if (error) {
-    console.error(error, "Error updating project");
-    throw json({ error: "Error updating project" }, { status: 500 });
-  }
+  // if (error) {
+  //   console.error(error, "Error updating project");
+  //   throw json({ error: "Error updating project" }, { status: 500 });
+  // }
 
-  return json({ project });
+  return json({ project: {} });
 };
 
 export default function Index() {
@@ -363,7 +365,6 @@ export default function Index() {
 function ProjectConfiguration() {
   const loaderData = useLoaderData<typeof loader>();
   const { activeLevel, isProject } = loaderData;
-  const fetcher = useFetcher();
 
   if (!activeLevel || activeLevel.__typename !== "Project" || !isProject) {
     return null;
@@ -387,15 +388,7 @@ function ProjectConfiguration() {
         <CardDescription>Configure the project</CardDescription>
       </CardHeader>
       <CardContent className="grid gap-4">
-        <FormGenerate
-          schema={loaderData.projectSchema}
-          fetcher={fetcher}
-          actions={
-            <Button variant="secondary" asChild>
-              <Link to=".">Cancel</Link>
-            </Button>
-          }
-        />
+        <FormGenerator schema={loaderData.projectSchema} />
       </CardContent>
     </Card>
   );

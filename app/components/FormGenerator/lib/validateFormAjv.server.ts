@@ -1,48 +1,59 @@
 import Ajv, { ErrorObject } from "ajv";
-import { buildJsonSchema } from "~/components/FormGenerator/Inputs/rules";
 import { fullFormats } from "ajv-formats/dist/formats";
 import avjErrors from "ajv-errors";
-import { Schema } from "~/components/FormGenerator/types";
+import { JSONSchema7 } from "json-schema";
 
-type JsonDataFromSchema<SchemaType extends Schema> = {
-    [K in SchemaType[number]['name']]: string;
-}
+type JsonDataFromSchema<SchemaType extends JSONSchema7> = {
+  [K in keyof SchemaType["properties"]]: SchemaType["properties"][K]["type"] extends "array"
+    ? Array<any>
+    : any;
+};
 
-type ValidateFormJsonSchemaResult<SchemaType extends Schema> = {
-    success: boolean;
-    data: JsonDataFromSchema<SchemaType>;
-    errors: Array<{ path: string, message: string }> | undefined;
-}
+type ValidateFormJsonSchemaResult<SchemaType extends JSONSchema7> = {
+  success: boolean;
+  data: JsonDataFromSchema<SchemaType>;
+  errors: Array<{ path: string; message: string }> | undefined;
+};
 
 const getAvj = () => {
-    const ajv = new Ajv({ formats: fullFormats, allErrors: true, coerceTypes: true });
-    avjErrors(ajv);
-    return ajv;
-}
+  const ajv = new Ajv({
+    formats: fullFormats,
+    allErrors: true,
+    coerceTypes: true,
+  });
+  avjErrors(ajv);
+  return ajv;
+};
 
 const formatErrors = (errors: ErrorObject[] | null | undefined) => {
-    if (!errors) {
-        return undefined;
-    }
+  if (!errors) {
+    return undefined;
+  }
 
-    return errors.map((error) => {
-        return {
-            path: error.instancePath.at(0) === "/" ? error.instancePath.slice(1) : error.instancePath,
-            message: error.message ?? "Error"
-        }
-    });
-}
-
-export const validateFormJsonSchema = <SchemaType extends Schema = Schema>
-    (formData: FormData, schema: SchemaType): ValidateFormJsonSchemaResult<SchemaType> => {
-    const jsonFormData = Object.fromEntries(formData);
-    const ajvInstance = getAvj();
-    const avjSchema = buildJsonSchema(schema);
-    const validator = ajvInstance.compile(avjSchema);
-    const validation = validator(jsonFormData);
+  return errors.map((error) => {
     return {
-        success: validation,
-        data: jsonFormData as JsonDataFromSchema<SchemaType>,
-        errors: formatErrors(validator.errors),
-    }
-}
+      path:
+        error.instancePath.at(0) === "/"
+          ? error.instancePath.slice(1)
+          : error.instancePath,
+      message: error.message ?? "Error",
+    };
+  });
+};
+
+export const validateFormJsonSchema = <
+  SchemaType extends JSONSchema7 = JSONSchema7
+>(
+  formData: FormData,
+  schema: SchemaType
+): ValidateFormJsonSchemaResult<SchemaType> => {
+  const jsonFormData = Object.fromEntries(formData);
+  const ajvInstance = getAvj();
+  const validator = ajvInstance.compile(schema);
+  const validation = validator(jsonFormData);
+  return {
+    success: validation,
+    data: jsonFormData as any,
+    errors: formatErrors(validator.errors),
+  };
+};

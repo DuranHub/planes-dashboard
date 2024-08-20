@@ -15,8 +15,19 @@ import {
 } from "~/components/ui/card";
 import { RequirementsCard } from "./ArrowConfiguration/RequirementCard";
 import { CollaboratorsCard } from "./ArrowConfiguration/Collaborators/CollaboratorsCard";
+import { Link, useLocation, useMatches, useParams } from "@remix-run/react";
 
-function ProcedureCard({ labelX, labelY }: { labelX: number; labelY: number }) {
+function ProcedureCard({
+  labelX,
+  labelY,
+  edgeId,
+}: {
+  labelX: number;
+  labelY: number;
+  edgeId: string;
+}) {
+  const params = useParams();
+
   return (
     <Card
       style={{
@@ -33,7 +44,13 @@ function ProcedureCard({ labelX, labelY }: { labelX: number; labelY: number }) {
         </CardDescription>
       </CardHeader>
       <CardFooter className="mt-auto">
-        <Button className="w-full">Configurar</Button>
+        <Button asChild className="w-full">
+          <Link
+            to={`/${params.projectMachineName}/workflow/${edgeId}/procedure`}
+          >
+            Configurar
+          </Link>
+        </Button>
       </CardFooter>
     </Card>
   );
@@ -142,7 +159,7 @@ export default function CustomEdge({
               labelX={labelX}
               labelY={labelY}
             />
-            <ProcedureCard labelX={labelX} labelY={labelY} />
+            <ProcedureCard edgeId={data?.id} labelX={labelX} labelY={labelY} />
             <RequirementsCard
               edgeId={data?.id}
               requirements={data?.requirements || []}

@@ -36,6 +36,7 @@
     "@radix-ui/react-tabs": "^1.0.4",
     "@radix-ui/react-toggle": "^1.0.3",
     "@radix-ui/react-tooltip": "^1.0.7",
+    "@react-formgen/json-schema": "0.0.0-alpha.1",
     "@remix-run/css-bundle": "2.8.1",
     "@remix-run/node": "2.8.1",
     "@remix-run/react": "2.8.1",
@@ -50,8 +51,10 @@
     "cmdk": "^1.0.0",
     "date-fns": "^3.3.1",
     "gql.tada": "^1.2.0",
+    "graphql-zeus-jsonschema": "^5.4.4",
     "input-otp": "^1.2.4",
     "isbot": "^4.1.0",
+    "json-schema": "^0.4.0",
     "lucide-react": "^0.323.0",
     "react": "^18.2.0",
     "react-day-picker": "^8.10.0",
@@ -89,6 +92,7 @@
     "tailwindcss": "^3.4.1",
     "typescript": "^5.4.2",
     "vite": "^5.1.5",
+    "vite-plugin-cjs-interop": "^2.1.1",
     "vite-tsconfig-paths": "^4.3.1"
   },
   "engines": {

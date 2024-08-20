@@ -1,24 +1,23 @@
-import { Schema } from "~/components/FormGenerator/types";
+import { JSONSchema7 } from "json-schema";
 import { graphql, graphqlClient } from "~/graphql/client.server";
 import { findAssignmentAreasQuery } from "~/graphql/models/assignmentArea/queries.server";
-import { ComposeSchema } from "~/components/FormGenerator/lib/composeSchema";
 
-export async function getUserSchema(userId: string, schema: Schema) {
+export async function getUserSchema(userId: string, schema: JSONSchema7) {
   const findUserByIdQuery = graphql(`
-      query findUserByIdQuery($id: String!) {
-        findUniqueUser(where: { id: $id }) {
-          id
+    query findUserByIdQuery($id: String!) {
+      findUniqueUser(where: { id: $id }) {
+        id
+        name
+        email
+        identification
+        position
+        assignmentArea {
+          machineName
           name
-          email
-          identification
-          position
-          assignmentArea {
-            machineName
-            name
-          }
         }
       }
-    `);
+    }
+  `);
   const { data: findUserById, error } = await graphqlClient.query(
     findUserByIdQuery,
     {
@@ -31,28 +30,13 @@ export async function getUserSchema(userId: string, schema: Schema) {
 
   const user = findUserById.findUniqueUser;
 
-  const composeSchema = new ComposeSchema(schema);
-  composeSchema.setDefaultValues({
-    name: user.name,
-    email: user.email,
-    identification: user.identification,
-    position: user.position,
-    assignmentArea: (user.assignmentArea?.machineName as string) || "",
-  });
-
   const { data: findAssignmentAreas } = await graphqlClient.query(
     findAssignmentAreasQuery,
     {}
   );
 
   const assignmentAreas = findAssignmentAreas?.findManyAssignmentArea || [];
-  composeSchema.setOptions(
-    "assignmentArea",
-    assignmentAreas.map((area) => ({
-      label: area.name,
-      value: area.machineName,
-    }))
-  );
+  // @TODO: Add data to schema
 
-  return composeSchema.getSchema();
+  return schema;
 }

@@ -1,49 +1,44 @@
 import {
   Await,
   defer,
-  useFetcher,
   useLoaderData,
   useNavigate,
   useSearchParams,
 } from "@remix-run/react";
 import { ClientOnly } from "remix-utils/client-only";
-import { Schema } from "~/components/FormGenerator/types";
 import Modal from "~/components/ui/modal";
-import { graphql, graphqlClient } from "~/graphql/client.server";
+import { graphqlClient } from "~/graphql/client.server";
 import {
   findAssignmentAreasQuery,
   listAssignmentAreasQuery,
 } from "~/graphql/models/assignmentArea/queries.server";
-import { ComposeSchema } from "~/components/FormGenerator/lib/composeSchema";
 import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node";
-import { validateFormJsonSchema } from "~/components/FormGenerator/lib/validateFormAjv.server";
-import { useFormGenerator } from "~/components/FormGenerator";
-import { Button } from "~/components/ui/button";
-import { Suspense, useEffect } from "react";
+import { FormGenerator } from "~/components/FormGenerator";
+import { Suspense } from "react";
 import { Skeleton } from "~/components/ui/skeleton";
-import { formatMachineName } from "~/lib/utils.server";
+import { JSONSchema7 } from "json-schema";
 
-const createAssigmentAreaSchema = [
-  {
-    kind: "alphabetic",
-    name: "name",
-    label: "Name",
-    required: true,
+const createAssigmentAreaSchema = {
+  type: "object",
+  title: "Create Assignment Area",
+  description: "Fill in the form below to create a new assignment area.",
+  properties: {
+    name: {
+      type: "string",
+      title: "Name",
+    },
+    description: {
+      type: "string",
+      title: "Description",
+    },
+    assignmentArea: {
+      type: "string",
+      title: "Assignment Area",
+      default: "",
+      oneOf: [] as { title: string; const: string }[],
+    },
   },
-  {
-    kind: "alphanumeric",
-    label: "Description",
-    name: "description",
-    required: true,
-  },
-  {
-    kind: "select",
-    label: "Assignment Area",
-    name: "assignmentArea",
-    options: [],
-    required: true,
-  },
-] as const satisfies Schema;
+} satisfies JSONSchema7;
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
@@ -51,20 +46,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
   async function getSchema() {
     const { data } = await graphqlClient.query(listAssignmentAreasQuery, {});
 
-    const assignmentAreas = data?.findManyAssignmentArea || [];
-    const composeSchema = new ComposeSchema(createAssigmentAreaSchema);
-    composeSchema.setOptions(
-      "assignmentArea",
-      assignmentAreas.map((area) => ({
-        label: area.name,
-        value: area.machineName,
-      }))
-    );
-    if (parentArea) {
-      composeSchema.setDefaultValue("assignmentArea", parentArea);
-    }
+    //@TODO: Add data to schema
 
-    return composeSchema.getSchema();
+    return createAssigmentAreaSchema;
   }
 
   return defer({
@@ -76,58 +60,58 @@ export async function action({ request }: ActionFunctionArgs) {
   // Format the validator
   const { data } = await graphqlClient.query(findAssignmentAreasQuery, {});
   const assignmentAreas = data?.findManyAssignmentArea || [];
-  const validatorSchema = new ComposeSchema(createAssigmentAreaSchema);
-  validatorSchema.setOptions(
-    "assignmentArea",
-    assignmentAreas.map((area) => ({
-      label: area.name,
-      value: area.machineName,
-    }))
-  );
+  // const validatorSchema = new ComposeSchema(createAssigmentAreaSchema);
+  // validatorSchema.setOptions(
+  //   "assignmentArea",
+  //   assignmentAreas.map((area) => ({
+  //     label: area.name,
+  //     value: area.machineName,
+  //   }))
+  // );
 
-  // Validation of form data
-  const result = validateFormJsonSchema(
-    await request.formData(), 
-    validatorSchema.getSchema()
-  );
+  // // Validation of form data
+  // const result = validateFormJsonSchema(
+  //   await request.formData(),
+  //   validatorSchema.getSchema()
+  // );
 
-  if (!result.success) {
-    return json(result.errors, {
-      status: 400,
-    });
-  }
+  // if (!result.success) {
+  //   return json(result.errors, {
+  //     status: 400,
+  //   });
+  // }
 
-  // Extract variables
-  const { assignmentArea, name, description } = result.data;
-  const machineName = formatMachineName(name);
-  // Buisness logic
-  const createAssignmentAreaMutation = graphql(`
-    mutation CreateAssignmentArea($input: AssignmentAreaCreateInput!) {
-      createOneAssignmentArea(data: $input) {
-        id
-      }
-    }
-  `);
+  // // Extract variables
+  // const { assignmentArea, name, description } = result.data;
+  // const machineName = formatMachineName(name);
+  // // Buisness logic
+  // const createAssignmentAreaMutation = graphql(`
+  //   mutation CreateAssignmentArea($input: AssignmentAreaCreateInput!) {
+  //     createOneAssignmentArea(data: $input) {
+  //       id
+  //     }
+  //   }
+  // `);
 
-  const { data: user, error } = await graphqlClient.mutation(
-    createAssignmentAreaMutation,
-    {
-      input: {
-        name,
-        description,
-        ParentArea: {
-          connect: {
-            machineName: assignmentArea,
-          },
-        },
-        machineName,
-      },
-    }
-  );
+  // const { data: user, error } = await graphqlClient.mutation(
+  //   createAssignmentAreaMutation,
+  //   {
+  //     input: {
+  //       name,
+  //       description,
+  //       ParentArea: {
+  //         connect: {
+  //           machineName: assignmentArea,
+  //         },
+  //       },
+  //       machineName,
+  //     },
+  //   }
+  // );
 
-  if (error || !user) {
-    return json({ error: "Error creating assignment area" }, { status: 500 });
-  }
+  // if (error || !user) {
+  //   return json({ error: "Error creating assignment area" }, { status: 500 });
+  // }
 
   return json({ success: true });
 }
@@ -163,44 +147,12 @@ export default function AddUser() {
           {({ closeModal }) => (
             <Suspense fallback={<Skeleton className="h-96" />}>
               <Await resolve={schema}>
-                {(schema) => (
-                  <AddForm schema={schema} closeModal={closeModal} />
-                )}
+                {(schema) => <FormGenerator schema={schema} />}
               </Await>
             </Suspense>
           )}
         </Modal>
       )}
     </ClientOnly>
-  );
-}
-
-function AddForm({
-  schema,
-  closeModal,
-}: {
-  schema: Schema;
-  closeModal: () => void;
-}) {
-  const { FormGenerated } = useFormGenerator({
-    schema,
-  });
-  const fetcher = useFetcher<{ success: boolean }>();
-
-  useEffect(() => {
-    if (fetcher.state === "idle" && fetcher.data?.success) {
-      closeModal();
-    }
-  }, [fetcher.state, fetcher.data, closeModal]);
-
-  return (
-    <FormGenerated
-      fetcher={fetcher}
-      actions={
-        <Button type="button" variant="secondary" onClick={closeModal}>
-          Cancel
-        </Button>
-      }
-    />
   );
 }

@@ -1,0 +1,1455 @@
+type Query {
+  movies: moviesQuery!
+  music: musicQuery!
+  shows: showsQuery!
+}
+
+type Mutation {
+  movies: moviesMutation!
+  music: musicMutation!
+  shows: showsMutation!
+}
+
+"""Batch payloads from prisma."""
+type BatchPayload {
+  """Prisma Batch Payload"""
+  count: Int!
+}
+
+"""
+A date string, such as 2007-12-03, compliant with the `full-date` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+"""
+scalar Date
+
+type Genre {
+  id: ID!
+  movies(cursor: MovieWhereUniqueInput, distinct: [MovieScalarFieldEnum!], orderBy: [MovieOrderByWithRelationInput!], skip: Int, take: Int, where: MovieWhereInput): [Movie!]!
+  name: String!
+  albums(cursor: AlbumWhereUniqueInput, distinct: [AlbumScalarFieldEnum!], orderBy: [AlbumOrderByWithRelationInput!], skip: Int, take: Int, where: AlbumWhereInput): [Album!]!
+  shows(cursor: ShowWhereUniqueInput, distinct: [ShowScalarFieldEnum!], orderBy: [ShowOrderByWithRelationInput!], skip: Int, take: Int, where: ShowWhereInput): [Show!]!
+}
+
+input GenreCountOrderByAggregateInput {
+  id: SortOrder
+  name: SortOrder
+}
+
+input GenreCreateInput {
+  id: String
+  movies: MovieCreateNestedManyWithoutGenreInput
+  name: String!
+  albums: AlbumCreateNestedManyWithoutGenreInput
+  shows: ShowCreateNestedManyWithoutGenreInput
+}
+
+input GenreCreateManyInput {
+  id: String
+  name: String!
+}
+
+input GenreCreateNestedOneWithoutMoviesInput {
+  connect: GenreWhereUniqueInput
+  connectOrCreate: GenreCreateOrConnectWithoutMoviesInput
+  create: GenreCreateWithoutMoviesInput
+}
+
+input GenreCreateOrConnectWithoutMoviesInput {
+  create: GenreCreateWithoutMoviesInput!
+  where: GenreWhereUniqueInput!
+}
+
+input GenreCreateWithoutMoviesInput {
+  id: String
+  name: String!
+}
+
+input GenreMaxOrderByAggregateInput {
+  id: SortOrder
+  name: SortOrder
+}
+
+input GenreMinOrderByAggregateInput {
+  id: SortOrder
+  name: SortOrder
+}
+
+input GenreOrderByWithAggregationInput {
+  _count: GenreCountOrderByAggregateInput
+  _max: GenreMaxOrderByAggregateInput
+  _min: GenreMinOrderByAggregateInput
+  id: SortOrder
+  name: SortOrder
+}
+
+input GenreOrderByWithRelationInput {
+  id: SortOrder
+  movies: MovieOrderByRelationAggregateInput
+  name: SortOrder
+  albums: AlbumOrderByRelationAggregateInput
+  shows: ShowOrderByRelationAggregateInput
+}
+
+input GenreRelationFilter {
+  is: GenreWhereInput
+  isNot: GenreWhereInput
+}
+
+enum GenreScalarFieldEnum {
+  id
+  name
+}
+
+input GenreScalarWhereWithAggregatesInput {
+  AND: [GenreScalarWhereWithAggregatesInput!]
+  NOT: [GenreScalarWhereWithAggregatesInput!]
+  OR: [GenreScalarWhereWithAggregatesInput!]
+  id: StringWithAggregatesFilter
+  name: StringWithAggregatesFilter
+}
+
+input GenreUpdateInput {
+  id: StringFieldUpdateOperationsInput
+  movies: MovieUpdateManyWithoutGenreNestedInput
+  name: StringFieldUpdateOperationsInput
+  albums: AlbumUpdateManyWithoutGenreNestedInput
+  shows: ShowUpdateManyWithoutGenreNestedInput
+}
+
+input GenreUpdateManyMutationInput {
+  id: StringFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
+}
+
+input GenreUpdateOneRequiredWithoutMoviesNestedInput {
+  connect: GenreWhereUniqueInput
+  connectOrCreate: GenreCreateOrConnectWithoutMoviesInput
+  create: GenreCreateWithoutMoviesInput
+  update: GenreUpdateWithoutMoviesInput
+  upsert: GenreUpsertWithoutMoviesInput
+}
+
+input GenreUpdateWithoutMoviesInput {
+  id: StringFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
+}
+
+input GenreUpsertWithoutMoviesInput {
+  create: GenreCreateWithoutMoviesInput!
+  update: GenreUpdateWithoutMoviesInput!
+}
+
+input GenreWhereInput {
+  AND: [GenreWhereInput!]
+  NOT: [GenreWhereInput!]
+  OR: [GenreWhereInput!]
+  id: StringFilter
+  movies: MovieListRelationFilter
+  name: StringFilter
+  albums: AlbumListRelationFilter
+  shows: ShowListRelationFilter
+}
+
+input GenreWhereUniqueInput {
+  id: String
+  name: String
+}
+
+input IntFieldUpdateOperationsInput {
+  decrement: Int
+  divide: Int
+  increment: Int
+  multiply: Int
+  set: Int
+}
+
+input IntFilter {
+  equals: Int
+  gt: Int
+  gte: Int
+  in: [Int!]
+  lt: Int
+  lte: Int
+  not: NestedIntFilter
+  notIn: [Int!]
+}
+
+input IntWithAggregatesFilter {
+  _avg: NestedFloatFilter
+  _count: NestedIntFilter
+  _max: NestedIntFilter
+  _min: NestedIntFilter
+  _sum: NestedIntFilter
+  equals: Int
+  gt: Int
+  gte: Int
+  in: [Int!]
+  lt: Int
+  lte: Int
+  not: NestedIntWithAggregatesFilter
+  notIn: [Int!]
+}
+
+scalar JSON
+
+type Movie {
+  cast: String!
+  director: String!
+  genre: Genre!
+  genreId: String!
+  id: ID!
+  synopsis: String!
+  title: String!
+  year: Int!
+}
+
+input MovieAvgOrderByAggregateInput {
+  year: SortOrder
+}
+
+input MovieCountOrderByAggregateInput {
+  cast: SortOrder
+  director: SortOrder
+  genreId: SortOrder
+  id: SortOrder
+  synopsis: SortOrder
+  title: SortOrder
+  year: SortOrder
+}
+
+input MovieCreateInput {
+  cast: String!
+  director: String!
+  genre: GenreCreateNestedOneWithoutMoviesInput!
+  id: String
+  synopsis: String!
+  title: String!
+  year: Int!
+}
+
+input MovieCreateManyGenreInput {
+  cast: String!
+  director: String!
+  id: String
+  synopsis: String!
+  title: String!
+  year: Int!
+}
+
+input MovieCreateManyGenreInputEnvelope {
+  data: [MovieCreateManyGenreInput!]!
+  skipDuplicates: Boolean
+}
+
+input MovieCreateManyInput {
+  cast: String!
+  director: String!
+  genreId: String!
+  id: String
+  synopsis: String!
+  title: String!
+  year: Int!
+}
+
+input MovieCreateNestedManyWithoutGenreInput {
+  connect: [MovieWhereUniqueInput!]
+  connectOrCreate: [MovieCreateOrConnectWithoutGenreInput!]
+  create: [MovieCreateWithoutGenreInput!]
+  createMany: MovieCreateManyGenreInputEnvelope
+}
+
+input MovieCreateOrConnectWithoutGenreInput {
+  create: MovieCreateWithoutGenreInput!
+  where: MovieWhereUniqueInput!
+}
+
+input MovieCreateWithoutGenreInput {
+  cast: String!
+  director: String!
+  id: String
+  synopsis: String!
+  title: String!
+  year: Int!
+}
+
+input MovieListRelationFilter {
+  every: MovieWhereInput
+  none: MovieWhereInput
+  some: MovieWhereInput
+}
+
+input MovieMaxOrderByAggregateInput {
+  cast: SortOrder
+  director: SortOrder
+  genreId: SortOrder
+  id: SortOrder
+  synopsis: SortOrder
+  title: SortOrder
+  year: SortOrder
+}
+
+input MovieMinOrderByAggregateInput {
+  cast: SortOrder
+  director: SortOrder
+  genreId: SortOrder
+  id: SortOrder
+  synopsis: SortOrder
+  title: SortOrder
+  year: SortOrder
+}
+
+input MovieOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input MovieOrderByWithAggregationInput {
+  _avg: MovieAvgOrderByAggregateInput
+  _count: MovieCountOrderByAggregateInput
+  _max: MovieMaxOrderByAggregateInput
+  _min: MovieMinOrderByAggregateInput
+  _sum: MovieSumOrderByAggregateInput
+  cast: SortOrder
+  director: SortOrder
+  genreId: SortOrder
+  id: SortOrder
+  synopsis: SortOrder
+  title: SortOrder
+  year: SortOrder
+}
+
+input MovieOrderByWithRelationInput {
+  cast: SortOrder
+  director: SortOrder
+  genre: GenreOrderByWithRelationInput
+  genreId: SortOrder
+  id: SortOrder
+  synopsis: SortOrder
+  title: SortOrder
+  year: SortOrder
+}
+
+enum MovieScalarFieldEnum {
+  cast
+  director
+  genreId
+  id
+  synopsis
+  title
+  year
+}
+
+input MovieScalarWhereInput {
+  AND: [MovieScalarWhereInput!]
+  NOT: [MovieScalarWhereInput!]
+  OR: [MovieScalarWhereInput!]
+  cast: StringFilter
+  director: StringFilter
+  genreId: StringFilter
+  id: StringFilter
+  synopsis: StringFilter
+  title: StringFilter
+  year: IntFilter
+}
+
+input MovieScalarWhereWithAggregatesInput {
+  AND: [MovieScalarWhereWithAggregatesInput!]
+  NOT: [MovieScalarWhereWithAggregatesInput!]
+  OR: [MovieScalarWhereWithAggregatesInput!]
+  cast: StringWithAggregatesFilter
+  director: StringWithAggregatesFilter
+  genreId: StringWithAggregatesFilter
+  id: StringWithAggregatesFilter
+  synopsis: StringWithAggregatesFilter
+  title: StringWithAggregatesFilter
+  year: IntWithAggregatesFilter
+}
+
+input MovieSumOrderByAggregateInput {
+  year: SortOrder
+}
+
+input MovieUpdateInput {
+  cast: StringFieldUpdateOperationsInput
+  director: StringFieldUpdateOperationsInput
+  genre: GenreUpdateOneRequiredWithoutMoviesNestedInput
+  id: StringFieldUpdateOperationsInput
+  synopsis: StringFieldUpdateOperationsInput
+  title: StringFieldUpdateOperationsInput
+  year: IntFieldUpdateOperationsInput
+}
+
+input MovieUpdateManyMutationInput {
+  cast: StringFieldUpdateOperationsInput
+  director: StringFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
+  synopsis: StringFieldUpdateOperationsInput
+  title: StringFieldUpdateOperationsInput
+  year: IntFieldUpdateOperationsInput
+}
+
+input MovieUpdateManyWithWhereWithoutGenreInput {
+  data: MovieUpdateManyMutationInput!
+  where: MovieScalarWhereInput!
+}
+
+input MovieUpdateManyWithoutGenreNestedInput {
+  connect: [MovieWhereUniqueInput!]
+  connectOrCreate: [MovieCreateOrConnectWithoutGenreInput!]
+  create: [MovieCreateWithoutGenreInput!]
+  createMany: MovieCreateManyGenreInputEnvelope
+  delete: [MovieWhereUniqueInput!]
+  deleteMany: [MovieScalarWhereInput!]
+  disconnect: [MovieWhereUniqueInput!]
+  set: [MovieWhereUniqueInput!]
+  update: [MovieUpdateWithWhereUniqueWithoutGenreInput!]
+  updateMany: [MovieUpdateManyWithWhereWithoutGenreInput!]
+  upsert: [MovieUpsertWithWhereUniqueWithoutGenreInput!]
+}
+
+input MovieUpdateWithWhereUniqueWithoutGenreInput {
+  data: MovieUpdateWithoutGenreInput!
+  where: MovieWhereUniqueInput!
+}
+
+input MovieUpdateWithoutGenreInput {
+  cast: StringFieldUpdateOperationsInput
+  director: StringFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
+  synopsis: StringFieldUpdateOperationsInput
+  title: StringFieldUpdateOperationsInput
+  year: IntFieldUpdateOperationsInput
+}
+
+input MovieUpsertWithWhereUniqueWithoutGenreInput {
+  create: MovieCreateWithoutGenreInput!
+  update: MovieUpdateWithoutGenreInput!
+  where: MovieWhereUniqueInput!
+}
+
+input MovieWhereInput {
+  AND: [MovieWhereInput!]
+  NOT: [MovieWhereInput!]
+  OR: [MovieWhereInput!]
+  cast: StringFilter
+  director: StringFilter
+  genre: GenreWhereInput
+  genreId: StringFilter
+  id: StringFilter
+  synopsis: StringFilter
+  title: StringFilter
+  year: IntFilter
+}
+
+input MovieWhereUniqueInput {
+  id: String
+  title: String
+}
+
+input NestedFloatFilter {
+  equals: Float
+  gt: Float
+  gte: Float
+  in: [Float!]
+  lt: Float
+  lte: Float
+  not: NestedFloatFilter
+  notIn: [Float!]
+}
+
+input NestedIntFilter {
+  equals: Int
+  gt: Int
+  gte: Int
+  in: [Int!]
+  lt: Int
+  lte: Int
+  not: NestedIntFilter
+  notIn: [Int!]
+}
+
+input NestedIntWithAggregatesFilter {
+  _avg: NestedFloatFilter
+  _count: NestedIntFilter
+  _max: NestedIntFilter
+  _min: NestedIntFilter
+  _sum: NestedIntFilter
+  equals: Int
+  gt: Int
+  gte: Int
+  in: [Int!]
+  lt: Int
+  lte: Int
+  not: NestedIntWithAggregatesFilter
+  notIn: [Int!]
+}
+
+input NestedStringFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  not: NestedStringFilter
+  notIn: [String!]
+  startsWith: String
+}
+
+input NestedStringWithAggregatesFilter {
+  _count: NestedIntFilter
+  _max: NestedStringFilter
+  _min: NestedStringFilter
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  not: NestedStringWithAggregatesFilter
+  notIn: [String!]
+  startsWith: String
+}
+
+enum SortOrder {
+  asc
+  desc
+}
+
+input StringFieldUpdateOperationsInput {
+  set: String
+}
+
+input StringFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  not: NestedStringFilter
+  notIn: [String!]
+  startsWith: String
+  mode: QueryMode
+}
+
+input StringWithAggregatesFilter {
+  _count: NestedIntFilter
+  _max: NestedStringFilter
+  _min: NestedStringFilter
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  not: NestedStringWithAggregatesFilter
+  notIn: [String!]
+  startsWith: String
+  mode: QueryMode
+}
+
+enum TransactionIsolationLevel {
+  ReadCommitted
+  ReadUncommitted
+  RepeatableRead
+  Serializable
+}
+
+type moviesQuery {
+  countGenre(cursor: GenreWhereUniqueInput, distinct: [GenreScalarFieldEnum!], orderBy: [GenreOrderByWithRelationInput!], skip: Int, take: Int, where: GenreWhereInput): Int!
+  countMovie(cursor: MovieWhereUniqueInput, distinct: [MovieScalarFieldEnum!], orderBy: [MovieOrderByWithRelationInput!], skip: Int, take: Int, where: MovieWhereInput): Int!
+  findFirstGenre(cursor: GenreWhereUniqueInput, distinct: [GenreScalarFieldEnum!], orderBy: [GenreOrderByWithRelationInput!], skip: Int, take: Int, where: GenreWhereInput): Genre
+  findFirstMovie(cursor: MovieWhereUniqueInput, distinct: [MovieScalarFieldEnum!], orderBy: [MovieOrderByWithRelationInput!], skip: Int, take: Int, where: MovieWhereInput): Movie
+  findManyGenre(cursor: GenreWhereUniqueInput, distinct: [GenreScalarFieldEnum!], orderBy: [GenreOrderByWithRelationInput!], skip: Int, take: Int, where: GenreWhereInput): [Genre!]!
+  findManyMovie(cursor: MovieWhereUniqueInput, distinct: [MovieScalarFieldEnum!], orderBy: [MovieOrderByWithRelationInput!], skip: Int, take: Int, where: MovieWhereInput): [Movie!]!
+  findUniqueGenre(where: GenreWhereUniqueInput!): Genre
+  findUniqueMovie(where: MovieWhereUniqueInput!): Movie
+}
+
+type moviesMutation {
+  createManyGenre(data: [GenreCreateInput!]!): [Genre!]!
+  createManyMovie(data: [MovieCreateInput!]!): [Movie!]!
+  createOneGenre(data: GenreCreateInput!): Genre!
+  createOneMovie(data: MovieCreateInput!): Movie!
+  deleteManyGenre(where: GenreWhereInput!): BatchPayload
+  deleteManyMovie(where: MovieWhereInput!): BatchPayload
+  deleteOneGenre(where: GenreWhereUniqueInput!): Genre
+  deleteOneMovie(where: MovieWhereUniqueInput!): Movie
+  updateManyGenre(data: GenreUpdateManyMutationInput!, where: GenreWhereInput): BatchPayload!
+  updateManyMovie(data: MovieUpdateManyMutationInput!, where: MovieWhereInput): BatchPayload!
+  updateOneGenre(data: GenreUpdateInput!, where: GenreWhereUniqueInput!): Genre
+  updateOneMovie(data: MovieUpdateInput!, where: MovieWhereUniqueInput!): Movie
+  upsertOneGenre(create: GenreCreateInput!, update: GenreUpdateInput!, where: GenreWhereUniqueInput!): Genre!
+  upsertOneMovie(create: MovieCreateInput!, update: MovieUpdateInput!, where: MovieWhereUniqueInput!): Movie!
+}
+
+type Album {
+  artist: Artist!
+  artistId: String!
+  genre: Genre!
+  genreId: String!
+  id: ID!
+  label: String!
+  members: String!
+  name: String!
+  year: Int!
+}
+
+input AlbumAvgOrderByAggregateInput {
+  year: SortOrder
+}
+
+input AlbumCountOrderByAggregateInput {
+  artistId: SortOrder
+  genreId: SortOrder
+  id: SortOrder
+  label: SortOrder
+  members: SortOrder
+  name: SortOrder
+  year: SortOrder
+}
+
+input AlbumCreateInput {
+  artist: ArtistCreateNestedOneWithoutAlbumsInput!
+  genre: GenreCreateNestedOneWithoutAlbumsInput!
+  id: String
+  label: String!
+  members: String!
+  name: String!
+  year: Int!
+}
+
+input AlbumCreateManyArtistInput {
+  genreId: String!
+  id: String
+  label: String!
+  members: String!
+  name: String!
+  year: Int!
+}
+
+input AlbumCreateManyArtistInputEnvelope {
+  data: [AlbumCreateManyArtistInput!]!
+  skipDuplicates: Boolean
+}
+
+input AlbumCreateManyGenreInput {
+  artistId: String!
+  id: String
+  label: String!
+  members: String!
+  name: String!
+  year: Int!
+}
+
+input AlbumCreateManyGenreInputEnvelope {
+  data: [AlbumCreateManyGenreInput!]!
+  skipDuplicates: Boolean
+}
+
+input AlbumCreateManyInput {
+  artistId: String!
+  genreId: String!
+  id: String
+  label: String!
+  members: String!
+  name: String!
+  year: Int!
+}
+
+input AlbumCreateNestedManyWithoutArtistInput {
+  connect: [AlbumWhereUniqueInput!]
+  connectOrCreate: [AlbumCreateOrConnectWithoutArtistInput!]
+  create: [AlbumCreateWithoutArtistInput!]
+  createMany: AlbumCreateManyArtistInputEnvelope
+}
+
+input AlbumCreateNestedManyWithoutGenreInput {
+  connect: [AlbumWhereUniqueInput!]
+  connectOrCreate: [AlbumCreateOrConnectWithoutGenreInput!]
+  create: [AlbumCreateWithoutGenreInput!]
+  createMany: AlbumCreateManyGenreInputEnvelope
+}
+
+input AlbumCreateOrConnectWithoutArtistInput {
+  create: AlbumCreateWithoutArtistInput!
+  where: AlbumWhereUniqueInput!
+}
+
+input AlbumCreateOrConnectWithoutGenreInput {
+  create: AlbumCreateWithoutGenreInput!
+  where: AlbumWhereUniqueInput!
+}
+
+input AlbumCreateWithoutArtistInput {
+  genre: GenreCreateNestedOneWithoutAlbumsInput!
+  id: String
+  label: String!
+  members: String!
+  name: String!
+  year: Int!
+}
+
+input AlbumCreateWithoutGenreInput {
+  artist: ArtistCreateNestedOneWithoutAlbumsInput!
+  id: String
+  label: String!
+  members: String!
+  name: String!
+  year: Int!
+}
+
+input AlbumListRelationFilter {
+  every: AlbumWhereInput
+  none: AlbumWhereInput
+  some: AlbumWhereInput
+}
+
+input AlbumMaxOrderByAggregateInput {
+  artistId: SortOrder
+  genreId: SortOrder
+  id: SortOrder
+  label: SortOrder
+  members: SortOrder
+  name: SortOrder
+  year: SortOrder
+}
+
+input AlbumMinOrderByAggregateInput {
+  artistId: SortOrder
+  genreId: SortOrder
+  id: SortOrder
+  label: SortOrder
+  members: SortOrder
+  name: SortOrder
+  year: SortOrder
+}
+
+input AlbumOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input AlbumOrderByWithAggregationInput {
+  _avg: AlbumAvgOrderByAggregateInput
+  _count: AlbumCountOrderByAggregateInput
+  _max: AlbumMaxOrderByAggregateInput
+  _min: AlbumMinOrderByAggregateInput
+  _sum: AlbumSumOrderByAggregateInput
+  artistId: SortOrder
+  genreId: SortOrder
+  id: SortOrder
+  label: SortOrder
+  members: SortOrder
+  name: SortOrder
+  year: SortOrder
+}
+
+input AlbumOrderByWithRelationInput {
+  artist: ArtistOrderByWithRelationInput
+  artistId: SortOrder
+  genre: GenreOrderByWithRelationInput
+  genreId: SortOrder
+  id: SortOrder
+  label: SortOrder
+  members: SortOrder
+  name: SortOrder
+  year: SortOrder
+}
+
+enum AlbumScalarFieldEnum {
+  artistId
+  genreId
+  id
+  label
+  members
+  name
+  year
+}
+
+input AlbumScalarWhereInput {
+  AND: [AlbumScalarWhereInput!]
+  NOT: [AlbumScalarWhereInput!]
+  OR: [AlbumScalarWhereInput!]
+  artistId: StringFilter
+  genreId: StringFilter
+  id: StringFilter
+  label: StringFilter
+  members: StringFilter
+  name: StringFilter
+  year: IntFilter
+}
+
+input AlbumScalarWhereWithAggregatesInput {
+  AND: [AlbumScalarWhereWithAggregatesInput!]
+  NOT: [AlbumScalarWhereWithAggregatesInput!]
+  OR: [AlbumScalarWhereWithAggregatesInput!]
+  artistId: StringWithAggregatesFilter
+  genreId: StringWithAggregatesFilter
+  id: StringWithAggregatesFilter
+  label: StringWithAggregatesFilter
+  members: StringWithAggregatesFilter
+  name: StringWithAggregatesFilter
+  year: IntWithAggregatesFilter
+}
+
+input AlbumSumOrderByAggregateInput {
+  year: SortOrder
+}
+
+input AlbumUpdateInput {
+  artist: ArtistUpdateOneRequiredWithoutAlbumsNestedInput
+  genre: GenreUpdateOneRequiredWithoutAlbumsNestedInput
+  id: StringFieldUpdateOperationsInput
+  label: StringFieldUpdateOperationsInput
+  members: StringFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
+  year: IntFieldUpdateOperationsInput
+}
+
+input AlbumUpdateManyMutationInput {
+  id: StringFieldUpdateOperationsInput
+  label: StringFieldUpdateOperationsInput
+  members: StringFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
+  year: IntFieldUpdateOperationsInput
+}
+
+input AlbumUpdateManyWithWhereWithoutArtistInput {
+  data: AlbumUpdateManyMutationInput!
+  where: AlbumScalarWhereInput!
+}
+
+input AlbumUpdateManyWithWhereWithoutGenreInput {
+  data: AlbumUpdateManyMutationInput!
+  where: AlbumScalarWhereInput!
+}
+
+input AlbumUpdateManyWithoutArtistNestedInput {
+  connect: [AlbumWhereUniqueInput!]
+  connectOrCreate: [AlbumCreateOrConnectWithoutArtistInput!]
+  create: [AlbumCreateWithoutArtistInput!]
+  createMany: AlbumCreateManyArtistInputEnvelope
+  delete: [AlbumWhereUniqueInput!]
+  deleteMany: [AlbumScalarWhereInput!]
+  disconnect: [AlbumWhereUniqueInput!]
+  set: [AlbumWhereUniqueInput!]
+  update: [AlbumUpdateWithWhereUniqueWithoutArtistInput!]
+  updateMany: [AlbumUpdateManyWithWhereWithoutArtistInput!]
+  upsert: [AlbumUpsertWithWhereUniqueWithoutArtistInput!]
+}
+
+input AlbumUpdateManyWithoutGenreNestedInput {
+  connect: [AlbumWhereUniqueInput!]
+  connectOrCreate: [AlbumCreateOrConnectWithoutGenreInput!]
+  create: [AlbumCreateWithoutGenreInput!]
+  createMany: AlbumCreateManyGenreInputEnvelope
+  delete: [AlbumWhereUniqueInput!]
+  deleteMany: [AlbumScalarWhereInput!]
+  disconnect: [AlbumWhereUniqueInput!]
+  set: [AlbumWhereUniqueInput!]
+  update: [AlbumUpdateWithWhereUniqueWithoutGenreInput!]
+  updateMany: [AlbumUpdateManyWithWhereWithoutGenreInput!]
+  upsert: [AlbumUpsertWithWhereUniqueWithoutGenreInput!]
+}
+
+input AlbumUpdateWithWhereUniqueWithoutArtistInput {
+  data: AlbumUpdateWithoutArtistInput!
+  where: AlbumWhereUniqueInput!
+}
+
+input AlbumUpdateWithWhereUniqueWithoutGenreInput {
+  data: AlbumUpdateWithoutGenreInput!
+  where: AlbumWhereUniqueInput!
+}
+
+input AlbumUpdateWithoutArtistInput {
+  genre: GenreUpdateOneRequiredWithoutAlbumsNestedInput
+  id: StringFieldUpdateOperationsInput
+  label: StringFieldUpdateOperationsInput
+  members: StringFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
+  year: IntFieldUpdateOperationsInput
+}
+
+input AlbumUpdateWithoutGenreInput {
+  artist: ArtistUpdateOneRequiredWithoutAlbumsNestedInput
+  id: StringFieldUpdateOperationsInput
+  label: StringFieldUpdateOperationsInput
+  members: StringFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
+  year: IntFieldUpdateOperationsInput
+}
+
+input AlbumUpsertWithWhereUniqueWithoutArtistInput {
+  create: AlbumCreateWithoutArtistInput!
+  update: AlbumUpdateWithoutArtistInput!
+  where: AlbumWhereUniqueInput!
+}
+
+input AlbumUpsertWithWhereUniqueWithoutGenreInput {
+  create: AlbumCreateWithoutGenreInput!
+  update: AlbumUpdateWithoutGenreInput!
+  where: AlbumWhereUniqueInput!
+}
+
+input AlbumWhereInput {
+  AND: [AlbumWhereInput!]
+  NOT: [AlbumWhereInput!]
+  OR: [AlbumWhereInput!]
+  artist: ArtistWhereInput
+  artistId: StringFilter
+  genre: GenreWhereInput
+  genreId: StringFilter
+  id: StringFilter
+  label: StringFilter
+  members: StringFilter
+  name: StringFilter
+  year: IntFilter
+}
+
+input AlbumWhereUniqueInput {
+  id: String
+  name: String
+}
+
+type Artist {
+  albums(cursor: AlbumWhereUniqueInput, distinct: [AlbumScalarFieldEnum!], orderBy: [AlbumOrderByWithRelationInput!], skip: Int, take: Int, where: AlbumWhereInput): [Album!]!
+  id: ID!
+  name: String!
+}
+
+input ArtistCountOrderByAggregateInput {
+  id: SortOrder
+  name: SortOrder
+}
+
+input ArtistCreateInput {
+  albums: AlbumCreateNestedManyWithoutArtistInput
+  id: String
+  name: String!
+}
+
+input ArtistCreateManyInput {
+  id: String
+  name: String!
+}
+
+input ArtistCreateNestedOneWithoutAlbumsInput {
+  connect: ArtistWhereUniqueInput
+  connectOrCreate: ArtistCreateOrConnectWithoutAlbumsInput
+  create: ArtistCreateWithoutAlbumsInput
+}
+
+input ArtistCreateOrConnectWithoutAlbumsInput {
+  create: ArtistCreateWithoutAlbumsInput!
+  where: ArtistWhereUniqueInput!
+}
+
+input ArtistCreateWithoutAlbumsInput {
+  id: String
+  name: String!
+}
+
+input ArtistMaxOrderByAggregateInput {
+  id: SortOrder
+  name: SortOrder
+}
+
+input ArtistMinOrderByAggregateInput {
+  id: SortOrder
+  name: SortOrder
+}
+
+input ArtistOrderByWithAggregationInput {
+  _count: ArtistCountOrderByAggregateInput
+  _max: ArtistMaxOrderByAggregateInput
+  _min: ArtistMinOrderByAggregateInput
+  id: SortOrder
+  name: SortOrder
+}
+
+input ArtistOrderByWithRelationInput {
+  albums: AlbumOrderByRelationAggregateInput
+  id: SortOrder
+  name: SortOrder
+}
+
+input ArtistRelationFilter {
+  is: ArtistWhereInput
+  isNot: ArtistWhereInput
+}
+
+enum ArtistScalarFieldEnum {
+  id
+  name
+}
+
+input ArtistScalarWhereWithAggregatesInput {
+  AND: [ArtistScalarWhereWithAggregatesInput!]
+  NOT: [ArtistScalarWhereWithAggregatesInput!]
+  OR: [ArtistScalarWhereWithAggregatesInput!]
+  id: StringWithAggregatesFilter
+  name: StringWithAggregatesFilter
+}
+
+input ArtistUpdateInput {
+  albums: AlbumUpdateManyWithoutArtistNestedInput
+  id: StringFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
+}
+
+input ArtistUpdateManyMutationInput {
+  id: StringFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
+}
+
+input ArtistUpdateOneRequiredWithoutAlbumsNestedInput {
+  connect: ArtistWhereUniqueInput
+  connectOrCreate: ArtistCreateOrConnectWithoutAlbumsInput
+  create: ArtistCreateWithoutAlbumsInput
+  update: ArtistUpdateWithoutAlbumsInput
+  upsert: ArtistUpsertWithoutAlbumsInput
+}
+
+input ArtistUpdateWithoutAlbumsInput {
+  id: StringFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
+}
+
+input ArtistUpsertWithoutAlbumsInput {
+  create: ArtistCreateWithoutAlbumsInput!
+  update: ArtistUpdateWithoutAlbumsInput!
+}
+
+input ArtistWhereInput {
+  AND: [ArtistWhereInput!]
+  NOT: [ArtistWhereInput!]
+  OR: [ArtistWhereInput!]
+  albums: AlbumListRelationFilter
+  id: StringFilter
+  name: StringFilter
+}
+
+input ArtistWhereUniqueInput {
+  id: String
+  name: String
+}
+
+input GenreCreateNestedOneWithoutAlbumsInput {
+  connect: GenreWhereUniqueInput
+  connectOrCreate: GenreCreateOrConnectWithoutAlbumsInput
+  create: GenreCreateWithoutAlbumsInput
+}
+
+input GenreCreateOrConnectWithoutAlbumsInput {
+  create: GenreCreateWithoutAlbumsInput!
+  where: GenreWhereUniqueInput!
+}
+
+input GenreCreateWithoutAlbumsInput {
+  id: String
+  name: String!
+}
+
+input GenreUpdateOneRequiredWithoutAlbumsNestedInput {
+  connect: GenreWhereUniqueInput
+  connectOrCreate: GenreCreateOrConnectWithoutAlbumsInput
+  create: GenreCreateWithoutAlbumsInput
+  update: GenreUpdateWithoutAlbumsInput
+  upsert: GenreUpsertWithoutAlbumsInput
+}
+
+input GenreUpdateWithoutAlbumsInput {
+  id: StringFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
+}
+
+input GenreUpsertWithoutAlbumsInput {
+  create: GenreCreateWithoutAlbumsInput!
+  update: GenreUpdateWithoutAlbumsInput!
+}
+
+enum QueryMode {
+  default
+  insensitive
+}
+
+type musicQuery {
+  countAlbum(cursor: AlbumWhereUniqueInput, distinct: [AlbumScalarFieldEnum!], orderBy: [AlbumOrderByWithRelationInput!], skip: Int, take: Int, where: AlbumWhereInput): Int!
+  countArtist(cursor: ArtistWhereUniqueInput, distinct: [ArtistScalarFieldEnum!], orderBy: [ArtistOrderByWithRelationInput!], skip: Int, take: Int, where: ArtistWhereInput): Int!
+  countGenre(cursor: GenreWhereUniqueInput, distinct: [GenreScalarFieldEnum!], orderBy: [GenreOrderByWithRelationInput!], skip: Int, take: Int, where: GenreWhereInput): Int!
+  findFirstAlbum(cursor: AlbumWhereUniqueInput, distinct: [AlbumScalarFieldEnum!], orderBy: [AlbumOrderByWithRelationInput!], skip: Int, take: Int, where: AlbumWhereInput): Album
+  findFirstArtist(cursor: ArtistWhereUniqueInput, distinct: [ArtistScalarFieldEnum!], orderBy: [ArtistOrderByWithRelationInput!], skip: Int, take: Int, where: ArtistWhereInput): Artist
+  findFirstGenre(cursor: GenreWhereUniqueInput, distinct: [GenreScalarFieldEnum!], orderBy: [GenreOrderByWithRelationInput!], skip: Int, take: Int, where: GenreWhereInput): Genre
+  findManyAlbum(cursor: AlbumWhereUniqueInput, distinct: [AlbumScalarFieldEnum!], orderBy: [AlbumOrderByWithRelationInput!], skip: Int, take: Int, where: AlbumWhereInput): [Album!]!
+  findManyArtist(cursor: ArtistWhereUniqueInput, distinct: [ArtistScalarFieldEnum!], orderBy: [ArtistOrderByWithRelationInput!], skip: Int, take: Int, where: ArtistWhereInput): [Artist!]!
+  findManyGenre(cursor: GenreWhereUniqueInput, distinct: [GenreScalarFieldEnum!], orderBy: [GenreOrderByWithRelationInput!], skip: Int, take: Int, where: GenreWhereInput): [Genre!]!
+  findUniqueAlbum(where: AlbumWhereUniqueInput!): Album
+  findUniqueArtist(where: ArtistWhereUniqueInput!): Artist
+  findUniqueGenre(where: GenreWhereUniqueInput!): Genre
+}
+
+type musicMutation {
+  createManyAlbum(data: [AlbumCreateInput!]!): [Album!]!
+  createManyArtist(data: [ArtistCreateInput!]!): [Artist!]!
+  createManyGenre(data: [GenreCreateInput!]!): [Genre!]!
+  createOneAlbum(data: AlbumCreateInput!): Album!
+  createOneArtist(data: ArtistCreateInput!): Artist!
+  createOneGenre(data: GenreCreateInput!): Genre!
+  deleteManyAlbum(where: AlbumWhereInput!): BatchPayload
+  deleteManyArtist(where: ArtistWhereInput!): BatchPayload
+  deleteManyGenre(where: GenreWhereInput!): BatchPayload
+  deleteOneAlbum(where: AlbumWhereUniqueInput!): Album
+  deleteOneArtist(where: ArtistWhereUniqueInput!): Artist
+  deleteOneGenre(where: GenreWhereUniqueInput!): Genre
+  updateManyAlbum(data: AlbumUpdateManyMutationInput!, where: AlbumWhereInput): BatchPayload!
+  updateManyArtist(data: ArtistUpdateManyMutationInput!, where: ArtistWhereInput): BatchPayload!
+  updateManyGenre(data: GenreUpdateManyMutationInput!, where: GenreWhereInput): BatchPayload!
+  updateOneAlbum(data: AlbumUpdateInput!, where: AlbumWhereUniqueInput!): Album
+  updateOneArtist(data: ArtistUpdateInput!, where: ArtistWhereUniqueInput!): Artist
+  updateOneGenre(data: GenreUpdateInput!, where: GenreWhereUniqueInput!): Genre
+  upsertOneAlbum(create: AlbumCreateInput!, update: AlbumUpdateInput!, where: AlbumWhereUniqueInput!): Album!
+  upsertOneArtist(create: ArtistCreateInput!, update: ArtistUpdateInput!, where: ArtistWhereUniqueInput!): Artist!
+  upsertOneGenre(create: GenreCreateInput!, update: GenreUpdateInput!, where: GenreWhereUniqueInput!): Genre!
+}
+
+input GenreCreateNestedOneWithoutShowsInput {
+  connect: GenreWhereUniqueInput
+  connectOrCreate: GenreCreateOrConnectWithoutShowsInput
+  create: GenreCreateWithoutShowsInput
+}
+
+input GenreCreateOrConnectWithoutShowsInput {
+  create: GenreCreateWithoutShowsInput!
+  where: GenreWhereUniqueInput!
+}
+
+input GenreCreateWithoutShowsInput {
+  id: String
+  name: String!
+}
+
+input GenreUpdateOneRequiredWithoutShowsNestedInput {
+  connect: GenreWhereUniqueInput
+  connectOrCreate: GenreCreateOrConnectWithoutShowsInput
+  create: GenreCreateWithoutShowsInput
+  update: GenreUpdateWithoutShowsInput
+  upsert: GenreUpsertWithoutShowsInput
+}
+
+input GenreUpdateWithoutShowsInput {
+  id: StringFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
+}
+
+input GenreUpsertWithoutShowsInput {
+  create: GenreCreateWithoutShowsInput!
+  update: GenreUpdateWithoutShowsInput!
+}
+
+type Show {
+  cast: String!
+  director: String!
+  genre: Genre!
+  genreId: String!
+  id: ID!
+  synopsis: String!
+  title: String!
+  yearEnded: Int!
+  yearStarted: Int!
+}
+
+input ShowAvgOrderByAggregateInput {
+  yearEnded: SortOrder
+  yearStarted: SortOrder
+}
+
+input ShowCountOrderByAggregateInput {
+  cast: SortOrder
+  director: SortOrder
+  genreId: SortOrder
+  id: SortOrder
+  synopsis: SortOrder
+  title: SortOrder
+  yearEnded: SortOrder
+  yearStarted: SortOrder
+}
+
+input ShowCreateInput {
+  cast: String!
+  director: String!
+  genre: GenreCreateNestedOneWithoutShowsInput!
+  id: String
+  synopsis: String!
+  title: String!
+  yearEnded: Int!
+  yearStarted: Int!
+}
+
+input ShowCreateManyGenreInput {
+  cast: String!
+  director: String!
+  id: String
+  synopsis: String!
+  title: String!
+  yearEnded: Int!
+  yearStarted: Int!
+}
+
+input ShowCreateManyGenreInputEnvelope {
+  data: [ShowCreateManyGenreInput!]!
+  skipDuplicates: Boolean
+}
+
+input ShowCreateManyInput {
+  cast: String!
+  director: String!
+  genreId: String!
+  id: String
+  synopsis: String!
+  title: String!
+  yearEnded: Int!
+  yearStarted: Int!
+}
+
+input ShowCreateNestedManyWithoutGenreInput {
+  connect: [ShowWhereUniqueInput!]
+  connectOrCreate: [ShowCreateOrConnectWithoutGenreInput!]
+  create: [ShowCreateWithoutGenreInput!]
+  createMany: ShowCreateManyGenreInputEnvelope
+}
+
+input ShowCreateOrConnectWithoutGenreInput {
+  create: ShowCreateWithoutGenreInput!
+  where: ShowWhereUniqueInput!
+}
+
+input ShowCreateWithoutGenreInput {
+  cast: String!
+  director: String!
+  id: String
+  synopsis: String!
+  title: String!
+  yearEnded: Int!
+  yearStarted: Int!
+}
+
+input ShowListRelationFilter {
+  every: ShowWhereInput
+  none: ShowWhereInput
+  some: ShowWhereInput
+}
+
+input ShowMaxOrderByAggregateInput {
+  cast: SortOrder
+  director: SortOrder
+  genreId: SortOrder
+  id: SortOrder
+  synopsis: SortOrder
+  title: SortOrder
+  yearEnded: SortOrder
+  yearStarted: SortOrder
+}
+
+input ShowMinOrderByAggregateInput {
+  cast: SortOrder
+  director: SortOrder
+  genreId: SortOrder
+  id: SortOrder
+  synopsis: SortOrder
+  title: SortOrder
+  yearEnded: SortOrder
+  yearStarted: SortOrder
+}
+
+input ShowOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input ShowOrderByWithAggregationInput {
+  _avg: ShowAvgOrderByAggregateInput
+  _count: ShowCountOrderByAggregateInput
+  _max: ShowMaxOrderByAggregateInput
+  _min: ShowMinOrderByAggregateInput
+  _sum: ShowSumOrderByAggregateInput
+  cast: SortOrder
+  director: SortOrder
+  genreId: SortOrder
+  id: SortOrder
+  synopsis: SortOrder
+  title: SortOrder
+  yearEnded: SortOrder
+  yearStarted: SortOrder
+}
+
+input ShowOrderByWithRelationInput {
+  cast: SortOrder
+  director: SortOrder
+  genre: GenreOrderByWithRelationInput
+  genreId: SortOrder
+  id: SortOrder
+  synopsis: SortOrder
+  title: SortOrder
+  yearEnded: SortOrder
+  yearStarted: SortOrder
+}
+
+enum ShowScalarFieldEnum {
+  cast
+  director
+  genreId
+  id
+  synopsis
+  title
+  yearEnded
+  yearStarted
+}
+
+input ShowScalarWhereInput {
+  AND: [ShowScalarWhereInput!]
+  NOT: [ShowScalarWhereInput!]
+  OR: [ShowScalarWhereInput!]
+  cast: StringFilter
+  director: StringFilter
+  genreId: StringFilter
+  id: StringFilter
+  synopsis: StringFilter
+  title: StringFilter
+  yearEnded: IntFilter
+  yearStarted: IntFilter
+}
+
+input ShowScalarWhereWithAggregatesInput {
+  AND: [ShowScalarWhereWithAggregatesInput!]
+  NOT: [ShowScalarWhereWithAggregatesInput!]
+  OR: [ShowScalarWhereWithAggregatesInput!]
+  cast: StringWithAggregatesFilter
+  director: StringWithAggregatesFilter
+  genreId: StringWithAggregatesFilter
+  id: StringWithAggregatesFilter
+  synopsis: StringWithAggregatesFilter
+  title: StringWithAggregatesFilter
+  yearEnded: IntWithAggregatesFilter
+  yearStarted: IntWithAggregatesFilter
+}
+
+input ShowSumOrderByAggregateInput {
+  yearEnded: SortOrder
+  yearStarted: SortOrder
+}
+
+input ShowUpdateInput {
+  cast: StringFieldUpdateOperationsInput
+  director: StringFieldUpdateOperationsInput
+  genre: GenreUpdateOneRequiredWithoutShowsNestedInput
+  id: StringFieldUpdateOperationsInput
+  synopsis: StringFieldUpdateOperationsInput
+  title: StringFieldUpdateOperationsInput
+  yearEnded: IntFieldUpdateOperationsInput
+  yearStarted: IntFieldUpdateOperationsInput
+}
+
+input ShowUpdateManyMutationInput {
+  cast: StringFieldUpdateOperationsInput
+  director: StringFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
+  synopsis: StringFieldUpdateOperationsInput
+  title: StringFieldUpdateOperationsInput
+  yearEnded: IntFieldUpdateOperationsInput
+  yearStarted: IntFieldUpdateOperationsInput
+}
+
+input ShowUpdateManyWithWhereWithoutGenreInput {
+  data: ShowUpdateManyMutationInput!
+  where: ShowScalarWhereInput!
+}
+
+input ShowUpdateManyWithoutGenreNestedInput {
+  connect: [ShowWhereUniqueInput!]
+  connectOrCreate: [ShowCreateOrConnectWithoutGenreInput!]
+  create: [ShowCreateWithoutGenreInput!]
+  createMany: ShowCreateManyGenreInputEnvelope
+  delete: [ShowWhereUniqueInput!]
+  deleteMany: [ShowScalarWhereInput!]
+  disconnect: [ShowWhereUniqueInput!]
+  set: [ShowWhereUniqueInput!]
+  update: [ShowUpdateWithWhereUniqueWithoutGenreInput!]
+  updateMany: [ShowUpdateManyWithWhereWithoutGenreInput!]
+  upsert: [ShowUpsertWithWhereUniqueWithoutGenreInput!]
+}
+
+input ShowUpdateWithWhereUniqueWithoutGenreInput {
+  data: ShowUpdateWithoutGenreInput!
+  where: ShowWhereUniqueInput!
+}
+
+input ShowUpdateWithoutGenreInput {
+  cast: StringFieldUpdateOperationsInput
+  director: StringFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
+  synopsis: StringFieldUpdateOperationsInput
+  title: StringFieldUpdateOperationsInput
+  yearEnded: IntFieldUpdateOperationsInput
+  yearStarted: IntFieldUpdateOperationsInput
+}
+
+input ShowUpsertWithWhereUniqueWithoutGenreInput {
+  create: ShowCreateWithoutGenreInput!
+  update: ShowUpdateWithoutGenreInput!
+  where: ShowWhereUniqueInput!
+}
+
+input ShowWhereInput {
+  AND: [ShowWhereInput!]
+  NOT: [ShowWhereInput!]
+  OR: [ShowWhereInput!]
+  cast: StringFilter
+  director: StringFilter
+  genre: GenreWhereInput
+  genreId: StringFilter
+  id: StringFilter
+  synopsis: StringFilter
+  title: StringFilter
+  yearEnded: IntFilter
+  yearStarted: IntFilter
+}
+
+input ShowWhereUniqueInput {
+  id: String
+  title: String
+}
+
+type showsQuery {
+  countGenre(cursor: GenreWhereUniqueInput, distinct: [GenreScalarFieldEnum!], orderBy: [GenreOrderByWithRelationInput!], skip: Int, take: Int, where: GenreWhereInput): Int!
+  countShow(cursor: ShowWhereUniqueInput, distinct: [ShowScalarFieldEnum!], orderBy: [ShowOrderByWithRelationInput!], skip: Int, take: Int, where: ShowWhereInput): Int!
+  findFirstGenre(cursor: GenreWhereUniqueInput, distinct: [GenreScalarFieldEnum!], orderBy: [GenreOrderByWithRelationInput!], skip: Int, take: Int, where: GenreWhereInput): Genre
+  findFirstShow(cursor: ShowWhereUniqueInput, distinct: [ShowScalarFieldEnum!], orderBy: [ShowOrderByWithRelationInput!], skip: Int, take: Int, where: ShowWhereInput): Show
+  findManyGenre(cursor: GenreWhereUniqueInput, distinct: [GenreScalarFieldEnum!], orderBy: [GenreOrderByWithRelationInput!], skip: Int, take: Int, where: GenreWhereInput): [Genre!]!
+  findManyShow(cursor: ShowWhereUniqueInput, distinct: [ShowScalarFieldEnum!], orderBy: [ShowOrderByWithRelationInput!], skip: Int, take: Int, where: ShowWhereInput): [Show!]!
+  findUniqueGenre(where: GenreWhereUniqueInput!): Genre
+  findUniqueShow(where: ShowWhereUniqueInput!): Show
+}
+
+type showsMutation {
+  createManyGenre(data: [GenreCreateInput!]!): [Genre!]!
+  createManyShow(data: [ShowCreateInput!]!): [Show!]!
+  createOneGenre(data: GenreCreateInput!): Genre!
+  createOneShow(data: ShowCreateInput!): Show!
+  deleteManyGenre(where: GenreWhereInput!): BatchPayload
+  deleteManyShow(where: ShowWhereInput!): BatchPayload
+  deleteOneGenre(where: GenreWhereUniqueInput!): Genre
+  deleteOneShow(where: ShowWhereUniqueInput!): Show
+  updateManyGenre(data: GenreUpdateManyMutationInput!, where: GenreWhereInput): BatchPayload!
+  updateManyShow(data: ShowUpdateManyMutationInput!, where: ShowWhereInput): BatchPayload!
+  updateOneGenre(data: GenreUpdateInput!, where: GenreWhereUniqueInput!): Genre
+  updateOneShow(data: ShowUpdateInput!, where: ShowWhereUniqueInput!): Show
+  upsertOneGenre(create: GenreCreateInput!, update: GenreUpdateInput!, where: GenreWhereUniqueInput!): Genre!
+  upsertOneShow(create: ShowCreateInput!, update: ShowUpdateInput!, where: ShowWhereUniqueInput!): Show!
+}

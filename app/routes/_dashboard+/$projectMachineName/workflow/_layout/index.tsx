@@ -3,7 +3,7 @@ import { ActionFunctionArgs, LinksFunction, json } from "@remix-run/node";
 
 import reacflowStyles from "reactflow/dist/style.css?url";
 import WorkflowBuilder from "~/components/WorkflowBuilder";
-import { useLoaderData } from "@remix-run/react";
+import { Outlet, useLoaderData } from "@remix-run/react";
 import { fetchWorkflows } from "./query.server";
 import PageHeader from "~/components/PageHeader";
 import { createRequirement, saveWorkflow } from "./mutations.server";
@@ -16,6 +16,7 @@ export const links: LinksFunction = () => [
 
 export async function loader() {
   const workflow = await fetchWorkflows();
+  console.log(JSON.stringify(workflow, null, 2));
   return json({
     workflow: workflow?.workflow,
   });
@@ -27,7 +28,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const formData = await request.formData();
   const intent = formData.get("_intent") as string;
 
-  console.log("intent", intent);
   if (intent === "saveWorkflow") {
     const data = await saveWorkflow(
       formData.get("workflow") as string,
@@ -62,6 +62,7 @@ export default function WorkflowIndex() {
         initialNodes={workflow.nodes}
         initialEdges={workflow.edges}
       />
+      <Outlet />
     </Fragment>
   );
 }
