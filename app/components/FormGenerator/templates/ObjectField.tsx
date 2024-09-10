@@ -1,7 +1,12 @@
-import { BaseObjectSchema, useFieldErrors } from "@react-formgen/json-schema";
-import { SchemaDefinitions } from "@react-formgen/json-schema";
-import { JSONSchema7, CustomFields } from "@react-formgen/json-schema";
-import { renderField } from "@react-formgen/json-schema";
+import React from "react";
+import { JSONSchema7 } from "json-schema";
+import {
+  BaseObjectSchema,
+  useErrorsAtPath,
+  useFormContext,
+  FormState,
+  RenderTemplate,
+} from "@react-formgen/json-schema";
 import { Label } from "~/components/ui/label";
 
 /**
@@ -18,10 +23,8 @@ import { Label } from "~/components/ui/label";
 export const ShadcnObjectField: React.FC<{
   schema: BaseObjectSchema;
   path: string[];
-  definitions: SchemaDefinitions;
-  customFields?: CustomFields;
-}> = ({ schema, path, definitions, customFields = {} }) => {
-  const errorsAtPath = useFieldErrors(path);
+}> = ({ schema, path }) => {
+  const errorsAtPath = useErrorsAtPath(path);
 
   return (
     <div className="border border-gray-300 dark:border-gray-600 p-4 my-4 flex flex-col space-y-2">
@@ -39,12 +42,11 @@ export const ShadcnObjectField: React.FC<{
       {schema.properties &&
         Object.keys(schema.properties).map((key) => (
           <div key={key}>
-            {renderField(
-              schema.properties?.[key] as JSONSchema7,
-              [...path, key],
-              definitions,
-              customFields
-            )}
+            <RenderTemplate
+              key={key}
+              schema={schema.properties?.[key] as JSONSchema7}
+              path={[...path, key]}
+            />
           </div>
         ))}
     </div>

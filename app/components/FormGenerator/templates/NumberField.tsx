@@ -1,7 +1,9 @@
 import {
   NumberSchema,
-  useFieldData,
-  useFieldErrors,
+  useFormDataAtPath,
+  useErrorsAtPath,
+  useFormContext,
+  FormState,
 } from "@react-formgen/json-schema";
 import { Label } from "~/components/ui/label";
 import { Input } from "~/components/ui/input";
@@ -19,8 +21,8 @@ export const ShadcnNumberField: React.FC<{
   schema: NumberSchema;
   path: string[];
 }> = ({ schema, path }) => {
-  const [valueAtPath, setValueAtPath] = useFieldData(path);
-  const errorsAtPath = useFieldErrors(path);
+  const [valueAtPath, setValueAtPath] = useFormDataAtPath(path);
+  const errorsAtPath = useErrorsAtPath(path);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValueAtPath(event.target.value ? Number(event.target.value) : null);

@@ -15,9 +15,11 @@ export default function UserNav() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="mt-auto relative h-8 w-8 rounded-full mt-auto">
+        <Button
+          variant="ghost"
+          className="relative h-8 w-8 rounded-full mt-auto"
+        >
           <Avatar className="h-8 w-8">
-            <AvatarImage src="/avatars/01.png" alt="@shadcn" />
             <AvatarFallback>SC</AvatarFallback>
           </Avatar>
         </Button>

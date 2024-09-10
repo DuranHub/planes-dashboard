@@ -377,7 +377,7 @@ function ProjectConfiguration() {
           <span>Project Configuration</span>
           <Button variant="default" asChild>
             <Link
-              to={`/${activeLevel.machineName}/workflow`}
+              to={`/projects/${activeLevel.machineName}/workflow`}
               className="flex items-center gap-4"
             >
               <PresentationIcon className="w-6 h-6" />
@@ -388,7 +388,7 @@ function ProjectConfiguration() {
         <CardDescription>Configure the project</CardDescription>
       </CardHeader>
       <CardContent className="grid gap-4">
-        <FormGenerator schema={loaderData.projectSchema} />
+        <FormGenerator initialData={{}} schema={loaderData.projectSchema} />
       </CardContent>
     </Card>
   );

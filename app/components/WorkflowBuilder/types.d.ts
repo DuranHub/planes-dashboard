@@ -1,0 +1,2 @@
+type AllowedType = "input" | "decision";
+

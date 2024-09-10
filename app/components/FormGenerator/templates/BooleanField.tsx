@@ -1,7 +1,11 @@
+import React from "react";
 import {
   BooleanSchema,
-  useFieldData,
-  useFieldErrors,
+  useFormDataAtPath,
+  useErrorsAtPath,
+  useFormContext,
+  FormState,
+  ReadonlyPrimitiveTemplate,
 } from "@react-formgen/json-schema";
 import { Label } from "~/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
@@ -68,8 +72,19 @@ export const ShadcnRadioBooleanField: React.FC<{
   schema: BooleanSchema;
   path: string[];
 }> = ({ schema, path }) => {
-  const [valueAtPath, setValueAtPath] = useFieldData(path, false);
-  const errorsAtPath = useFieldErrors(path);
+  const [valueAtPath, setValueAtPath] = useFormDataAtPath(path, false);
+  const errorsAtPath = useErrorsAtPath(path);
+  const readonly = useFormContext((state: FormState) => state.readonly);
+
+  if (readonly) {
+    return (
+      <ReadonlyPrimitiveTemplate
+        title={schema.title ?? undefined}
+        value={valueAtPath ? "Yes" : "No"}
+        description={schema.description ?? undefined}
+      />
+    );
+  }
 
   if (!schema.oneOf || schema.uiSchema?.component !== "radio") {
     return;
@@ -138,8 +153,8 @@ export const ShadcnSwitchBooleanField: React.FC<{
   schema: BooleanSchema;
   path: string[];
 }> = ({ schema, path }) => {
-  const [valueAtPath, setValueAtPath] = useFieldData(path, false);
-  const errorsAtPath = useFieldErrors(path);
+  const [valueAtPath, setValueAtPath] = useFormDataAtPath(path, false);
+  const errorsAtPath = useErrorsAtPath(path);
 
   if (!schema.oneOf || schema.uiSchema?.component !== "switch") {
     return;
@@ -197,8 +212,8 @@ export const ShadcnCheckboxBooleanField: React.FC<{
   schema: BooleanSchema;
   path: string[];
 }> = ({ schema, path }) => {
-  const [valueAtPath, setValueAtPath] = useFieldData(path, false);
-  const errorsAtPath = useFieldErrors(path);
+  const [valueAtPath, setValueAtPath] = useFormDataAtPath(path, false);
+  const errorsAtPath = useErrorsAtPath(path);
 
   return (
     <div className="flex flex-col space-y-2">

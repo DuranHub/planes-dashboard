@@ -49,9 +49,9 @@ export default function Verify() {
     <div className="min-h-screen w-full flex items-center justify-center flex-col gap-4">
       <Form method="POST" className="flex flex-col gap-4">
         <Label htmlFor="code">Code</Label>
-        <InputOTP maxLength={6} pattern={REGEXP_ONLY_DIGITS_AND_CHARS} id="code" name="code">
+        <InputOTP type="text" maxLength={6} pattern={REGEXP_ONLY_DIGITS_AND_CHARS} id="code" name="code">
           <InputOTPGroup id="code">
-            <InputOTPSlot index={0} />
+            <InputOTPSlot  index={0} />
             <InputOTPSlot index={1} />
             <InputOTPSlot index={2} />
             <InputOTPSlot index={3} />

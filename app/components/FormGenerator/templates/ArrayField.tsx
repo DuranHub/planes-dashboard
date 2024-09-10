@@ -1,13 +1,16 @@
-import { SchemaDefinitions, useArrayField } from "@react-formgen/json-schema";
+import React from "react";
+import { JSONSchema7 } from "json-schema";
 import {
-  JSONSchema7,
   BaseArraySchema,
-  CustomFields,
+  useFormContext,
+  useArrayTemplate,
+  FormState,
+  generateInitialData,
+  RenderTemplate,
 } from "@react-formgen/json-schema";
-import { renderField } from "@react-formgen/json-schema";
-import { X, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Label } from "~/components/ui/label";
+import { X, ChevronDown, ChevronUp } from "lucide-react";
 
 /**
  * Array Field Component Template
@@ -22,11 +25,16 @@ import { Label } from "~/components/ui/label";
 export const ShadcnArrayField: React.FC<{
   schema: BaseArraySchema;
   path: string[];
-  definitions: SchemaDefinitions;
-  customFields?: CustomFields;
-}> = ({ schema, path, definitions, customFields = {} }) => {
+}> = ({ schema, path }) => {
+  const readonly = useFormContext((state: FormState) => state.readonly);
+  const definitions = useFormContext(
+    (state: FormState) => state.schema.definitions || {}
+  );
+
   const { valueAtPath, errorsAtPath, moveItem, removeItem, addItem } =
-    useArrayField(path, schema, definitions, []);
+    useArrayTemplate(path, () =>
+      generateInitialData(schema.items as JSONSchema7, definitions)
+    );
 
   return (
     <div className="border-dashed rounded-xl border-2 border-gray-400 dark:border-gray-600 p-4 my-4 flex flex-col space-y-2">
@@ -64,12 +72,10 @@ export const ShadcnArrayField: React.FC<{
             >
               <ChevronDown />
             </Button>
-            {renderField(
-              schema.items as JSONSchema7,
-              [...path, index.toString()],
-              definitions,
-              customFields
-            )}
+            <RenderTemplate
+              schema={schema.items as JSONSchema7}
+              path={[...path, index.toString()]}
+            />
           </div>
         ))}
       <Button type="button" onClick={addItem}>

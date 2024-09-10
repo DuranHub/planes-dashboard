@@ -16,15 +16,8 @@ export const loader = async () => {
     throw new Response("Not found", { status: 404 });
   }
 
-  const schema: JSONSchema7 = {
-    title: formSchema.title,
-    definitions: formSchema.definitions,
-    properties:
-      formSchema.definitions.MovieCreateOrConnectWithoutGenreInput.properties,
-  } as JSONSchema7;
-
   return {
-    schema: schema as unknown as JSONSchema7,
+    schema: formSchema as unknown as JSONSchema7,
     initialData: {},
   };
 };

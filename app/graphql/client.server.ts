@@ -1,8 +1,19 @@
-import { Client, cacheExchange, fetchExchange } from "@urql/core";
+import { Client, ssrExchange, fetchExchange } from "@urql/core";
 
 export const graphqlClient = new Client({
-    url: "http://localhost:4000/graphql",
-    exchanges: [fetchExchange],
+  url: "http://localhost:4000/graphql",
+  fetchOptions: {
+    headers: {
+      connection: "keep-alive",
+    },
+  },
+  exchanges: [
+    fetchExchange,
+    ssrExchange({
+      isClient: false,
+    }),
+  ],
+  requestPolicy: "network-only",
 });
 
-export { graphql } from "gql.tada"
+export { graphql } from "gql.tada";

@@ -1,7 +1,10 @@
+import React from "react";
 import {
   StringSchema,
-  useFieldErrors,
-  useFieldData,
+  useFormDataAtPath,
+  useErrorsAtPath,
+  useFormContext,
+  FormState,
 } from "@react-formgen/json-schema";
 import { Label } from "~/components/ui/label";
 import { Input } from "~/components/ui/input";
@@ -58,8 +61,8 @@ const ShadcnInputField: React.FC<{
   schema: StringSchema;
   path: string[];
 }> = ({ schema, path }) => {
-  const [valueAtPath, setValueAtPath] = useFieldData(path);
-  const errorsAtPath = useFieldErrors(path);
+  const [valueAtPath, setValueAtPath] = useFormDataAtPath(path);
+  const errorsAtPath = useErrorsAtPath(path);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValueAtPath(event.target.value);
@@ -69,8 +72,8 @@ const ShadcnInputField: React.FC<{
     schema.format && ["password", "email", "url"].includes(schema.format)
       ? schema.format
       : schema.uiSchema?.component === "tel"
-      ? "tel"
-      : "text";
+        ? "tel"
+        : "text";
 
   return (
     <div className="space-y-2 flex flex-col">
@@ -120,8 +123,8 @@ const ShadcnTextareaField: React.FC<{
   schema: StringSchema;
   path: string[];
 }> = ({ schema, path }) => {
-  const [valueAtPath, setValueAtPath] = useFieldData(path);
-  const errorsAtPath = useFieldErrors(path);
+  const [valueAtPath, setValueAtPath] = useFormDataAtPath(path);
+  const errorsAtPath = useErrorsAtPath(path);
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setValueAtPath(event.target.value);
@@ -163,9 +166,8 @@ const ShadcnSelectField: React.FC<{
   schema: StringSchema;
   path: string[];
 }> = ({ schema, path }) => {
-  const [valueAtPath, setValueAtPath] = useFieldData(path, schema.default || "");
-  const errorsAtPath = useFieldErrors(path);
-  console.log(schema);
+  const [valueAtPath, setValueAtPath] = useFormDataAtPath(path);
+  const errorsAtPath = useErrorsAtPath(path);
 
   return (
     <div className="space-y-2 flex flex-col">
@@ -217,8 +219,8 @@ const ShadcnDateField: React.FC<{
   schema: StringSchema;
   path: string[];
 }> = ({ schema, path }) => {
-  const [valueAtPath, setValueAtPath] = useFieldData(path, "");
-  const errorsAtPath = useFieldErrors(path);
+  const [valueAtPath, setValueAtPath] = useFormDataAtPath(path);
+  const errorsAtPath = useErrorsAtPath(path);
 
   return (
     <div className="space-y-2 flex flex-col">

@@ -1,113 +1,211 @@
 import {
-  addEdge,
   Background,
   ReactFlow,
   BackgroundVariant,
   Controls,
-  Edge,
-  MiniMap,
-  Node,
+  ReactFlowProvider,
+  ConnectionLineType,
+  addEdge,
   OnConnect,
-  ReactFlowInstance,
-  useEdgesState,
-  useNodesState,
-} from "reactflow";
-import { nodeTypes } from "./components/Nodes";
-import { DragEventHandler, Fragment, useCallback, useState } from "react";
-import Toolbar from "./components/Sidebar";
-import { edgeTypes } from "./components/Edge";
+  applyNodeChanges,
+  applyEdgeChanges,
+  OnNodesChange,
+  OnEdgesChange,
+  useReactFlow,
+} from "@xyflow/react";
+import { useCallback, useEffect, useRef, useState, useMemo } from "react";
+import { Workflow } from "~/routes/_dashboard+/projects_+/$projectMachineName/workflow/_layout/query.server";
+import { CommentNode } from "./components/Nodes";
+import { InputNode } from "./components/Nodes/InputNode";
+import { Arrow } from "./components/Edge";
+import { getInitialDataForNewNode, isAllowedType } from "./utils";
+import { Toolbar } from "./components/Toolbar";
+interface WorkflowBuilderProps {
+  workflow: Workflow;
+  onMoveNode: (node: Workflow["nodes"][0]) => void;
+  onNodeAdd: (node: Workflow["nodes"][0]) => void;
+  onConnectSave: (edge: Workflow["edges"][0]) => void;
+  onNodeDelete: (nodeId: string) => void;
+}
 
-export default function WorkflowBuilder({
-  initialNodes,
-  initialEdges,
-}: {
-  initialNodes: Node[];
-  initialEdges: Edge[];
-}) {
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+export default function WorkflowBuilder(props: WorkflowBuilderProps) {
+  return (
+    <ReactFlowProvider>
+      <WorkflowBuilderPlanes {...props} />
+    </ReactFlowProvider>
+  );
+}
 
-  const [reactFlowInstance, setReactFlowInstance] =
-    useState<ReactFlowInstance | null>();
+function WorkflowBuilderPlanes({
+  workflow,
+  onMoveNode,
+  onNodeAdd,
+  onConnectSave,
+  onNodeDelete,
+}: WorkflowBuilderProps) {
+  const [nodes, setNodes] = useState<Workflow["nodes"]>(workflow.nodes);
+  const [edges, setEdges] = useState<Workflow["edges"]>(workflow.edges);
+  const reactFlowWrapper = useRef(null);
+  const { screenToFlowPosition } = useReactFlow();
 
-  const onConnect = useCallback<OnConnect>((params) => {
-    const { source, target } = params;
-    const edgeId = `${source}-{TO}-${target}`;
-    const edge = { ...params, type: "custom", id: edgeId };
-    setEdges((eds) => addEdge(edge, eds));
-  }, []);
+  // This useEffect updates the nodes and edges when the workflow from the server changes
+  useEffect(() => {
+    setNodes(workflow.nodes);
+    setEdges(workflow.edges);
+  }, [workflow]);
 
-  const onDragOver = useCallback<DragEventHandler<HTMLDivElement>>((event) => {
+  const onNodesChange = useCallback<OnNodesChange<any>>(
+    (changes) => {
+      const updatedNodes = applyNodeChanges(changes, nodes);
+      setNodes(updatedNodes);
+
+      // Find the moved node, if any
+      const movedNode = changes.find((change) => change.type === "position");
+      if (movedNode && "id" in movedNode) {
+        const updatedNode = updatedNodes.find(
+          (node) => node.id === movedNode.id
+        );
+        if (updatedNode) {
+          onMoveNode(updatedNode);
+        }
+      }
+    },
+    [nodes, edges, onMoveNode]
+  );
+
+  const onEdgesChange = useCallback<
+    OnEdgesChange<(typeof workflow)["edges"][0]>
+  >(
+    (changes) => {
+      const updatedEdges = applyEdgeChanges(changes, edges);
+      setEdges(updatedEdges);
+    },
+    [nodes, edges]
+  );
+
+  const onConnect = useCallback(
+    (params: Parameters<OnConnect>[0]) => {
+      const newEdge = {
+        ...params,
+        type: "arrow",
+      };
+      const updatedEdges = addEdge(newEdge, edges);
+      setEdges(updatedEdges);
+      onConnectSave(newEdge);
+    },
+    [edges, onConnectSave]
+  );
+
+  const onDragOver = useCallback((event: React.DragEvent) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
   }, []);
 
-  const onDrop = useCallback<DragEventHandler<HTMLDivElement>>(
-    (event) => {
+  const onDrop = useCallback(
+    (event: React.DragEvent) => {
       event.preventDefault();
-
       const type = event.dataTransfer.getData("application/reactflow");
-
-      if (typeof type === "undefined" || !type) {
+      if (!isAllowedType(type)) {
         return;
       }
 
-      if (reactFlowInstance) {
-        const position = reactFlowInstance?.screenToFlowPosition({
-          x: event.clientX,
-          y: event.clientY,
-        });
-        const newNode = {
-          id: Math.random().toString(),
-          type,
-          position,
-          data: { label: `${type} node` },
-        };
-        setNodes((nds) => nds.concat(newNode));
-      }
+      const position = screenToFlowPosition({
+        x: event.clientX,
+        y: event.clientY,
+      });
+
+      const newNode = {
+        id: `${type}-${Date.now()}`,
+        type,
+        position,
+        data: getInitialDataForNewNode(type),
+      };
+
+      setNodes((nds) => nds.concat(newNode as Workflow["nodes"][0]));
+      onNodeAdd(newNode as Workflow["nodes"][0]);
     },
-    [reactFlowInstance]
+    [screenToFlowPosition]
+  );
+
+  const nodeTypes = useMemo(
+    () => ({
+      input: InputNode,
+      node: InputNode,
+      comment: CommentNode,
+    }),
+    []
+  );
+
+  const edgeTypes = useMemo(
+    () => ({
+      custom: Arrow,
+    }),
+    []
+  );
+
+  const [isDragging, setIsDragging] = useState(false);
+  const [draggedType, setDraggedType] = useState<string | null>(null);
+
+  const handleNodeAdd = useCallback(
+    (type: string, event: React.MouseEvent | React.TouchEvent) => {
+      const position = screenToFlowPosition({
+        x: "touches" in event ? event.touches[0].clientX : event.clientX,
+        y: "touches" in event ? event.touches[0].clientY : event.clientY,
+      });
+
+      const newNode = {
+        id: `${type}-${Date.now()}`,
+        type,
+        position,
+        data: { label: `${type} node` },
+      };
+
+      setNodes((nds) => nds.concat(newNode as Workflow["nodes"][0]));
+      onNodeAdd(newNode as Workflow["nodes"][0]);
+    },
+    [screenToFlowPosition, onNodeAdd]
   );
 
   return (
-    <Fragment>
-      <div className="px-4 mt-4 flex gap-2">
-        <Toolbar reactFlowInstance={reactFlowInstance} />
-        <div className="h-[800px] w-full border border-stone-500">
-          <ReactFlow
-            nodes={nodes}
-            edges={edges}
-            onNodesChange={(changes) => {
-              onNodesChange(changes);
-            }}
-            onNodeDragStop={() => {}}
-            onEdgesChange={onEdgesChange}
-            onConnect={onConnect}
-            onInit={setReactFlowInstance}
-            onDrop={onDrop}
-            nodeTypes={nodeTypes}
-            edgeTypes={edgeTypes}
-            onDragOver={onDragOver}
-            fitView
-            snapToGrid
-          >
-            <Controls></Controls>
-            <MiniMap pannable zoomable />
-            <Background
-              id="1"
-              gap={10}
-              color="#f1f1f1"
-              variant={BackgroundVariant.Lines}
-            />
-            <Background
-              id="2"
-              gap={100}
-              color="#ccc"
-              variant={BackgroundVariant.Lines}
-            />
-          </ReactFlow>
-        </div>
-      </div>
-    </Fragment>
+    <ReactFlow
+      nodeTypes={nodeTypes}
+      connectionLineType={ConnectionLineType.Straight}
+      edgeTypes={edgeTypes}
+      edges={edges}
+      fitView
+      maxZoom={2}
+      minZoom={0.5}
+      nodes={nodes}
+      onConnect={onConnect}
+      onDragOver={onDragOver}
+      multiSelectionKeyCode={["Meta", "Shift"]}
+      onDrop={onDrop}
+      deleteKeyCode={["Delete", "Backspace"]}
+      onEdgesChange={onEdgesChange}
+      onNodesChange={onNodesChange}
+      onBeforeDelete={async () => {
+        const confirm = await window.confirm(
+          "Are you sure you want to delete this node?"
+        );
+        return confirm;
+      }}
+      onNodesDelete={(nodes) => {
+        nodes.forEach((node) => {
+          onNodeDelete(node.id);
+        });
+      }}
+      ref={reactFlowWrapper}
+      onPaneClick={(event) => {
+        if (isDragging && draggedType) {
+          handleNodeAdd(draggedType, event);
+          setIsDragging(false);
+          setDraggedType(null);
+        }
+      }}
+    >
+      <Background color="#94a3b8" variant={BackgroundVariant.Dots} />
+      <Controls showInteractive />
+      <Toolbar />
+    </ReactFlow>
   );
 }

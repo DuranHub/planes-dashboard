@@ -1,13 +1,23 @@
-import { ErrorObject } from "@react-formgen/json-schema";
+import React from "react";
+import Ajv from "ajv";
+import addFormats from "ajv-formats";
+import { JSONSchema7 } from "json-schema";
 import {
+  FormRootProps,
   useFormContext,
-  JSONSchema7,
-  CustomFields,
+  FormState,
+  RenderTemplate,
 } from "@react-formgen/json-schema";
-import { renderField } from "@react-formgen/json-schema";
-import { AjvInstance } from "@react-formgen/json-schema";
-import { Form, useSubmit, type FormMethod } from "@remix-run/react";
+import { Form, useSubmit } from "@remix-run/react";
+import { cn } from "~/lib/utils";
 import { Button } from "~/components/ui/button";
+
+// Single shared Ajv instance with formats
+export const AjvInstance = new Ajv({
+  allErrors: true,
+  verbose: true,
+}).addKeyword("uiSchema");
+addFormats(AjvInstance);
 
 /**
  * Represents a JSON object.
@@ -59,23 +69,34 @@ function removeKeys(keys: string[], obj: JSONObject): JSONObject {
  * Form Component Template
  * @param {Function} onSubmit - The function to call when the form is submitted.
  * @param {Function} onError - The function to call when the form has errors.
- * @param {CustomFields} customFields - The custom fields object.
  * @returns {JSX.Element} - The form component.
  * @example
- * <ShadcnFormComponent onSubmit={onSubmit} onError={onError} customFields={customFields} />
+ * <FormComponent onSubmit={onSubmit} onError={onError} />
  *
  */
-export const ShadcnFormComponent: React.FC<{
-  customFields?: CustomFields;
-  method: FormMethod;
-}> = ({ method = "post", customFields = {} }) => {
+export const ShadcnFormComponent: React.FC<FormRootProps> = ({
+  onSubmit,
+  onError,
+}) => {
+  const readonly = useFormContext((state: FormState) => state.readonly);
+  const schema = useFormContext((state: FormState) => state.schema);
+  const formData = useFormContext((state: FormState) => state.formData);
+  const setErrors = useFormContext((state: FormState) => state.setErrors);
   const submit = useSubmit();
 
-  const schema = useFormContext((state) => state.schema);
-  const formData = useFormContext(
-    (state) => state.formData as { [key: string]: unknown }
-  );
-  const setErrors = useFormContext((state) => state.setErrors);
+  if (readonly) {
+    return (
+      <div className="p-4 flex flex-col gap-4">
+        {Object.keys(schema.properties || {}).map((key) => (
+          <RenderTemplate
+            key={key}
+            schema={schema.properties?.[key] as JSONSchema7}
+            path={[key]}
+          />
+        ))}
+      </div>
+    );
+  }
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -87,28 +108,30 @@ export const ShadcnFormComponent: React.FC<{
 
     const validate = AjvInstance.compile(cleanSchema);
     const valid = validate(formData);
-    if (valid) {
-      setErrors(null);
-      submit(event.currentTarget as any, {
-        method: "post",
-        preventScrollReset: true,
-      });
-    } else {
+    if (!valid) {
       setErrors(validate.errors ?? null);
+      return;
     }
+
+    setErrors(null);
+    submit(event.currentTarget as any, {
+      method: "post",
+      preventScrollReset: true,
+    });
   };
 
   return (
-    <Form onSubmit={handleSubmit} method={method}>
-      {Object.keys(schema.properties || {}).map((key) => {
+    <Form onSubmit={handleSubmit} method="post">
+      {Object.entries(schema.properties || {}).map(([key, property]) => {
         return (
-          <div key={key} className="mb-4">
-            {renderField(
-              schema.properties?.[key] as JSONSchema7,
-              [key],
-              schema.definitions || {},
-              customFields
-            )}
+          <div
+            key={key}
+            className={cn("mb-4", property.uiSchema?.hidden && "hidden")}
+          >
+            <RenderTemplate
+              schema={schema.properties?.[key] as JSONSchema7}
+              path={[key]}
+            />
           </div>
         );
       })}

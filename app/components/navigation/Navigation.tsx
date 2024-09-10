@@ -8,8 +8,22 @@ import { Separator } from "~/components/ui/separator";
 import { LucideIcon, MenuIcon } from "lucide-react";
 import UserNav from "./UserNav";
 
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "~/components/ui/accordion";
+
 interface Props {
-  procedures: { to: string; text: string; icon: string | LucideIcon }[];
+  procedures: {
+    label: string;
+    links: {
+      to: string;
+      text: string;
+      icon?: LucideIcon;
+    }[];
+  }[];
 }
 
 export default function Navigation({ procedures }: Props) {
@@ -20,7 +34,16 @@ export default function Navigation({ procedures }: Props) {
           <LinkList links={systemRoutes} />
           <Separator className="my-4" />
           {procedures.length > 0 ? (
-            <LinkList links={procedures} />
+            <Accordion type="single">
+              {procedures.map((procedure) => (
+                <AccordionItem value={procedure.label} key={procedure.label}>
+                  <AccordionTrigger>{procedure.label}</AccordionTrigger>
+                  <AccordionContent>
+                    <LinkList links={procedure.links} />
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
           ) : (
             <div>
               <p className="text-sm text-gray-500 mb-4">

@@ -28,8 +28,8 @@ export const systemRoutes = [
         icon: UserRoundCogIcon,
     },
     {
-        to: "/levels",
-        text: "Levels",
+        to: "/projects",
+        text: "Projects",
         icon: MonitorPlayIcon,
     }
 ]

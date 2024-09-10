@@ -1,89 +1,13 @@
-import { Fragment, useState } from "react";
 import {
   BaseEdge,
+  Edge,
   EdgeLabelRenderer,
   EdgeProps,
   getSimpleBezierPath,
-} from "reactflow";
-import { Button } from "~/components/ui/button";
-import {
-  Card,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
-import { RequirementsCard } from "./ArrowConfiguration/RequirementCard";
-import { CollaboratorsCard } from "./ArrowConfiguration/Collaborators/CollaboratorsCard";
-import { Link, useLocation, useMatches, useParams } from "@remix-run/react";
+} from "@xyflow/react";
+import { EditArrow } from "./EditArrow";
 
-function ProcedureCard({
-  labelX,
-  labelY,
-  edgeId,
-}: {
-  labelX: number;
-  labelY: number;
-  edgeId: string;
-}) {
-  const params = useParams();
-
-  return (
-    <Card
-      style={{
-        position: "absolute",
-        transform: `translate(20%, 20%) translate(${labelX}px,${labelY}px)`,
-        pointerEvents: "all",
-      }}
-      className="nodrag nopan z-50 h-80 w-72 flex flex-col"
-    >
-      <CardHeader>
-        <CardTitle>Procedimiento</CardTitle>
-        <CardDescription>
-          Procedimiento a seguir para completar la tarea
-        </CardDescription>
-      </CardHeader>
-      <CardFooter className="mt-auto">
-        <Button asChild className="w-full">
-          <Link
-            to={`/${params.projectMachineName}/workflow/${edgeId}/procedure`}
-          >
-            Configurar
-          </Link>
-        </Button>
-      </CardFooter>
-    </Card>
-  );
-}
-
-function StadisticsCard({
-  labelX,
-  labelY,
-}: {
-  labelX: number;
-  labelY: number;
-}) {
-  return (
-    <Card
-      style={{
-        position: "absolute",
-        transform: `translate(20%, -120%) translate(${labelX}px,${labelY}px)`,
-        pointerEvents: "all",
-      }}
-      className="nodrag nopan z-50 h-80 w-72 flex flex-col"
-    >
-      <CardHeader>
-        <CardTitle>Indicadores</CardTitle>
-        <CardDescription>Indicadores de desempeño de la tarea</CardDescription>
-      </CardHeader>
-      <CardFooter className="mt-auto">
-        <Button className="w-full">Configurar</Button>
-      </CardFooter>
-    </Card>
-  );
-}
-
-type DataType = {
+export type DataType = {
   label: string;
   id: string;
   requirements: {
@@ -99,16 +23,14 @@ type DataType = {
   procedure: any[];
 };
 
-export default function CustomEdge({
+export function Arrow({
   id,
   sourceX,
   sourceY,
   targetX,
   targetY,
   data,
-}: EdgeProps<DataType>) {
-  const [showCards, setShowCards] = useState(false);
-
+}: EdgeProps<Edge<DataType>>) {
   const [edgePath, labelX, labelY] = getSimpleBezierPath({
     sourceX,
     sourceY,
@@ -122,58 +44,8 @@ export default function CustomEdge({
     <>
       <BaseEdge id={id} path={edgePath} />
       <EdgeLabelRenderer>
-        {showCards ? (
-          <Button
-            style={{
-              position: "absolute",
-              transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
-              pointerEvents: "all",
-            }}
-            className="nodrag nopan border"
-            onClick={() => {
-              setShowCards((prev) => !prev);
-            }}
-          >
-            Hide
-          </Button>
-        ) : (
-          <Button
-            style={{
-              position: "absolute",
-              transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
-              pointerEvents: "all",
-            }}
-            className="nodrag nopan border"
-            onClick={() => {
-              setShowCards((prev) => !prev);
-            }}
-          >
-            Show
-          </Button>
-        )}
-
-        {showCards && (
-          <Fragment>
-            <CollaboratorsCard
-              collaborators={data?.collaborators}
-              labelX={labelX}
-              labelY={labelY}
-            />
-            <ProcedureCard edgeId={data?.id} labelX={labelX} labelY={labelY} />
-            <RequirementsCard
-              edgeId={data?.id}
-              requirements={data?.requirements || []}
-              labelX={labelX}
-              labelY={labelY}
-            />
-            <StadisticsCard labelX={labelX} labelY={labelY} />
-          </Fragment>
-        )}
+        <EditArrow arrowId={id} data={data} labelX={labelX} labelY={labelY} />
       </EdgeLabelRenderer>
     </>
   );
 }
-
-export const edgeTypes = {
-  custom: CustomEdge,
-};
